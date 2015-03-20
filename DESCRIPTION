@@ -8,12 +8,10 @@ Imports:
     shiny (>= 0.11.1),
     ggplot2 (>= 1.0.0),
     memuse,
-    tm (>= 0.6),
+    tm,
     wordcloud (>= 2.5),
-    memoise (>= 0.2.1),
     RColorBrewer (>= 1.0.5),
-    SnowballC (>= 0.5.1),
-    qdap (>= 2.2.0)
+    SnowballC (>= 0.5.1)
 NeedsCompilation: no
 ByteCompile: yes
 Authors@R: c(person("Drew", "Schmidt", email="schmidt@math.utk.edu", 

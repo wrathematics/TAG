@@ -9,7 +9,7 @@ TODO
 }
 \details{
 \tabular{ll}{
-   Package: \tab memuse \cr
+   Package: \tab textgateway \cr
    Type: \tab Package \cr
    License: \tab AGPL-3 \cr
 }
