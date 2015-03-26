@@ -168,7 +168,7 @@ output$summarize_wordcorr_plot <- renderPlot({
   withProgress(message='Rendering plot...', value=0,
   {
     corpus <- get("corpus", envir=session)
-    cor_list <- apply_as_df(corpus, word_cor, word=input$wordcorr_word, r=input$wordcorr_corr)
+    cor_list <- qdap::apply_as_df(corpus, qdap::word_cor, word=input$wordcorr_word, r=input$wordcorr_corr)
     
     len <- length(cor_list[[1L]])
     if (len > 10) len <- 10

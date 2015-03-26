@@ -19,6 +19,7 @@
 #' 
 #' @importFrom wordcloud wordcloud
 #' @importFrom RColorBrewer brewer.pal
+#' @importFrom qdap apply_as_df word_cor
 #' 
 #' @keywords Package
 NULL
