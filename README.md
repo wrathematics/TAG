@@ -4,7 +4,7 @@
 
 
 
-## Dependencies
+## Installation
 
 In addition to needing R, you need the following packages: 
 
@@ -17,4 +17,26 @@ In addition to needing R, you need the following packages:
 * SnowballC (>= 0.5.1),
 * qdap (>= 2.2.0)
 
-You can launch the app via the `runapp.sh` script.
+
+The easiest way to install is to use the devtools package, which
+you can install via:
+
+```r
+install.packages("devtools")
+```
+
+From then on, you can install the textgateway package via:
+
+```r
+devtools::install_github("XSEDEScienceGateways/textgateway")
+```
+
+
+
+## Launching
+
+You can launch the app via the `runapp.sh` script.  Use the url/port
+combo that it prints it's "listening on" in your web browser.
+
+
+
