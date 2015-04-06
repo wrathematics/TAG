@@ -1,7 +1,7 @@
 library(shiny)
 
 
-pagetitle <- "Let's Get Textual"
+pagetitle <- "TAG"
 
 shinyUI(
   navbarPage(pagetitle, id="nav_radiant", inverse=TRUE, collapsable=FALSE,

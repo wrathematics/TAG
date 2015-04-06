@@ -2,7 +2,7 @@
 
 output$main_about <- renderUI({
   HTML("
-  <h1>Let's Get Textual</h1>
+  <h1>TAG: Text Analysis Gateway</h1>
   <h3>Basic Text Analysis Tools Without the Programming</h3>
   
   <ul>
