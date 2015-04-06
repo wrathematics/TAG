@@ -29,9 +29,8 @@ shinyServer(
     assign("wordcount_table", wordcount_table, envir=session)
     
     
-    
-    source(file="about.r", local=TRUE)
-    source(file="data.r", local=TRUE)
-    source(file="summarize.r", local=TRUE)
+    source(file="pages/about.r", local=TRUE)
+    source(file="pages/data/data.r", local=TRUE)
+    source(file="pages/summarize/summarize.r", local=TRUE)
   }
 )
