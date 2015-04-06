@@ -1,3 +1,3 @@
 #!/bin/sh
 
-Rscript -e "shiny::runApp('./inst/shiny')"
+Rscript -e "library(methods);shiny::runApp('./inst/shiny')"
