@@ -1,83 +1,3 @@
-### 'Summarize' tab
-
-output$main_summarize_basic <- renderUI({
-  list(
-      mainPanel(id="summarizetabs_basic", 
-        tabsetPanel(
-          tabPanel("Corpus Summary", uiOutput("summarize_corpus")),
-          tabPanel("Term Search", uiOutput("summarize_termsearch"))
-        )
-      )
-    )
-})
-
-output$summarize_corpus <- renderUI({
-  tdm <- get("tdm", envir=session)
-  HTML(
-    paste("
-      <table>
-        <tr>
-          <td>Total Letters:</td>
-          <td>", print('FIXME'), "</td>
-        </tr>
-        <tr>
-          <td>Total Words:</td>
-          <td>", print('FIXME'), "</td>
-        </tr>
-        <tr>
-          <td>Distinct Terms:</td>
-          <td>", tm::nTerms(tdm), "</td>
-        </tr>
-        <tr>
-          <td>Documents:</td>
-          <td>", tm::nDocs(tdm), "</td>
-        </tr>
-        <tr>
-          <td>Memory Usage:</td>
-          <td>", memuse::swap.prefix(memuse::swap.names(memuse::object.size(corpus))), "</td>
-        </tr>
-      </table> 
-    ")
-  )
-})
-
-output$summarize_termsearch <- renderUI({
-  list(
-    sidebarLayout(
-      sidebarPanel(
-        h5("Term Frequency"),
-        tags$textarea(id="summarize_termsearchbox", rows=1, cols=60, ""),
-        actionButton("button_process", "Process")
-      ),
-    mainPanel(
-      uiOutput("tabs_search")
-      )
-    )
-  )
-})
-
-output$tabs_search <- renderUI({ ## FIXME broken
-  button <- buttonfix(session, input$button_process)
-  
-  if (button$button_process)
-  {
-    wordcount_table <- get("wordcount_table", envir=session)
-    
-    term <- wordcount_table[input$summarize_termsearchbox]
-    
-    if (is.na(term))
-      HTML("Term not found! <br><br> You may need to transform the data first (stem, lowercase, etc.).  See the Data--Transform tab.")
-    else
-      paste0("\"", input$summarize_termsearchbox, "\" occurs ", term, " times in the corpus.")
-  }
-  else
-    ""
-})
-
-
-
-### Plots
-
 output$main_summarize_plot <- renderUI({
   list(
       mainPanel(id="summarizetabs_plot", 
@@ -153,7 +73,7 @@ output$summarize_wordcorr <- renderUI({
   list(
     sidebarLayout(
       sidebarPanel(
-        h5("Wordcloud Options"),
+        h5("Correlation Plot Options"),
         sliderInput("wordcorr_corr", "Minimum Correlation", min=.05, max=1.0, value=.750000000),
         tags$textarea(id="wordcorr_word", rows=1, cols=60, "")
       ),
@@ -167,14 +87,29 @@ output$summarize_wordcorr <- renderUI({
 output$summarize_wordcorr_plot <- renderPlot({
   withProgress(message='Rendering plot...', value=0,
   {
-    corpus <- get("corpus", envir=session)
-    cor_list <- qdap::apply_as_df(corpus, qdap::word_cor, word=input$wordcorr_word, r=input$wordcorr_corr)
-    
-    len <- length(cor_list[[1L]])
-    if (len > 10) len <- 10
-    cor_list[[1L]] <- sort(cor_list[[1L]], decreasing=TRUE)[1L:len]
-    
-    plot(cor_list)
+    if (input$wordcorr_word == "")
+    {
+      plot.new()
+    }
+    else
+    {
+      corpus <- get("corpus", envir=session)
+      cor_list <<- qdap::apply_as_df(corpus, qdap::word_cor, word=input$wordcorr_word, r=input$wordcorr_corr)
+      
+      if (is.null(cor_list))
+      {
+        plot.new()
+        text("Term not found\nin corpus!", x=.45, y=.5, cex=3, col="red")
+      }
+      else
+      {
+        len <- length(cor_list[[1L]])
+        if (len > 10) len <- 10
+        cor_list[[1L]] <- sort(cor_list[[1L]], decreasing=TRUE)[1L:len]
+        
+        plot(cor_list)
+      }
+    }
   })
 })
 

@@ -28,9 +28,6 @@ shinyServer(
     wordcount_table <- sort(rowSums(as.matrix(tdm)), decreasing=TRUE)
     assign("wordcount_table", wordcount_table, envir=session)
     
-    
-    source(file="pages/about.r", local=TRUE)
-    source(file="pages/data/data.r", local=TRUE)
-    source(file="pages/summarize/summarize.r", local=TRUE)
+    source(file="sourceror.r", local=TRUE)
   }
 )
