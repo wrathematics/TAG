@@ -9,21 +9,24 @@ output$data_transform <- renderUI({
         checkboxInput("data_transform_checkbox_stem", "Stem?", value=FALSE),
         selectizeInput("data_stopwords_lang", "Stopwords Language", stopwords_list, "english"),
         checkboxInput("data_transform_checkbox_remstop", "Remove stopwords?", value=FALSE),
-        actionButton("button_process", "Transform")
+        actionButton("button_process", "Transform"),
+        render_helpfile("Transform", "help/data_transform.md")
       ),
-    mainPanel(
-      htmlOutput("data_transform_buttonaction")
+      mainPanel(
+        htmlOutput("data_transform_buttonaction")
       )
     )
   )
 })
+
+
 
 output$data_transform_buttonaction <- renderUI({
   button <- buttonfix(session, input$button_process)
   
   if (button$button_process)
   {
-    withProgress(message='Processing...', value=0,{
+    withProgress(message='Processing...', value=0, {
       corpus <- get("corpus", envir=session)
       
       if (input$data_transform_checkbox_makelower)
