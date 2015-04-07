@@ -9,7 +9,8 @@ library(ggplot2)
 #library(qdap)
 
 
-source(file="utils.r")
+source(file="utils/buttonfixer.r")
+source(file="utils/help.r")
 stopwords_list <- c("danish", "dutch", "english", "finnish", "french", "german", "hungarian", "italian", "norwegian", "portuguese", "russian", "spanish", "swedish")
 
 
