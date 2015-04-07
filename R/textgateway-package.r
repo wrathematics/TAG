@@ -20,6 +20,8 @@
 #' @importFrom wordcloud wordcloud
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom qdap apply_as_df word_cor
+#' @importFrom markdown markdownToHTML
+#' @importFrom rmarkdown render html_fragment
 #' 
 #' @keywords Package
 NULL

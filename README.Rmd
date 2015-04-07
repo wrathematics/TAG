@@ -6,16 +6,13 @@
 
 In addition to needing R, you need the following packages:
 
-* shiny (>= 0.11.1),
-* ggplot2 (>= 1.0.0),
-* memuse,
-* tm,
-* wordcloud (>= 2.5),
-* RColorBrewer (>= 1.0.5),
-* SnowballC (>= 0.5.1),
-* qdap (>= 2.2.0),
-* markdown (>= 0.7.4),
-* rmarkdown (>= 0.5.1)
+```{r, echo=FALSE, eval=TRUE, results='asis'}
+description <- readLines("DESCRIPTION")
+indices <- (grep(description, pattern="Imports")+1) : (grep(description, pattern="NeedsCompilation:")-1)
+deps <- description[indices]
+deps <- gsub(deps, pattern=" +", replacement=" ")
+cat(paste0("*", deps, collapse="\n"))
+```
 
 
 The easiest way to install is to use the devtools package, which

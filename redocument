@@ -1,4 +1,4 @@
 #!/bin/sh
 
 Rscript --vanilla -e "roxygen2::roxygenize()"
-
+Rscript --vanilla -e "knitr::knit(input='README.Rmd', output='README.md')"

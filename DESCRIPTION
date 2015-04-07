@@ -12,7 +12,9 @@ Imports:
     wordcloud (>= 2.5),
     RColorBrewer (>= 1.0.5),
     SnowballC (>= 0.5.1),
-    qdap (>= 2.2.0)
+    qdap (>= 2.2.0),
+    markdown (>= 0.7.4),
+    rmarkdown (>= 0.5.1)
 NeedsCompilation: no
 ByteCompile: yes
 Authors@R: c(person("Drew", "Schmidt", email="schmidt@math.utk.edu", 
