@@ -11,8 +11,8 @@
 This interactive web app is a rough prototype for demonstrating
 a possible interface for basic text analysis, powered by
 [Shiny](http://www.rstudio.com/shiny/).
-
-
 Source code available on the project's [GitHub page](https://github.com/XSEDEScienceGateways/textgateway).
-All documentation is released under a <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="./images/cc.png"></a>
+All documentation is released under a
+<a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons License</a>.
+<img alt="" style="border-width:0" src="cc.png">
 

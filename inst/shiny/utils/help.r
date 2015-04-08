@@ -15,7 +15,10 @@ render_helpfile <- function(title, file)
             <h4 class='modal-title' id='%s_label'>%s</h4>
           </div>
           <div class='modal-body'>%s<br>
-            &copy; Drew Schmidt and Mike Black %s.  All documentation is released under a <a rel='license' href='http://creativecommons.org/licenses/by-sa/4.0/' target='_blank'><img alt='Creative Commons License' style='border-width:0' src='images/cc.png'></a>
+            &copy;%s Drew Schmidt and Mike Black.
+            All documentation is released under a
+              <a rel='license' href='http://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>Creative Commons License</a>.
+              <img alt='' style='border-width:0' src='cc.png'>
           </div>
         </div>
       </div>
