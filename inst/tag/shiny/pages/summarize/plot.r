@@ -1,53 +1,13 @@
-output$main_summarize_plot <- renderUI({
-  list(
-      mainPanel(id="summarizetabs_plot", 
-        tabsetPanel(
-          tabPanel("About", uiOutput("summarize_plot_about")),
-          tabPanel("Top 10", plotOutput("summarize_top10")),
-          tabPanel("Correlation", uiOutput("summarize_wordcorr")),
-          tabPanel("Zipf Plot", plotOutput("summarize_zipf")),
-          tabPanel("Wordcloud", uiOutput("summarize_wordcloud"))
-        )
-      )
-    )
-})
+output$summarize_top10 <- renderUI(
+  verticalLayout(
+    plotOutput("summarize_top10_plot"),
+    render_helpfile("Top 10", "summarize/plot_top10.md")
+  )
+)
 
-output$summarize_plot_about <- renderUI({
-  HTML("
-  <h3>Top 10</h3>
-  <p>
-  This plot shows the top 10 terms (by frequency of occurrence)
-  from the corpora, plotted against each term's percentage of
-  the total text.
-  </p>
-  
-  <h3>Correlation</h3>
-  <p>
-  The word correlation plot will show the correlation of all other
-  terms in the corpus 
-  </p>
-  
-  <h3>Zipf Plot</h3>
-  <p>
-  <a href='https://en.wikipedia.org/wiki/Zipf%27s_law'>Zipf's law</a>
-  says that the frequency of a word's occurrence in a text is 
-  inversely proportional to its rank in a frequency table.
-  
-  The Zipf plot from the tm package plots the logarithm of the
-  frequency against the logarithm of the rank, and evaluates the
-  goodness of fit of a linear model.
-  </p>
-  
-  <h3>Wordcloud</h3>
-  <p>
-  A wordcloud (or tag cloud) is a visual representation of 
-  unstructured text data in which a
-  </p>
-")
-})
-
-output$summarize_top10 <- renderPlot({
-  withProgress(message='Rendering plot...', value=0,{
+output$summarize_top10_plot <- renderPlot(
+  withProgress(message='Rendering plot...', value=0,
+  {
     wordcount_table <- get("wordcount_table", envir=session)
     
     tot <- sum(wordcount_table)
@@ -65,26 +25,26 @@ output$summarize_top10 <- renderPlot({
          theme(axis.text.x=element_text(angle=22, hjust=1))
     
     g
-#    incProgress(1/n, detail = paste("Doing part", i))
   })
-})
+)
 
-output$summarize_wordcorr <- renderUI({
-  list(
-    sidebarLayout(
-      sidebarPanel(
-        h5("Correlation Plot Options"),
-        sliderInput("wordcorr_corr", "Minimum Correlation", min=.05, max=1.0, value=.750000000),
-        tags$textarea(id="wordcorr_word", rows=1, cols=60, "")
-      ),
+
+
+output$summarize_wordcorr <- renderUI(
+  sidebarLayout(
+    sidebarPanel(
+      h5("Correlation Plot Options"),
+      sliderInput("wordcorr_corr", "Minimum Correlation", min=.05, max=1.0, value=.750000000),
+      tags$textarea(id="wordcorr_word", rows=1, cols=60, ""),
+      render_helpfile("Correlation Plot", "summarize/plot_wordcorr.md")
+    ),
     mainPanel(
       plotOutput("summarize_wordcorr_plot")
-      )
     )
   )
-})
+)
 
-output$summarize_wordcorr_plot <- renderPlot({
+output$summarize_wordcorr_plot <- renderPlot(
   withProgress(message='Rendering plot...', value=0,
   {
     if (input$wordcorr_word == "")
@@ -111,28 +71,41 @@ output$summarize_wordcorr_plot <- renderPlot({
       }
     }
   })
-})
+)
 
-output$summarize_zipf <- renderPlot({
-  tdm <- get("tdm", envir=session)
-  tm::Zipf_plot(tdm)
-})
 
-output$summarize_wordcloud <- renderUI({
-  list(
-    sidebarLayout(
-      sidebarPanel(
-        h5("Wordcloud Options"),
-        sliderInput("wordcloud_minfreq", "Minimum Frequency:", min=1, max=50, value=15),
-        sliderInput("wordcloud_maxwords", "Maximum Number of Words:", min=1, max=150, value=25),
-        selectizeInput("wordcloud_colors", "Colors", c("Black/White", "Accent", "Dark", "Orange", "Green", "Purple", "Blue", "Grey"), "alternating")
-      ),
+
+output$summarize_zipf <- renderUI(
+  verticalLayout(
+    plotOutput("summarize_zipf_plot"),
+    render_helpfile("Zipf Plot", "summarize/plot_zipf.md")
+  )
+)
+
+output$summarize_zipf_plot <- renderPlot(
+  withProgress(message='Rendering plot...', value=0,
+  {
+    tdm <- get("tdm", envir=session)
+    tm::Zipf_plot(tdm)
+  })
+)
+
+
+
+output$summarize_wordcloud <- renderUI(
+  sidebarLayout(
+    sidebarPanel(
+      h5("Wordcloud Options"),
+      sliderInput("wordcloud_minfreq", "Minimum Frequency:", min=1, max=50, value=15),
+      sliderInput("wordcloud_maxwords", "Maximum Number of Words:", min=1, max=150, value=25),
+      selectizeInput("wordcloud_colors", "Colors", c("Black/White", "Accent", "Dark", "Orange", "Green", "Purple", "Blue", "Grey"), "alternating"),
+      render_helpfile("Wordcloud", "summarize/plot_wordcloud.md")
+    ),
     mainPanel(
       plotOutput("summarize_wordcloud_plotter")
-      )
     )
   )
-})
+)
 
 output$summarize_wordcloud_plotter <- renderPlot({
   if (input$wordcloud_colors == "Black/White")
