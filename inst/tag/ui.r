@@ -11,6 +11,9 @@ shinyUI(
     navbarMenu("Summarize",
       tabPanel("Basic", uiOutput("main_summarize_basic")),
       tabPanel("Plots", uiOutput("main_summarize_plot"))
+    ),
+    navbarMenu("Analyse",
+      tabPanel("LDA", uiOutput("main_analyse_lda"))
     )
   )
 )

@@ -11,3 +11,5 @@ localsrc(file="summarize.r")
 localsrc(file="summarize/basic.r")
 localsrc(file="summarize/plot.r")
 
+localsrc(file="analyse.r")
+localsrc(file="analyse/lda.r")
