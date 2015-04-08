@@ -1,6 +1,6 @@
 Package: textgateway
 Title: Text Gateway
-Version: 0.1.0
+Version: 0.0.2
 Description:  TODO
 License: AGPL-3
 Depends: R (>= 3.1.2)
