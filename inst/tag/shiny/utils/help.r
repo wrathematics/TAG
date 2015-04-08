@@ -5,7 +5,7 @@ render_helpfile <- function(title, file)
   file <- paste0("shiny/help/", file)
   
   body <- markdown::markdownToHTML(file, fragment.only=TRUE, options=c(""))
-  link <- paste0(title, "_help")
+  link <- paste0(gsub(title, pattern=" ", replacement=""), "_help")
   thisyear <- format(Sys.Date(), "%Y")
   
   html <- sprintf("
@@ -17,10 +17,12 @@ render_helpfile <- function(title, file)
             <h4 class='modal-title' id='%s_label'>%s</h4>
           </div>
           <div class='modal-body'>%s<br>
+            <font size='1'>
             &copy;%s Drew Schmidt and Mike Black.
             All documentation is released under a
               <a rel='license' href='http://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>Creative Commons License</a>.
               <img alt='' style='border-width:0' src='cc.png'>
+            </font>
           </div>
         </div>
       </div>
