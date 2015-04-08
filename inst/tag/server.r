@@ -9,8 +9,9 @@ library(ggplot2)
 #library(qdap)
 
 
-source(file="utils/buttonfixer.r")
-source(file="utils/help.r")
+source(file="shiny/utils/buttonfixer.r")
+source(file="shiny/utils/help.r")
+
 stopwords_list <- c("danish", "dutch", "english", "finnish", "french", "german", "hungarian", "italian", "norwegian", "portuguese", "russian", "spanish", "swedish")
 
 
@@ -29,6 +30,6 @@ shinyServer(
     wordcount_table <- sort(rowSums(as.matrix(tdm)), decreasing=TRUE)
     assign("wordcount_table", wordcount_table, envir=session)
     
-    source(file="sourcerer.r", local=TRUE)
+    source(file="shiny/sourcerer.r", local=TRUE)
   }
 )

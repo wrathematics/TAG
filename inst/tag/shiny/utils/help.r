@@ -2,6 +2,8 @@
 
 render_helpfile <- function(title, file)
 {
+  file <- paste0("shiny/help/", file)
+  
   body <- markdown::markdownToHTML(file, fragment.only=TRUE, options=c(""))
   link <- paste0(title, "_help")
   thisyear <- format(Sys.Date(), "%Y")
