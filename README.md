@@ -15,7 +15,8 @@ In addition to needing R, you need the following packages:
 * SnowballC (>= 0.5.1),
 * qdap (>= 2.2.0),
 * markdown (>= 0.7.4),
-* rmarkdown (>= 0.5.1)
+* rmarkdown (>= 0.5.1),
+* topicmodels (>= 0.2.1)
 
 
 The easiest way to install is to use the devtools package, which

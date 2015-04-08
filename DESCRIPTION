@@ -14,7 +14,8 @@ Imports:
     SnowballC (>= 0.5.1),
     qdap (>= 2.2.0),
     markdown (>= 0.7.4),
-    rmarkdown (>= 0.5.1)
+    rmarkdown (>= 0.5.1),
+    topicmodels (>= 0.2.1)
 NeedsCompilation: no
 ByteCompile: yes
 Authors@R: c(person("Drew", "Schmidt", email="schmidt@math.utk.edu", 

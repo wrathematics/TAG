@@ -19,9 +19,10 @@
 #' 
 #' @importFrom wordcloud wordcloud
 #' @importFrom RColorBrewer brewer.pal
-#' @importFrom qdap apply_as_df word_cor
+#' @importFrom qdap apply_as_df word_cor as.dtm
 #' @importFrom markdown markdownToHTML
 #' @importFrom rmarkdown render html_fragment
+#' @importFrom topicmodels LDA terms
 #' 
 #' @keywords Package
 NULL
