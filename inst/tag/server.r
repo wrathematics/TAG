@@ -1,12 +1,6 @@
 library(shiny)
-library(memuse)
 library(tm)
-library(wordcloud)
-library(memoise)
-library(RColorBrewer)
-library(SnowballC)
 library(ggplot2)
-#library(qdap)
 
 
 source(file="shiny/utils/buttonfixer.r")
