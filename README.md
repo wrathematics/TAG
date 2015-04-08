@@ -8,8 +8,8 @@ In addition to needing R, you need the following packages:
 
 * shiny (>= 0.11.1),
 * ggplot2 (>= 1.0.0),
-* memuse,
-* tm,
+* memuse (>= 1.1),
+* tm (>= 0.6),
 * wordcloud (>= 2.5),
 * RColorBrewer (>= 1.0.5),
 * SnowballC (>= 0.5.1),
