@@ -10,7 +10,7 @@ output$data_transform <- renderUI({
         selectizeInput("data_stopwords_lang", "Stopwords Language", stopwords_list, "english"),
         checkboxInput("data_transform_checkbox_remstop", "Remove stopwords?", value=FALSE),
         actionButton("button_process", "Transform"),
-        render_helpfile("Transform", "data_transform.md")
+        render_helpfile("Transform", "data/transform.md")
       ),
       mainPanel(
         htmlOutput("data_transform_buttonaction")
