@@ -5,11 +5,15 @@ output$summarize_top10 <- renderUI(
   )
 )
 
-output$summarize_top10_plot <- renderPlot(
+#wct <- reactive({
+#  get("wordcount_table", envir=session)
+#})
+
+output$summarize_top10_plot <- renderPlot({
+#  wordcount_table <- wct()
+  get("wordcount_table", envir=session)
   withProgress(message='Rendering plot...', value=0,
   {
-    wordcount_table <- get("wordcount_table", envir=session)
-    
     tot <- sum(wordcount_table)
     v <- wordcount_table[1:min(length(wordcount_table), 10)]
     
@@ -22,11 +26,12 @@ output$summarize_top10_plot <- renderPlot(
          geom_point() + 
          ylab("Percentage of Corpora") + 
          xlab("Term") + 
+         theme_bw() + 
          theme(axis.text.x=element_text(angle=22, hjust=1))
     
     g
   })
-)
+})
 
 
 
@@ -54,7 +59,7 @@ output$summarize_wordcorr_plot <- renderPlot(
     else
     {
       corpus <- get("corpus", envir=session)
-      cor_list <<- qdap::apply_as_df(corpus, qdap::word_cor, word=input$wordcorr_word, r=input$wordcorr_corr)
+      cor_list <- qdap::apply_as_df(corpus, qdap::word_cor, word=input$wordcorr_word, r=input$wordcorr_corr)
       
       if (is.null(cor_list))
       {
@@ -67,7 +72,7 @@ output$summarize_wordcorr_plot <- renderPlot(
         if (len > 10) len <- 10
         cor_list[[1L]] <- sort(cor_list[[1L]], decreasing=TRUE)[1L:len]
         
-        plot(cor_list)
+        plot(cor_list) + theme_bw()
       }
     }
   })
