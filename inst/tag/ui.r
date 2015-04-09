@@ -1,10 +1,11 @@
 library(shiny)
 
 
-pagetitle <- "TAG"
-
 shinyUI(
-  navbarPage(pagetitle, id="nav_radiant", inverse=TRUE, collapsable=FALSE,
+  navbarPage("TAG", windowTitle="TAG: Text Analytics Gateway", id="nav_tag", 
+    inverse=TRUE, collapsible=FALSE, 
+    theme="superhero.css", 
+    
     
     tabPanel("About", uiOutput('main_about')),
     tabPanel("Data", uiOutput('main_data')),
