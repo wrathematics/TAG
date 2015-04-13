@@ -4,7 +4,7 @@ library(shiny)
 shinyUI(
   navbarPage("TAG", windowTitle="TAG: Text Analytics Gateway", id="nav_tag", 
     inverse=TRUE, collapsible=FALSE, 
-    theme="superhero.css", 
+#    theme="superhero.css", 
     
     
     tabPanel("About", uiOutput('main_about')),
