@@ -10,7 +10,7 @@ get_themes <- function() dir("www/css/themes/")
 get_theme_names <- function()
 {
   themes <- get_themes()
-  themes <- gsub(themes, pattern="[.]css", replacement="")
+  themes <- gsub(themes, pattern="[.]min[.]css", replacement="")
   themes
 }
 
@@ -29,6 +29,5 @@ output$main_about <- renderUI({
 
 
 output$main_about_ <- renderUI({
-  tags$head(tags$link(rel="stylesheet", type="text/css", href=paste0("css/themes/", input$tag_theme, ".css")))
-  tags$head(tags$link(rel="stylesheet", type="text/css", href=paste0("css/themes/", input$tag_theme, ".css")))
+  tags$head(tags$link(rel="stylesheet", type="text/css", href=paste0("css/themes/", input$tag_theme, ".min.css")))
 })
