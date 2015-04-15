@@ -2,7 +2,7 @@ output$analyse_lda_fit <- renderUI(
   sidebarLayout(
     sidebarPanel(
       h5("Latent Dirichlet Allocation"),
-      sliderInput("lda_ntopics", "Number of Topics", min=1, max=20, value=5),
+      sliderInput("lda_ntopics", "Number of Topics", min=1, max=20, value=3),
       selectizeInput("lda_method", "Method", c("Gibbs", "VEM"), "Gibbs"),
       actionButton("lda_button_fit", "Fit"),
       render_helpfile("LDA", "analyse/lda_fit.md")
