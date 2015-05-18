@@ -19,14 +19,16 @@ In addition to needing R, you need the following packages:
 * topicmodels (>= 0.2.1)
 
 
-The easiest way to install is to use the devtools package, which
-you can install via:
+The easiest way to install this package is use the devtools package,
+which will handle dependency resolution for you.  To install devtools,
+you can run the following from R:
 
 ```r
 install.packages("devtools")
 ```
 
-From then on, you can install the textgateway package via:
+From then on, you can install the current build of the textgateway
+package via:
 
 ```r
 devtools::install_github("XSEDEScienceGateways/textgateway")
@@ -36,8 +38,15 @@ devtools::install_github("XSEDEScienceGateways/textgateway")
 
 ## Launching
 
-You can launch the app via the `runapp.sh` script.  Use the url/port
-combo that it prints it's "listening on" in your web browser.
+From a terminal, you can launch the app via the `runapp.sh` script.
+If your web browser does not automatically open the web app, use
+the url/port combo that it prints it's "listening on" in your
+web browser.
 
+You can also run the app easily from any interactive R session:
 
+```r
+library(textgateway)
+textgateway()
+```
 
