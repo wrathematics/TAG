@@ -1,5 +1,22 @@
-# Text Gateway [![Build Status](https://travis-ci.org/XSEDEScienceGateways/textgateway.png)](https://travis-ci.org/XSEDEScienceGateways/textgateway) [![License](http://img.shields.io/badge/license-AGPL--3-orange.svg?style=flat)](https://www.gnu.org/licenses/agpl-3.0.html)
+# Text Gateway 
 
+
+
+
+* **Version:** 0.0.2
+* ![Status](http://img.shields.io/badge/status-In_development_%28UNSTABLE%29-red.svg?style=flat)
+* [![Build Status](https://travis-ci.org/XSEDEScienceGateways/textgateway.png)](https://travis-ci.org/XSEDEScienceGateways/textgateway)
+* [![License](http://img.shields.io/badge/license-AGPL--3-orange.svg?style=flat)](https://www.gnu.org/licenses/agpl-3.0.html)
+* **Authors:** &copy; Drew Schmidt and Mike Black
+
+
+The Text Analytics Gateway (TAG) is an interactive webapp for
+performing simple analyses on unstructured text.
+
+When the gateway becomes mature enough, it will be made available
+one XSEDE compute resources.  However, it is completely open
+source and you are free to install it on your laptop or a different
+remote resource.
 
 
 ## Installation
@@ -43,7 +60,7 @@ If your web browser does not automatically open the web app, use
 the url/port combo that it prints it's "listening on" in your
 web browser.
 
-You can also run the app easily from any interactive R session:
+You can also easily run the app from any interactive R session:
 
 ```r
 library(textgateway)
