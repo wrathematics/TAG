@@ -5,13 +5,8 @@ output$summarize_top10 <- renderUI(
   )
 )
 
-#wct <- reactive({
-#  get("wordcount_table", envir=session)
-#})
-
 output$summarize_top10_plot <- renderPlot({
-#  wordcount_table <- wct()
-  get("wordcount_table", envir=session)
+  wordcount_table <- get("wordcount_table", envir=session)
   withProgress(message='Rendering plot...', value=0,
   {
     tot <- sum(wordcount_table)
