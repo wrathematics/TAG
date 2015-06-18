@@ -15,21 +15,8 @@ booklist <- dir("data/books/", pattern=".rda")
 shinyServer(
   function(input, output, session)
   {
-    ### Data preprocessing TODO
-#    data("crude")
-#    corpus <- crude
-#    assign("corpus", corpus, envir=session)
-#    
-#    tdm <- tm::TermDocumentMatrix(corpus)
-#    assign("tdm", tdm, envir=session)
-#    
-#    wordcount_table <- sort(rowSums(as.matrix(tdm)), decreasing=TRUE)
-#    assign("wordcount_table", wordcount_table, envir=session)
-    
-    
     files <- dir("./shiny", recursive=TRUE, pattern="[.]r$")
     files <- paste0("./shiny/", files)
-    print(files)
     for (file in files) source(file=file, local=TRUE)
   }
 )
