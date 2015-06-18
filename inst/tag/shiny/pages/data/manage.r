@@ -6,11 +6,12 @@ output$data_manage <- renderUI({
         conditionalPanel(condition = "input.data_infile == 'state'",
           fileInput('uploadState', 'Load previous app state:', accept=".rda"),
           uiOutput("refreshOnUpload")
-        )
-      )#,
-#    mainPanel(
-#      htmlOutput("data_transform_buttonaction")
-#      )
+        ),
+        selectizeInput("data_books", "Books", booklist_names)
+      ),
+    mainPanel(
+      htmlOutput("data_transform_buttonaction")
+      )
     )
   )
 })

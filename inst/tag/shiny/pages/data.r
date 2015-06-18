@@ -1,7 +1,7 @@
 output$main_data <- renderUI({
   mainPanel(id="datatabs", 
     tabsetPanel(
-      tabPanel("Manage", htmlOutput("data_manage")),
+      tabPanel("Import", htmlOutput("data_import")),
       tabPanel("Transform", htmlOutput("data_transform"))
     )
   )
