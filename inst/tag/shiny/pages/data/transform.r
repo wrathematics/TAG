@@ -2,14 +2,14 @@ output$data_transform <- renderUI({
   list(
     sidebarLayout(
       sidebarPanel(
-        checkboxInput("data_transform_checkbox_makelower", "Make lowercase?", value=FALSE),
-        checkboxInput("data_transform_checkbox_rempunct", "Remove punctuation?", value=FALSE),
+        checkboxInput("data_transform_checkbox_makelower", "Make lowercase?", value=TRUE),
+        checkboxInput("data_transform_checkbox_rempunct", "Remove punctuation?", value=TRUE),
         checkboxInput("data_transform_checkbox_remnum", "Remove numbers?", value=FALSE),
         checkboxInput("data_transform_checkbox_remws", "Remove extra whitespace?", value=FALSE),
         checkboxInput("data_transform_checkbox_stem", "Stem?", value=FALSE),
         selectizeInput("data_stopwords_lang", "Stopwords Language", stopwords_list, "english"),
-        checkboxInput("data_transform_checkbox_remstop", "Remove stopwords?", value=FALSE),
-        actionButton("button_process", "Transform"),
+        checkboxInput("data_transform_checkbox_remstop", "Remove stopwords?", value=TRUE),
+        actionButton("button_data_transform", "Transform"),
         render_helpfile("Transform", "data/transform.md")
       ),
       mainPanel(
@@ -22,9 +22,10 @@ output$data_transform <- renderUI({
 
 
 output$data_transform_buttonaction <- renderUI({
-  button <- buttonfix(session, input$button_process)
+  button <- buttonfix(session, input$button_data_transform)
   
-  if (button$button_process)
+  print(button)
+  if (button$button_data_transform)
   {
     withProgress(message='Processing...', value=0, {
       corpus <- get("corpus", envir=session)
