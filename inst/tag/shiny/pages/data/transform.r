@@ -73,6 +73,8 @@ output$data_transform_buttonaction <- renderUI({
         localstate$tdm <- tm::TermDocumentMatrix(localstate$corpus)
         localstate$wordcount_table <- sort(rowSums(as.matrix(localstate$tdm)), decreasing=TRUE)
       })
+      
+      setProgress(1)
     })
   })
   
