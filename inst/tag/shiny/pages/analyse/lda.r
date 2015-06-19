@@ -14,7 +14,7 @@ output$analyse_lda_fit <- renderUI(
 )
 
 output$analyse_lda_fit_ <- renderText({
-  observeEvent(input$lda_button_fit, {
+  temp <- eventReactive(input$lda_button_fit, {
     withProgress(message='Fitting the model...', value=0,
     {
       incProgress(0, message="Transforming to document-term matrix...")
@@ -27,12 +27,11 @@ output$analyse_lda_fit_ <- renderText({
       
       setProgress(1)
     })
+    
+    capture.output(localstate$lda_mdl)
   })
   
-  if (is.null(localstate$lda_mdl))
-    "Press 'Fit' to fit an LDA model."
-  else
-    capture.output(localstate$lda_mdl)
+  temp()
 })
 
 
