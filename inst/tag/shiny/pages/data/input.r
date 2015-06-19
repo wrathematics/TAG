@@ -20,23 +20,28 @@ output$data_import <- renderUI({
 output$data_input_book_buttonaction <- renderUI({
   observeEvent(input$button_data_input_book, {
     withProgress(message='Reading data...', value=0, {
-      book <- input$data_books
-      bookfile <- booklist[which(booklist_names == book)]
-      
-      corpus <- readRDS(paste0("data/books/", bookfile))
-      assign("corpus", corpus, envir=session)
-      
-      tdm <- tm::TermDocumentMatrix(corpus)
-      assign("tdm", tdm, envir=session)
-      
-      wordcount_table <- sort(rowSums(as.matrix(tdm)), decreasing=TRUE)
-      assign("wordcount_table", wordcount_table, envir=session)
+      localstate$runtime <- system.time({
+        book <- input$data_books
+        bookfile <- booklist[which(booklist_names == book)]
+        
+        load(paste0("data/books/", bookfile))
+        
+        localstate$corpus <- corpus
+        localstate$tdm <- tdm
+        localstate$wordcount_table <- wordcount_table
+        
+#        assign("corpus", corpus, envir=session)
+#        tdm <- tm::TermDocumentMatrix(corpus)
+#        assign("tdm", tdm, envir=session)
+#        wordcount_table <- sort(rowSums(as.matrix(tdm)), decreasing=TRUE)
+#        assign("wordcount_table", wordcount_table, envir=session)
+      })
     })
   })
   
   
   output <- eventReactive(input$button_data_input_book, {
-    HTML(paste("The<i>", input$data_books, "</i>corpus is now ready to use!"))
+    HTML(paste("The<i>", input$data_books, "</i>corpus is now ready to use!\nLoading finished in", round(localstate$runtime[3], 3), "seconds."))
   })
   
   output()

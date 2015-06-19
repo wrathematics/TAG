@@ -1,5 +1,4 @@
 output$summarize_corpus <- renderUI({
-  tdm <- get("tdm", envir=session)
   html <- paste("
     <table>
       <tr>
@@ -12,15 +11,15 @@ output$summarize_corpus <- renderUI({
       </tr>
       <tr>
         <td>Distinct Terms:</td>
-        <td>", tm::nTerms(tdm), "</td>
+        <td>", tm::nTerms(localstate$tdm), "</td>
       </tr>
       <tr>
         <td>Documents:</td>
-        <td>", tm::nDocs(tdm), "</td>
+        <td>", tm::nDocs(localstate$tdm), "</td>
       </tr>
       <tr>
         <td>Memory Usage:</td>
-        <td>", memuse::swap.prefix(memuse::swap.names(memuse::object.size(corpus))), "</td>
+        <td>", memuse::swap.prefix(memuse::swap.names(memuse::object.size(localstate$corpus))), "</td>
       </tr>
     </table> 
   ")
@@ -37,8 +36,7 @@ output$summarize_termsearch <- renderUI({
     sidebarLayout(
       sidebarPanel(
         h5("Term Frequency"),
-        tags$textarea(id="summarize_termsearchbox", rows=1, cols=60, ""),
-        actionButton("button_process", "Process"),
+        tags$textarea(id="summarize_termsearchbox", rows=1, cols=10, ""),
         render_helpfile("Term Search", "summarize/basic_termsearch.md")
       ),
       mainPanel(
@@ -50,21 +48,15 @@ output$summarize_termsearch <- renderUI({
 
 
 
-output$tabs_search <- renderUI({ ## FIXME broken
-  button <- buttonfix(session, input$button_process)
+output$tabs_search <- renderUI({
+  if (input$summarize_termsearchbox == "")
+    return("")
   
-  if (button$button_process)
-  {
-    wordcount_table <- get("wordcount_table", envir=session)
-    
-    term <- wordcount_table[input$summarize_termsearchbox]
-    
-    if (is.na(term))
-      HTML("Term not found! <br><br> You may need to transform the data first (stem, lowercase, etc.).  See the Data--Transform tab.")
-    else
-      paste0("\"", input$summarize_termsearchbox, "\" occurs ", term, " times in the corpus.")
-  }
+  term <- localstate$wordcount_table[input$summarize_termsearchbox]
+  
+  if (is.na(term))
+    HTML("Term not found! <br><br> You may need to transform the data first (stem, lowercase, etc.).  See the Data--Transform tab.")
   else
-    ""
+    paste0("\"", input$summarize_termsearchbox, "\" occurs ", term, " times in the corpus.")
 })
 

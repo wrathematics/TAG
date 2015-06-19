@@ -14,23 +14,23 @@ output$analyse_lda_fit <- renderUI(
 )
 
 output$analyse_lda_fit_ <- renderText({
-  button <- buttonfix(session, input$lda_button_fit)
-  
-  if (button$lda_button_fit)
-  {
+  observeEvent(input$lda_button_fit, {
     withProgress(message='Fitting the model...', value=0,
     {
-      corpus <- get("corpus", envir=session)
-      DTM <- qdap::as.dtm(corpus)
+      incProgress(0, message="Transforming to document-term matrix...")
+      DTM <- qdap::as.dtm(localstate$corpus)
       
-      lda_mdl <- topicmodels::LDA(DTM, k=input$lda_ntopics, method=input$lda_method)
-      assign("lda_mdl", lda_mdl, envir=session)
+      print("asdf") # watch the terminal and be amazed!
       
-      capture.output(lda_mdl)
+      incProgress(1/2, message="Fitting the model...")
+      localstate$lda_mdl <- topicmodels::LDA(DTM, k=input$lda_ntopics, method=input$lda_method)
     })
-  }
-  else
+  })
+  
+  if (is.null(localstate$lda_mdl))
     "Press 'Fit' to fit an LDA model."
+  else
+    capture.output(localstate$lda_mdl)
 })
 
 

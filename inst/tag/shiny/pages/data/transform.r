@@ -22,39 +22,64 @@ output$data_transform <- renderUI({
 
 
 output$data_transform_buttonaction <- renderUI({
-  button <- buttonfix(session, input$button_data_transform)
-  
-  print(button)
-  if (button$button_data_transform)
-  {
+  observeEvent(input$button_data_transform, {
     withProgress(message='Processing...', value=0, {
-      corpus <- get("corpus", envir=session)
       
-      if (input$data_transform_checkbox_makelower)
-        corpus <- tm::tm_map(corpus, tm::content_transformer(tolower))
-      if (input$data_transform_checkbox_rempunct)
-        corpus <- tm::tm_map(corpus, tm::removePunctuation)
-      if (input$data_transform_checkbox_remnum)
-        corpus <- tm::tm_map(corpus, tm::removeNumbers)
-      if (input$data_transform_checkbox_remws)
-        corpus <- tm::tm_map(corpus, tm::stripWhitespace)
-      if (input$data_transform_checkbox_stem)
-        corpus <- tm::tm_map(corpus, tm::stemDocument)
-      if (input$data_transform_checkbox_remstop)
-        corpus <- tm::tm_map(corpus, tm::removeWords, tm::stopwords(input$data_stopwords_lang))
+      n <- input$data_transform_checkbox_makelower + 
+           input$data_transform_checkbox_rempunct + 
+           input$data_transform_checkbox_remnum + 
+           input$data_transform_checkbox_remws + 
+           input$data_transform_checkbox_stem + 
+           input$data_transform_checkbox_remstop
       
-      assign("corpus", corpus, envir=session)
-      tdm <- tm::TermDocumentMatrix(corpus)
-      assign("tdm", tdm, envir=session)
-      
-      wordcount_table <- sort(rowSums(as.matrix(tdm)), decreasing=TRUE)
-      assign("wordcount_table", wordcount_table, envir=session)
-      
-      
-      "Done processing!"
+      localstate$runtime <- system.time({
+        if (input$data_transform_checkbox_makelower)
+        {
+          incProgress(0, message="Setting to lowercase...")
+          localstate$corpus <- tm::tm_map(localstate$corpus, tm::content_transformer(tolower))
+          incProgress(1/n)
+        }
+        if (input$data_transform_checkbox_rempunct)
+        {
+          incProgress(0, message="Removing punctuation...")
+          localstate$corpus <- tm::tm_map(localstate$corpus, tm::removePunctuation)
+          incProgress(1/n)
+        }
+        if (input$data_transform_checkbox_remnum)
+        {
+          incProgress(0, message="Removing numbers...")
+          localstate$corpus <- tm::tm_map(localstate$corpus, tm::removeNumbers)
+          incProgress(1/n)
+        }
+        if (input$data_transform_checkbox_remws)
+        {
+          incProgress(0, message="Stripping whitespace...")
+          localstate$corpus <- tm::tm_map(localstate$corpus, tm::stripWhitespace)
+          incProgress(1/n)
+        }
+        if (input$data_transform_checkbox_stem)
+        {
+          incProgress(0, message="Stemming...")
+          localstate$corpus <- tm::tm_map(localstate$corpus, tm::stemDocument)
+          incProgress(1/n)
+        }
+        if (input$data_transform_checkbox_remstop)
+        {
+          incProgress(0, message="Removing stopwords...")
+          localstate$corpus <- tm::tm_map(localstate$corpus, tm::removeWords, tm::stopwords(input$data_stopwords_lang))
+          incProgress(1/n)
+        }
+        
+        localstate$tdm <- tm::TermDocumentMatrix(localstate$corpus)
+        localstate$wordcount_table <- sort(rowSums(as.matrix(localstate$tdm)), decreasing=TRUE)
+      })
     })
-  }
-  else
-    "Do something"
+  })
+  
+  output <- eventReactive(input$button_data_transform, {
+    paste("Processing finished in", localstate$runtime[3], "seconds.")
+  })
+  
+  output()
 })
 

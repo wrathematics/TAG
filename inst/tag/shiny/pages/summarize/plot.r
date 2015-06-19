@@ -6,11 +6,10 @@ output$summarize_top10 <- renderUI(
 )
 
 output$summarize_top10_plot <- renderPlot({
-  wordcount_table <- get("wordcount_table", envir=session)
   withProgress(message='Rendering plot...', value=0,
   {
-    tot <- sum(wordcount_table)
-    v <- wordcount_table[1:min(length(wordcount_table), 10)]
+    tot <- sum(localstate$wordcount_table)
+    v <- localstate$wordcount_table[1:min(length(localstate$wordcount_table), 10)]
     
     df <- data.frame(terms=names(v), counts=v, stringsAsFactors=FALSE)
     
@@ -35,7 +34,7 @@ output$summarize_wordcorr <- renderUI(
     sidebarPanel(
       h5("Correlation Plot Options"),
       sliderInput("wordcorr_corr", "Minimum Correlation", min=.05, max=1.0, value=.750000000),
-      tags$textarea(id="wordcorr_word", rows=1, cols=60, ""),
+      tags$textarea(id="wordcorr_word", rows=1, cols=10, ""),
       render_helpfile("Correlation Plot", "summarize/plot_wordcorr.md")
     ),
     mainPanel(
@@ -53,8 +52,7 @@ output$summarize_wordcorr_plot <- renderPlot(
     }
     else
     {
-      corpus <- get("corpus", envir=session)
-      cor_list <- qdap::apply_as_df(corpus, qdap::word_cor, word=input$wordcorr_word, r=input$wordcorr_corr)
+      cor_list <- qdap::apply_as_df(localstate$corpus, qdap::word_cor, word=input$wordcorr_word, r=input$wordcorr_corr)
       
       if (is.null(cor_list))
       {
@@ -85,8 +83,7 @@ output$summarize_zipf <- renderUI(
 output$summarize_zipf_plot <- renderPlot(
   withProgress(message='Rendering plot...', value=0,
   {
-    tdm <- get("tdm", envir=session)
-    tm::Zipf_plot(tdm)
+    tm::Zipf_plot(localstate$tdm)
   })
 )
 
@@ -127,8 +124,7 @@ output$summarize_wordcloud_plotter <- renderPlot({
   
   withProgress(message='Rendering plot...', value=0, 
   {
-    corpus <- get("corpus", envir=session)
-    wordcloud::wordcloud(corpus, min.freq=input$wordcloud_minfreq, max.words=input$wordcloud_maxwords, random.order=FALSE, random.color=FALSE, colors=colors, scale=c(8, .2))
+    wordcloud::wordcloud(localstate$corpus, min.freq=input$wordcloud_minfreq, max.words=input$wordcloud_maxwords, random.order=FALSE, random.color=FALSE, colors=colors, scale=c(8, .2))
   })
 })
 
