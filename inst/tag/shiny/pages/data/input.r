@@ -1,7 +1,8 @@
 output$data_import <- renderUI({
   sidebarLayout(
     sidebarPanel(
-      radioButtons(inputId="data_infile", label="Select File:", c("txt"="txt", "dir"="dir", "rda"="rda"), selected="txt", inline=TRUE),
+      ### TODO
+#      radioButtons(inputId="data_infile", label="Select File:", c("txt"="txt", "dir"="dir", "rda"="rda"), selected="txt", inline=TRUE),
       conditionalPanel(condition = "input.data_infile == 'state'",
         fileInput('uploadState', 'Load previous app state:', accept=".rda"),
         uiOutput("refreshOnUpload")
@@ -41,7 +42,10 @@ output$data_input_book_buttonaction <- renderUI({
   
   
   output <- eventReactive(input$button_data_input_book, {
-    HTML(paste("The<i>", input$data_books, "</i>corpus is now ready to use!\nLoading finished in", round(localstate$runtime[3], 3), "seconds."))
+    if (is.null(localstate$runtime))
+      HTML("")
+    else
+      HTML(paste("The<i>", input$data_books, "</i>corpus is now ready to use!\nLoading finished in", round(localstate$runtime[3], 3), "seconds."))
   })
   
   output()
