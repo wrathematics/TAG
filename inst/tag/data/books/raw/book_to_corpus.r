@@ -4,12 +4,15 @@
 library(tm)
 sourcedir <- "./"
 
-files <- dir(sourcedir)
+files <- dir(sourcedir, pattern="[.]txt")
 
 for (file in files){
   name <- sub(file, pattern=".txt", replacement="")
-  tmp <- Corpus(DirSource(sourcedir, pattern=name))
-  saveRDS(file=paste0("../", name, ".rda"), object=tmp)
+  
+  corpus <- Corpus(DirSource(sourcedir, pattern=name))
+  tdm <- tm::TermDocumentMatrix(corpus)
+  wordcount_table <- sort(rowSums(as.matrix(tdm)), decreasing=TRUE)
+  
+  save(corpus, tdm, wordcount_table, file=paste0("../", name, ".rda"))
 }
 
-# readRDS()
