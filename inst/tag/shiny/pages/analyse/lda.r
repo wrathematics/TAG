@@ -24,6 +24,8 @@ output$analyse_lda_fit_ <- renderText({
       
       incProgress(1/2, message="Fitting the model...")
       localstate$lda_mdl <- topicmodels::LDA(DTM, k=input$lda_ntopics, method=input$lda_method)
+      
+      setProgress(1)
     })
   })
   
@@ -40,25 +42,16 @@ output$analyse_lda_topics <- renderUI(
     sidebarPanel(
       h5("Latent Dirichlet Allocation"),
       sliderInput("lda_nterms", "Number of Terms", min=1, max=50, value=10),
-      actionButton("lda_button_topics", "Update Topics"),
       render_helpfile("LDA", "analyse/lda_topics.md")
     ),
     mainPanel(
       renderTable({
-        button <- buttonfix(session, input$lda_button_topics)
-        
-        if (button$lda_button_topics)
-        {
-          if (exists("lda_mdl", envir=session))
-          {
-            lda_mdl <- get("lda_mdl", envir=session)
-            topicmodels::terms(lda_mdl, input$lda_nterms)
-          }
-          else
-            stop("You must first fit a model in the 'Fit' tab!")
-        }
+        if (!is.null(localstate$lda_mdl))
+          topicmodels::terms(localstate$lda_mdl, input$lda_nterms)
         else
-          data.frame("Fit a model in the 'Fit' tab and then generate topics by clicking the 'Update Topics' button.")
+          stop("You must first fit a model in the 'Fit' tab!")
+#        else
+#          data.frame("Fit a model in the 'Fit' tab and then generate topics by clicking the 'Update Topics' button.")
       })
     )
   )
