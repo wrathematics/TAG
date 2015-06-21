@@ -3,7 +3,7 @@
 \docType{package}
 \name{textgateway-package}
 \alias{textgateway-package}
-\title{Text Gateway}
+\title{Text Analytics Gateway}
 \description{
 TODO
 }

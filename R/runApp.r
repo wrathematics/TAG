@@ -3,5 +3,5 @@
 #' @export
 textgateway <- function()
 {
-  shiny::runApp(file.path(system.file("shiny", package="textgateway")))
+  shiny::runApp(file.path(system.file("shiny", package="TAG")))
 }

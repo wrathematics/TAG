@@ -1,5 +1,5 @@
-Package: textgateway
-Title: Text Gateway
+Package: TAG
+Title: Text Analytics Gateway
 Version: 0.0.2
 Description:  TODO
 License: AGPL-3
@@ -16,7 +16,7 @@ Imports:
     markdown (>= 0.7.4),
     rmarkdown (>= 0.5.1),
     topicmodels (>= 0.2.1)
-NeedsCompilation: no
+NeedsCompilation: yes
 ByteCompile: yes
 Authors@R: c(person("Drew", "Schmidt", email="schmidt@math.utk.edu", 
     role=c("aut", "cre")), 

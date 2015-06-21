@@ -1,4 +1,4 @@
-#' Text Gateway
+#' Text Analytics Gateway
 #' 
 #' TODO
 #' 
@@ -14,6 +14,8 @@
 #' 
 #' @references 
 #' Project home page: \url{https://github.com/XSEDEScienceGateways/textgateway}
+#' 
+#' @useDynLib TAG R_levenshtein_dist R_find_closest_word
 #' 
 #' @import shiny ggplot2 memuse SnowballC tm
 #' 
