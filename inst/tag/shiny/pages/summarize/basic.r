@@ -3,11 +3,11 @@ output$summarize_corpus <- renderUI({
     <table>
       <tr>
         <td>Total Letters:</td>
-        <td>", print('FIXME'), "</td>
+        <td>", sum(sapply(localstate$corpus, function(i) nchar(i$content))), "</td>
       </tr>
       <tr>
         <td>Total Words:</td>
-        <td>", print('FIXME'), "</td>
+        <td>", sum(sapply(localstate$corpus, function(i) wc(i$content))), "</td>
       </tr>
       <tr>
         <td>Distinct Terms:</td>
