@@ -4,8 +4,8 @@ output$data_transform <- renderUI({
       sidebarPanel(
         checkboxInput("data_transform_checkbox_makelower", "Make lowercase?", value=TRUE),
         checkboxInput("data_transform_checkbox_rempunct", "Remove punctuation?", value=TRUE),
-        checkboxInput("data_transform_checkbox_remnum", "Remove numbers?", value=FALSE),
-        checkboxInput("data_transform_checkbox_remws", "Remove extra whitespace?", value=FALSE),
+        checkboxInput("data_transform_checkbox_remnum", "Remove numbers?", value=TRUE),
+        checkboxInput("data_transform_checkbox_remws", "Remove extra whitespace?", value=TRUE),
         checkboxInput("data_transform_checkbox_stem", "Stem?", value=FALSE),
         selectizeInput("data_stopwords_lang", "Stopwords Language", stopwords_list, "english"),
         checkboxInput("data_transform_checkbox_remstop", "Remove stopwords?", value=TRUE),
@@ -37,40 +37,42 @@ output$data_transform_buttonaction <- renderUI({
         {
           incProgress(0, message="Setting to lowercase...")
           localstate$corpus <- tm::tm_map(localstate$corpus, tm::content_transformer(tolower))
-          incProgress(1/n)
+          incProgress(1/n/2)
         }
         if (input$data_transform_checkbox_rempunct)
         {
           incProgress(0, message="Removing punctuation...")
           localstate$corpus <- tm::tm_map(localstate$corpus, tm::removePunctuation)
-          incProgress(1/n)
+          incProgress(1/n/2)
         }
         if (input$data_transform_checkbox_remnum)
         {
           incProgress(0, message="Removing numbers...")
           localstate$corpus <- tm::tm_map(localstate$corpus, tm::removeNumbers)
-          incProgress(1/n)
+          incProgress(1/n/2)
         }
         if (input$data_transform_checkbox_remws)
         {
           incProgress(0, message="Stripping whitespace...")
           localstate$corpus <- tm::tm_map(localstate$corpus, tm::stripWhitespace)
-          incProgress(1/n)
+          incProgress(1/n/2)
         }
         if (input$data_transform_checkbox_stem)
         {
           incProgress(0, message="Stemming...")
           localstate$corpus <- tm::tm_map(localstate$corpus, tm::stemDocument)
-          incProgress(1/n)
+          incProgress(1/n/2)
         }
         if (input$data_transform_checkbox_remstop)
         {
           incProgress(0, message="Removing stopwords...")
           localstate$corpus <- tm::tm_map(localstate$corpus, tm::removeWords, tm::stopwords(input$data_stopwords_lang))
-          incProgress(1/n)
+          incProgress(1/n/2)
         }
         
+        incProgress(0, message="Updating tdm...")
         localstate$tdm <- tm::TermDocumentMatrix(localstate$corpus)
+        setProgress(3/4, message="Updating wordcounts...")
         localstate$wordcount_table <- sort(rowSums(as.matrix(localstate$tdm)), decreasing=TRUE)
       })
       
