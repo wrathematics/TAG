@@ -69,7 +69,6 @@ output$analyse_lda_vis <- renderUI({
   )
 })
 
-
 output$analyse_lda_vis_ <- LDAvis::renderVis({
   withProgress(message='Preparing the data...', value=0,
   {
