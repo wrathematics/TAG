@@ -30,4 +30,3 @@ acknowledge these and thank the authors for their work:
 
 Additionally, we would like to thank Mikhail Popov for help with
 a performance issue in our shiny usage.
-
