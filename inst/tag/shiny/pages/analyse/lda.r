@@ -17,18 +17,20 @@ output$analyse_lda_fit_ <- renderText({
   temp <- eventReactive(input$lda_button_fit, {
     withProgress(message='Fitting the model...', value=0,
     {
-      incProgress(0, message="Transforming to document-term matrix...")
-      DTM <- qdap::as.dtm(localstate$corpus)
-      
-      print("asdf") # watch the terminal and be amazed!
-      
-      incProgress(1/2, message="Fitting the model...")
-      localstate$lda_mdl <- topicmodels::LDA(DTM, k=input$lda_ntopics, method=input$lda_method)
-      
-      setProgress(1)
+      runtime <- system.time({
+        incProgress(0, message="Transforming to document-term matrix...")
+        DTM <- qdap::as.dtm(localstate$corpus)
+        
+        print("asdf") # watch the terminal and be amazed!
+        
+        incProgress(1/2, message="Fitting the model...")
+        localstate$lda_mdl <- topicmodels::LDA(DTM, k=input$lda_ntopics, method=input$lda_method)
+        
+        setProgress(1)
+      })
     })
     
-    capture.output(localstate$lda_mdl)
+    paste("Fit a", input$lda_method, "LDA topic model in", round(runtime[3], roundlen), "seconds.")
   })
   
   temp()
