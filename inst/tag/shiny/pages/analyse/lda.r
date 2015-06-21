@@ -18,10 +18,8 @@ output$analyse_lda_fit_ <- renderText({
     withProgress(message='Fitting the model...', value=0,
     {
       runtime <- system.time({
-        incProgress(0, message="Transforming to dtm...")
+        incProgress(0, message="Building to dtm...")
         DTM <- qdap::as.dtm(localstate$corpus)
-        
-        print("asdf") # watch the terminal and be amazed!
         
         incProgress(1/2, message="Fitting the model...")
         localstate$lda_mdl <- topicmodels::LDA(DTM, k=input$lda_ntopics, method=input$lda_method)
@@ -82,7 +80,7 @@ output$analyse_lda_vis_ <- LDAvis::renderVis({
     theta <- post$topics
     doc.length <- sapply(localstate$corpus, function(i) length(i$content))
     vocab <- localstate$lda_mdl@terms
-    term.frequency <- sort(localstate$wordcount_table)
+    term.frequency <- localstate$wordcount_table[vocab]
     
     setProgress(1/2, message="Visualizing the model...")
     LDAvis::createJSON(phi, theta, doc.length, vocab, term.frequency, R=input$lda_vis_nterms)
