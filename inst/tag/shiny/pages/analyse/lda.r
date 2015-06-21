@@ -49,8 +49,6 @@ output$analyse_lda_topics <- renderUI(
           topicmodels::terms(localstate$lda_mdl, input$lda_nterms)
         else
           stop("You must first fit a model in the 'Fit' tab!")
-#        else
-#          data.frame("Fit a model in the 'Fit' tab and then generate topics by clicking the 'Update Topics' button.")
       })
     )
   )

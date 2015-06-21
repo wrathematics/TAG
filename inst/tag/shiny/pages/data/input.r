@@ -19,9 +19,9 @@ output$data_import <- renderUI({
 
 
 output$data_input_book_buttonaction <- renderUI({
-  observeEvent(input$button_data_input_book, {
-    withProgress(message='Reading data...', value=0, {
-      localstate$runtime <- system.time({
+  temp <- eventReactive(input$button_data_input_book, {
+    withProgress(message='Loading data...', value=0, {
+      runtime <- system.time({
         book <- input$data_books
         bookfile <- booklist[which(booklist_names == book)]
         
@@ -37,17 +37,14 @@ output$data_input_book_buttonaction <- renderUI({
 #        wordcount_table <- sort(rowSums(as.matrix(tdm)), decreasing=TRUE)
 #        assign("wordcount_table", wordcount_table, envir=session)
       })
+      
+      setProgress(1)
     })
+    
+    HTML(paste("The<i>", input$data_books, "</i>corpus is now ready to use!\nLoading finished in", round(runtime[3], roundlen), "seconds."))
   })
   
+  temp()
   
-  output <- eventReactive(input$button_data_input_book, {
-    if (is.null(localstate$runtime))
-      HTML("")
-    else
-      HTML(paste("The<i>", input$data_books, "</i>corpus is now ready to use!\nLoading finished in", round(localstate$runtime[3], 3), "seconds."))
-  })
-  
-  output()
 })
 

@@ -36,6 +36,7 @@ output$summarize_termsearch <- renderUI({
     sidebarLayout(
       sidebarPanel(
         h5("Term Frequency"),
+        checkboxInput("basic_termsearch_checkbox_findclosest", "Find closest match?", value=FALSE),
         tags$textarea(id="summarize_termsearchbox", rows=1, cols=10, ""),
         render_helpfile("Term Search", "summarize/basic_termsearch.md")
       ),
@@ -52,11 +53,16 @@ output$tabs_search <- renderUI({
   if (input$summarize_termsearchbox == "")
     return("")
   
-  term <- localstate$wordcount_table[input$summarize_termsearchbox]
+  term <- input$summarize_termsearchbox
   
-  if (is.na(term))
+  if (input$basic_termsearch_checkbox_findclosest)
+    term <- find_closest_word(term, names(localstate$wordcount_table))$word
+  
+  freq <- localstate$wordcount_table[term]
+  
+  if (is.na(freq))
     HTML("Term not found! <br><br> You may need to transform the data first (stem, lowercase, etc.).  See the Data--Transform tab.")
   else
-    paste0("\"", input$summarize_termsearchbox, "\" occurs ", term, " times in the corpus.")
+    paste0("\"", term, "\" occurs ", freq, " times in the corpus.")
 })
 

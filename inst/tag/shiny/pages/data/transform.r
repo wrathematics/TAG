@@ -22,7 +22,7 @@ output$data_transform <- renderUI({
 
 
 output$data_transform_buttonaction <- renderUI({
-  observeEvent(input$button_data_transform, {
+  temp <- eventReactive(input$button_data_transform, {
     withProgress(message='Processing...', value=0, {
       
       n <- input$data_transform_checkbox_makelower + 
@@ -32,7 +32,7 @@ output$data_transform_buttonaction <- renderUI({
            input$data_transform_checkbox_stem + 
            input$data_transform_checkbox_remstop
       
-      localstate$runtime <- system.time({
+      runtime <- system.time({
         if (input$data_transform_checkbox_makelower)
         {
           incProgress(0, message="Setting to lowercase...")
@@ -76,12 +76,10 @@ output$data_transform_buttonaction <- renderUI({
       
       setProgress(1)
     })
+    
+    paste("Processing finished in", round(runtime[3], roundlen), "seconds.")
   })
   
-  output <- eventReactive(input$button_data_transform, {
-    paste("Processing finished in", localstate$runtime[3], "seconds.")
-  })
-  
-  output()
+  temp()
 })
 

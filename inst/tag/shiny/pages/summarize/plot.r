@@ -33,6 +33,7 @@ output$summarize_wordcorr <- renderUI(
   sidebarLayout(
     sidebarPanel(
       h5("Correlation Plot Options"),
+      checkboxInput("plot_termsearch_checkbox_findclosest", "Find closest match?", value=FALSE),
       sliderInput("wordcorr_corr", "Minimum Correlation", min=.05, max=1.0, value=.750000000),
       tags$textarea(id="wordcorr_word", rows=1, cols=10, ""),
       render_helpfile("Correlation Plot", "summarize/plot_wordcorr.md")
@@ -46,13 +47,15 @@ output$summarize_wordcorr <- renderUI(
 output$summarize_wordcorr_plot <- renderPlot(
   withProgress(message='Rendering plot...', value=0,
   {
-    if (input$wordcorr_word == "")
-    {
+    term <- input$wordcorr_word
+    if (input$plot_termsearch_checkbox_findclosest)
+      term <- find_closest_word(term, names(localstate$wordcount_table))$word
+    
+    if (term == "")
       plot.new()
-    }
     else
     {
-      cor_list <- qdap::apply_as_df(localstate$corpus, qdap::word_cor, word=input$wordcorr_word, r=input$wordcorr_corr)
+      cor_list <- qdap::apply_as_df(localstate$corpus, qdap::word_cor, word=term, r=input$wordcorr_corr)
       
       if (is.null(cor_list))
       {
