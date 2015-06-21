@@ -104,3 +104,61 @@ SEXP R_find_closest_word(SEXP input, SEXP words)
   return ret;
 }
 
+
+
+#include <ctype.h>
+#include <stdbool.h>
+
+SEXP R_wc(SEXP string)
+{
+  SEXP ret;
+  PROTECT(ret = allocVector(INTSXP, 1));
+  int wc = 0;
+  char c;
+  char *str;
+  bool correct;
+  
+  for (int j=0; j<LENGTH(string); j++)
+  {
+    int i = 0;
+    str = CHARPT(string, j);
+    
+    while ((c=str[i]) != '\0')
+    {
+      correct = false;
+      if (isspace(c) || c=='\n')
+        wc++;
+      
+      // skip multiple spaces
+      do
+      {
+        if (isspace(c) || c == '\n')
+        {
+          correct = true;
+          i++;
+        }
+        else
+          break;
+      } while ((c=str[i]) != '\0');
+      
+      if (!correct) i++;
+    }
+    
+    // Count words that end lines
+    if (i == 0) 
+      continue;
+    
+    c = str[i-1];
+    if (!isspace(c) && c!='\n' && c!='-')
+      wc++;
+    else if (c=='-' && j<LENGTH(string)-1)
+      wc--;
+  }
+  
+  INT(ret) = wc;
+  
+  UNPROTECT(1);
+  return ret;
+}
+
+
