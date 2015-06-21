@@ -29,4 +29,5 @@ acknowledge these and thank the authors for their work:
 * [ggplot2](http://cran.r-project.org/web/packages/ggplot2/index.html), [wordcloud](http://cran.r-project.org/web/packages/wordcloud/index.html), [RColorBrewer](http://cran.r-project.org/web/packages/RColorBrewer/index.html), and the incredible [LDAvis](http://cran.r-project.org/web/packages/LDAvis/index.html) --- the graphics and visualization stack
 
 Additionally, we would like to thank Mikhail Popov for help with
-a performance issue in our shiny usage.
+a performance issue in our shiny usage. 
+
