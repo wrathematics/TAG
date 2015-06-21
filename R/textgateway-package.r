@@ -17,7 +17,12 @@
 #' 
 #' @useDynLib TAG R_levenshtein_dist R_find_closest_word R_wc
 #' 
-#' @import shiny ggplot2 memuse SnowballC tm
+#' @import shiny
+#' @import ggplot2
+#' @import SnowballC
+#' @import tm
+#' @import memuse
+#' @import LDAvis
 #' 
 #' @importFrom wordcloud wordcloud
 #' @importFrom RColorBrewer brewer.pal
