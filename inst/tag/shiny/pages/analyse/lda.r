@@ -5,7 +5,7 @@ output$analyse_lda_fit <- renderUI(
       sliderInput("lda_ntopics", "Number of Topics", min=1, max=20, value=3),
       selectizeInput("lda_method", "Method", c("Gibbs", "VEM"), "Gibbs"),
       actionButton("lda_button_fit", "Fit"),
-      render_helpfile("LDA", "analyse/lda_fit.md")
+      render_helpfile("LDA Fit", "analyse/lda_fit.md")
     ),
     mainPanel(
       textOutput("analyse_lda_fit_")
@@ -18,7 +18,7 @@ output$analyse_lda_fit_ <- renderText({
     withProgress(message='Fitting the model...', value=0,
     {
       runtime <- system.time({
-        incProgress(0, message="Transforming to document-term matrix...")
+        incProgress(0, message="Transforming to dtm...")
         DTM <- qdap::as.dtm(localstate$corpus)
         
         print("asdf") # watch the terminal and be amazed!
@@ -42,8 +42,8 @@ output$analyse_lda_topics <- renderUI(
   sidebarLayout(
     sidebarPanel(
       h5("Latent Dirichlet Allocation"),
-      sliderInput("lda_nterms", "Number of Terms", min=1, max=50, value=10),
-      render_helpfile("LDA", "analyse/lda_topics.md")
+      sliderInput("lda_nterms", "Number of terms", min=5, max=50, value=10),
+      render_helpfile("LDA Topics", "analyse/lda_topics.md")
     ),
     mainPanel(
       renderTable({
@@ -55,4 +55,37 @@ output$analyse_lda_topics <- renderUI(
     )
   )
 )
+
+
+
+output$analyse_lda_vis <- renderUI({
+  sidebarLayout(
+    sidebarPanel(
+      h5("LDA Vis"),
+      sliderInput("lda_vis_nterms", "Number of terms", min=5, max=50, value=10),
+      render_helpfile("LDA Vis", "analyse/lda_vis.md")
+    ),
+    mainPanel(
+      LDAvis::visOutput('analyse_lda_vis_')
+    )
+  )
+})
+
+
+output$analyse_lda_vis_ <- LDAvis::renderVis({
+  withProgress(message='Preparing the data...', value=0,
+  {
+    post <- topicmodels::posterior(localstate$lda_mdl)
+    setProgress(1/3)
+    
+    phi <- post$terms
+    theta <- post$topics
+    doc.length <- sapply(localstate$corpus, function(i) length(i$content))
+    vocab <- localstate$lda_mdl@terms
+    term.frequency <- sort(localstate$wordcount_table)
+    
+    setProgress(1/2, message="Visualizing the model...")
+    LDAvis::createJSON(phi, theta, doc.length, vocab, term.frequency, R=input$lda_vis_nterms)
+  })
+})
 

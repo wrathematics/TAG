@@ -33,7 +33,8 @@ In addition to needing R, you need the following packages:
 * qdap (>= 2.2.0),
 * markdown (>= 0.7.4),
 * rmarkdown (>= 0.5.1),
-* topicmodels (>= 0.2.1)
+* topicmodels (>= 0.2.1),
+* LDAvis (>= 0.3.1)
 
 
 The easiest way to install this package is use the devtools package,
