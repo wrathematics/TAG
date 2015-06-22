@@ -14,6 +14,8 @@ output$analyse_lda_fit <- renderUI(
 )
 
 output$analyse_lda_fit_ <- renderText({
+  must_have("corpus")
+  
   temp <- eventReactive(input$lda_button_fit, {
     withProgress(message='Fitting the model...', value=0,
     {
@@ -23,6 +25,9 @@ output$analyse_lda_fit_ <- renderText({
         
         incProgress(1/2, message="Fitting the model...")
         localstate$lda_mdl <- topicmodels::LDA(DTM, k=input$lda_ntopics, method=input$lda_method)
+        
+        incProgress(1/3, message="Setting posteriors...")
+        localstate$post <- topicmodels::posterior(localstate$lda_mdl)
         
         setProgress(1)
       })
@@ -45,6 +50,9 @@ output$analyse_lda_topics <- renderUI(
     ),
     mainPanel(
       renderTable({
+        must_have("corpus")
+        must_have("lda_mdl")
+        
         if (!is.null(localstate$lda_mdl))
           topicmodels::terms(localstate$lda_mdl, input$lda_nterms)
         else
@@ -70,13 +78,13 @@ output$analyse_lda_vis <- renderUI({
 })
 
 output$analyse_lda_vis_ <- LDAvis::renderVis({
+  must_have("corpus")
+  must_have("lda_mdl")
+  
   withProgress(message='Preparing the data...', value=0,
   {
-    post <- topicmodels::posterior(localstate$lda_mdl)
-    setProgress(1/3)
-    
-    phi <- post$terms
-    theta <- post$topics
+    phi <- localstate$post$terms
+    theta <- localstate$post$topics
     doc.length <- sapply(localstate$corpus, function(i) length(i$content))
     vocab <- localstate$lda_mdl@terms
     term.frequency <- localstate$wordcount_table[vocab]

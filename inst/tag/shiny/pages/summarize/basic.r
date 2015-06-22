@@ -1,4 +1,6 @@
 output$summarize_corpus <- renderUI({
+  must_have("corpus")
+  
   html <- paste("
     <table>
       <tr>
@@ -50,6 +52,8 @@ output$summarize_termsearch <- renderUI({
 
 
 output$tabs_search <- renderUI({
+  must_have("wordcount_table")
+  
   if (input$summarize_termsearchbox == "")
     return("")
   

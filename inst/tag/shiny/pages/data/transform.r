@@ -22,6 +22,8 @@ output$data_transform <- renderUI({
 
 
 output$data_transform_buttonaction <- renderUI({
+  must_have("corpus")
+  
   temp <- eventReactive(input$button_data_transform, {
     withProgress(message='Processing...', value=0, {
       

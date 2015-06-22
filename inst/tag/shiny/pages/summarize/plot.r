@@ -6,6 +6,8 @@ output$summarize_top10 <- renderUI(
 )
 
 output$summarize_top10_plot <- renderPlot({
+  must_have("corpus")
+  
   withProgress(message='Rendering plot...', value=0,
   {
     tot <- sum(localstate$wordcount_table)
@@ -47,6 +49,8 @@ output$summarize_wordcorr <- renderUI(
 output$summarize_wordcorr_plot <- renderPlot(
   withProgress(message='Rendering plot...', value=0,
   {
+    must_have("corpus")
+    
     term <- input$wordcorr_word
     if (input$plot_termsearch_checkbox_findclosest)
       term <- find_closest_word(term, names(localstate$wordcount_table))$word
@@ -86,6 +90,8 @@ output$summarize_zipf <- renderUI(
 output$summarize_zipf_plot <- renderPlot(
   withProgress(message='Rendering plot...', value=0,
   {
+    must_have("tdm")
+    
     tm::Zipf_plot(localstate$tdm)
   })
 )
@@ -108,6 +114,8 @@ output$summarize_wordcloud <- renderUI(
 )
 
 output$summarize_wordcloud_plotter <- renderPlot({
+  must_have("corpus")
+  
   if (input$wordcloud_colors == "Black/White")
     colors <- "black"
   else if (input$wordcloud_colors == "Accent")
