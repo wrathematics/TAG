@@ -11,7 +11,7 @@ aboutfile <- "inst/tag/shiny/pages/about.md"
 about <- readLines(aboutfile)
 versionline <- grep(about, pattern="Version:")
 about[versionline] <- paste("* **Version:**", tagversion)
-cat(paste(paste0(about, collapse="\n"), "\n\n"), file=aboutfile, append=FALSE)
+cat(paste(paste0(about, collapse="\n"), "\n"), file=aboutfile, append=FALSE)
 ```
 
 * **Version:** `r tagversion`
