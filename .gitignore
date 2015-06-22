@@ -3,3 +3,6 @@
 
 *.o
 *.so
+
+inst/tag/rsconnect
+inst/deploy_shinyapps
