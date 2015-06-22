@@ -7,7 +7,8 @@ shinyUI(
       tags$link(rel="stylesheet", type="text/css", href="css/logo.css")
     ),
     
-    navbarPage(title=div(a(href="http://xsede.org", target="new", img(src="img/xsede_small.png"))), 
+    navbarPage(
+      title=div(a(href="http://xsede.org", target="new", img(src="img/xsede_small.png"))), 
       windowTitle="TAG: Text Analytics Gateway", id="nav_tag", 
       inverse=TRUE, collapsible=FALSE, 
       
