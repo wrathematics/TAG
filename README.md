@@ -34,7 +34,8 @@ In addition to needing R, you need the following packages:
 * markdown (>= 0.7.4),
 * rmarkdown (>= 0.5.1),
 * topicmodels (>= 0.2.1),
-* LDAvis (>= 0.3.1)
+* LDAvis (>= 0.3.1),
+* DT (>= 0.1)
 
 
 The easiest way to install this package is use the devtools package,
