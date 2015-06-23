@@ -2,14 +2,14 @@ output$data_filter <- renderUI({
   list(
     sidebarLayout(
       sidebarPanel(
-        checkboxInput("data_filter_checkbox_makelower", "Make lowercase?", value=TRUE),
-        checkboxInput("data_filter_checkbox_rempunct", "Remove punctuation?", value=TRUE),
-        checkboxInput("data_filter_checkbox_remnum", "Remove numbers?", value=TRUE),
-        checkboxInput("data_filter_checkbox_remws", "Remove extra whitespace?", value=TRUE),
-        checkboxInput("data_filter_checkbox_stem", "Stem?", value=FALSE),
         selectizeInput("data_filter_stopwords_lang", "Stopwords Language", stopwords_list, "english"),
         checkboxInput("data_filter_checkbox_remstop", "Remove stopwords?", value=TRUE),
+        
+        hr(),
+        
         checkboxInput("data_filter_checkbox_exclude", "Exclude list?", value=TRUE),
+        checkboxInput("data_filter_checkbox_greedy", "Exclude greedily?", value=TRUE),
+        checkboxInput("data_filter_checkbox_greedy", "Exclude ignores case?", value=FALSE),
         tags$textarea(id="data_filter_exclude", rows=1, cols=10, ""),
         
         actionButton("button_data_filter", "Filter"),
@@ -30,44 +30,9 @@ output$data_filter_buttonaction <- renderUI({
   temp <- eventReactive(input$button_data_filter, {
     withProgress(message='Processing...', value=0, {
       
-      n <- input$data_filter_checkbox_makelower + 
-           input$data_filter_checkbox_rempunct + 
-           input$data_filter_checkbox_remnum + 
-           input$data_filter_checkbox_remws + 
-           input$data_filter_checkbox_stem + 
-           input$data_filter_checkbox_remstop
+      n <- input$data_filter_checkbox_remstop
       
       runtime <- system.time({
-        if (input$data_filter_checkbox_makelower)
-        {
-          incProgress(0, message="Setting to lowercase...")
-          localstate$corpus <- tm::tm_map(localstate$corpus, tm::content_transformer(tolower))
-          incProgress(1/n/2)
-        }
-        if (input$data_filter_checkbox_rempunct)
-        {
-          incProgress(0, message="Removing punctuation...")
-          localstate$corpus <- tm::tm_map(localstate$corpus, tm::removePunctuation)
-          incProgress(1/n/2)
-        }
-        if (input$data_filter_checkbox_remnum)
-        {
-          incProgress(0, message="Removing numbers...")
-          localstate$corpus <- tm::tm_map(localstate$corpus, tm::removeNumbers)
-          incProgress(1/n/2)
-        }
-        if (input$data_filter_checkbox_remws)
-        {
-          incProgress(0, message="Stripping whitespace...")
-          localstate$corpus <- tm::tm_map(localstate$corpus, tm::stripWhitespace)
-          incProgress(1/n/2)
-        }
-        if (input$data_filter_checkbox_stem)
-        {
-          incProgress(0, message="Stemming...")
-          localstate$corpus <- tm::tm_map(localstate$corpus, tm::stemDocument)
-          incProgress(1/n/2)
-        }
         if (input$data_filter_checkbox_remstop)
         {
           incProgress(0, message="Removing stopwords...")
