@@ -1,4 +1,4 @@
-## Basic text preprocessing.
+## Filtering and Excluding
 
 #### Stopwords
 
