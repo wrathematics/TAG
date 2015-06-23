@@ -34,11 +34,11 @@ output$data_input_book_buttonaction <- renderUI({
           localstate$tdm <- tdm
           localstate$wordcount_table <- wordcount_table
           
-  #        assign("corpus", corpus, envir=session)
-  #        tdm <- tm::TermDocumentMatrix(corpus)
-  #        assign("tdm", tdm, envir=session)
-  #        wordcount_table <- sort(rowSums(as.matrix(tdm)), decreasing=TRUE)
-  #        assign("wordcount_table", wordcount_table, envir=session)
+#          data(crude, package="tm")
+#          localstate$corpus <- crude
+#          localstate$tdm <- tm::TermDocumentMatrix(localstate$corpus)
+#          localstate$wordcount_table <- sort(rowSums(as.matrix(localstate$tdm)), decreasing=TRUE)
+          
         })
         
         localstate$lda_mdl <- NULL
