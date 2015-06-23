@@ -1,3 +1,8 @@
+<!--- 
+  NOTE: this file is modified by running `redocument`, via `README.Rmd`
+  only the Version line is modified.
+ -->
+
 # TAG: Text Analysis Gateway
 
 ## Basic Text Analysis Tools Without the Programming
@@ -28,6 +33,5 @@ a performance issue in our shiny usage.
 
 
 ## Theme
- 
- 
+
  
