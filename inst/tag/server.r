@@ -2,17 +2,6 @@ library(TAG)
 library(ggplot2)
 
 
-
-source(file="shiny/utils/help.r")
-source(file="shiny/utils/validate.r")
-
-stopwords_list <- c("danish", "dutch", "english", "finnish", "french", "german", "hungarian", "italian", "norwegian", "portuguese", "russian", "spanish", "swedish")
-
-booklist_names <- readLines("data/books/booklist_names.txt")
-booklist <- dir("data/books/", pattern=".rda")
-
-
-
 shinyServer(
   function(input, output, session)
   {
