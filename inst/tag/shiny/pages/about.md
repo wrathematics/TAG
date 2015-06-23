@@ -10,14 +10,6 @@
 * **Authors:** Drew Schmidt and Mike Black
 
 
-TAG is a web-app that contains a collection of utilities for
-performing text analyses.  Each analysis element contains this icon:
-<i title='Help' class='glyphicon glyphicon-question-sign'></i>.
-If you click it, additional information and help will pop up.  All
-documentation is released under a
-<a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons License</a>.
-
-
 
 ## Acknowledgements
 
