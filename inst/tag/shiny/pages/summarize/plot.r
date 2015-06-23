@@ -37,7 +37,7 @@ output$summarize_wordcorr <- renderUI(
       h5("Correlation Plot Options"),
       checkboxInput("plot_termsearch_checkbox_findclosest", "Find closest match?", value=FALSE),
       sliderInput("wordcorr_corr", "Minimum Correlation", min=.05, max=1.0, value=.750000000),
-      tags$textarea(id="wordcorr_word", rows=1, cols=10, ""),
+      textInput("wordcorr_word", ""),
       render_helpfile("Correlation Plot", "summarize/plot_wordcorr.md")
     ),
     mainPanel(
@@ -46,37 +46,37 @@ output$summarize_wordcorr <- renderUI(
   )
 )
 
-output$summarize_wordcorr_plot <- renderPlot(
+output$summarize_wordcorr_plot <- renderPlot({
+  must_have("corpus")
+  
+  term <- input$wordcorr_word
+  if (term == "")
+    return("")
+  
   withProgress(message='Rendering plot...', value=0,
   {
-    must_have("corpus")
-    
-    term <- input$wordcorr_word
     if (input$plot_termsearch_checkbox_findclosest)
       term <- find_closest_word(term, names(localstate$wordcount_table))$word
     
-    if (term == "")
+    cor_list <- qdap::apply_as_df(localstate$corpus, qdap::word_cor, word=term, r=input$wordcorr_corr)
+    
+    print(cor_list)
+    
+    if (is.null(cor_list))
+    {
       plot.new()
+      text("Term not found\nin corpus!", x=.45, y=.5, cex=3, col="red")
+    }
     else
     {
-      cor_list <- qdap::apply_as_df(localstate$corpus, qdap::word_cor, word=term, r=input$wordcorr_corr)
+      len <- length(cor_list[[1L]])
+      if (len > 10) len <- 10
+      cor_list[[1L]] <- sort(cor_list[[1L]], decreasing=TRUE)[1L:len]
       
-      if (is.null(cor_list))
-      {
-        plot.new()
-        text("Term not found\nin corpus!", x=.45, y=.5, cex=3, col="red")
-      }
-      else
-      {
-        len <- length(cor_list[[1L]])
-        if (len > 10) len <- 10
-        cor_list[[1L]] <- sort(cor_list[[1L]], decreasing=TRUE)[1L:len]
-        
-        plot(cor_list) + theme_bw()
-      }
+      plot(cor_list) + theme_bw()
     }
   })
-)
+})
 
 
 
