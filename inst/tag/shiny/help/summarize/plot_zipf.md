@@ -1,4 +1,4 @@
-> Zipf Plot
+## Zipf Plot
 
 <a href="https://en.wikipedia.org/wiki/Zipf%27s_law" target="_blank">Zipf's law</a>
 says that the frequency of a word's occurrence in a text is 

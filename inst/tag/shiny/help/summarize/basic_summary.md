@@ -1,6 +1,4 @@
-> Basic summary statistics.
-
-#### Corpus Summary
+## Corpus Summary
 
 Shows some basic summary statistics for the corpora.  
 
