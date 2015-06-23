@@ -7,8 +7,11 @@ output$data_filter <- renderUI({
         checkboxInput("data_filter_checkbox_remnum", "Remove numbers?", value=TRUE),
         checkboxInput("data_filter_checkbox_remws", "Remove extra whitespace?", value=TRUE),
         checkboxInput("data_filter_checkbox_stem", "Stem?", value=FALSE),
-        selectizeInput("data_stopwords_lang", "Stopwords Language", stopwords_list, "english"),
+        selectizeInput("data_filter_stopwords_lang", "Stopwords Language", stopwords_list, "english"),
         checkboxInput("data_filter_checkbox_remstop", "Remove stopwords?", value=TRUE),
+        checkboxInput("data_filter_checkbox_exclude", "Exclude list?", value=TRUE),
+        tags$textarea(id="data_filter_exclude", rows=1, cols=10, ""),
+        
         actionButton("button_data_filter", "Filter"),
         render_helpfile("Filter", "data/filter.md")
       ),
@@ -38,7 +41,7 @@ output$data_filter_buttonaction <- renderUI({
         if (input$data_filter_checkbox_makelower)
         {
           incProgress(0, message="Setting to lowercase...")
-          localstate$corpus <- tm::tm_map(localstate$corpus, tm::content_filterer(tolower))
+          localstate$corpus <- tm::tm_map(localstate$corpus, tm::content_transformer(tolower))
           incProgress(1/n/2)
         }
         if (input$data_filter_checkbox_rempunct)
@@ -68,8 +71,25 @@ output$data_filter_buttonaction <- renderUI({
         if (input$data_filter_checkbox_remstop)
         {
           incProgress(0, message="Removing stopwords...")
-          localstate$corpus <- tm::tm_map(localstate$corpus, tm::removeWords, tm::stopwords(input$data_stopwords_lang))
+          localstate$corpus <- tm::tm_map(localstate$corpus, tm::removeWords, tm::stopwords(input$data_filter_stopwords_lang))
           incProgress(1/n/2)
+        }
+        if (input$data_filter_checkbox_exclude)
+        {
+          terms <- input$data_filter_exclude
+#          terms <- paste0("(", paste0(unlist(strsplit(terms, split=",")), collapse="|"), ")")
+          terms <- unlist(strsplit(terms, split=","))
+          
+          localstate$corpus <- tm::tm_map(localstate$corpus, tm::removeWords, terms)
+#          endofword <- paste0(terms, "(.*?)(\\s|\\n|[:punct:])")
+#          endofline <- paste0(terms, "(.*?)")
+#          
+#          for (i in 1:length(localstate$corpus))
+#          {
+#            
+#            localstate$corpus[[i]]$content <- gsub(localstate$corpus[[i]]$content, pattern=endofword, replacement="")
+#            localstate$corpus[[i]]$content <- gsub(localstate$corpus[[i]]$content, pattern=endofline, replacement="")
+#          }
         }
         
         incProgress(0, message="Updating tdm...")
