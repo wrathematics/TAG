@@ -2,7 +2,7 @@ output$main_help <- renderUI({
   list(
     sidebarLayout(
       sidebarPanel(
-        selectizeInput("help_topic", "Help Topic", c("", helpdirs)),
+        selectizeInput("help_topic", "Help Topic", helpdirs_display),
         conditionalPanel(
           condition=paste0("input.help_topic == '", helpdirs[1], "'"),
           radioButtons("helpdirs_1", helpdirs[1], choices=from_md_to_display(helppages[helpdirs[1]][[1]]))

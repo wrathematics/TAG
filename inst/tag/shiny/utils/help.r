@@ -71,6 +71,10 @@ render_helpfile_inplace <- function(title, files)
 
 
 
+title_case <- function(x) gsub(x, pattern="(^|[[:space:]])([[:alpha:]])", replacement="\\1\\U\\2", perl=TRUE)
+
+
+
 from_md_to_display <- function(terms)
 {
   terms <- gsub(terms, pattern="_", replacement=" ")
