@@ -20,7 +20,8 @@ shinyUI(
       ),
       navbarMenu("Analyse",
         tabPanel("LDA", uiOutput("main_analyse_lda"))
-      )
+      ),
+      tabPanel("Help", uiOutput('main_help'))
     )
   )
 )
