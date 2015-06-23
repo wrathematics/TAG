@@ -4,13 +4,12 @@ output$data_filter <- renderUI({
       sidebarPanel(
         selectizeInput("data_filter_stopwords_lang", "Stopwords Language", stopwords_list, "english"),
         checkboxInput("data_filter_checkbox_remstop", "Remove stopwords?", value=TRUE),
-        
         hr(),
         
         checkboxInput("data_filter_checkbox_exclude", "Exclude list?", value=TRUE),
         checkboxInput("data_filter_checkbox_greedy", "Exclude greedily?", value=TRUE),
         checkboxInput("data_filter_checkbox_greedy", "Exclude ignores case?", value=FALSE),
-        tags$textarea(id="data_filter_exclude", rows=1, cols=10, ""),
+        textInput("data_filter_exclude", "Exclude Text"),
         
         actionButton("button_data_filter", "Filter"),
         render_helpfile("Filter", "data/filter.md")

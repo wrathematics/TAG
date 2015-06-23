@@ -39,7 +39,7 @@ output$summarize_termsearch <- renderUI({
       sidebarPanel(
         h5("Term Frequency"),
         checkboxInput("basic_termsearch_checkbox_findclosest", "Find closest match?", value=FALSE),
-        tags$textarea(id="summarize_termsearchbox", rows=1, cols=10, ""),
+        textInput("summarize_termsearchbox", ""),
         render_helpfile("Term Search", "summarize/basic_termsearch.md")
       ),
       mainPanel(
