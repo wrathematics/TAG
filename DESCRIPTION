@@ -23,7 +23,9 @@ NeedsCompilation: yes
 ByteCompile: yes
 Authors@R: c(person("Drew", "Schmidt", email="schmidt@math.utk.edu", 
     role=c("aut", "cre")), 
-    person("Mike", "Black", role="aut"))
+    person("Mike", "Black", role="aut"),
+    person("Vincent", "Nijs", role="ctb", comment="some help file 
+    generation code taken from radiant"))
 Maintainer: Drew Schmidt <schmidt@math.utk.edu>
 URL: https://github.com/XSEDEScienceGateways/textgateway
 BugReports: https://github.com/XSEDEScienceGateways/textgateway/issues
