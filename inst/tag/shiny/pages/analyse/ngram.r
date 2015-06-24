@@ -51,6 +51,7 @@ output$analyse_ngram_inspect_ <- DT::renderDataTable({
     pt <- ngram::get.phrasetable(localstate$ng_mdl)
     pt$prop <- round(pt$prop, roundlen)
     rownames(pt) <- NULL
+    colnames(pt)[2:3] <- c("frequency", "proportion")
     
     incProgress(3/4, message="Rendering...")
     DT::datatable(pt, extensions="Scroller", escape=TRUE,
