@@ -53,10 +53,7 @@ output$analyse_lda_topics <- renderUI(
         must_have("corpus")
         must_have("lda_mdl")
         
-        if (!is.null(localstate$lda_mdl))
-          topicmodels::terms(localstate$lda_mdl, input$lda_nterms)
-        else
-          stop("You must first fit a model in the 'Fit' tab!")
+        topicmodels::terms(localstate$lda_mdl, input$lda_nterms)
       })
     )
   )
