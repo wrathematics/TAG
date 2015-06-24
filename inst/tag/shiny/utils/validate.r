@@ -1,6 +1,6 @@
 must_have <- function(obj)
 {
-  obj <- match.arg(tolower(obj), c("corpus", "tdm", "wordcount_table", "lda_mdl"))
+  obj <- match.arg(tolower(obj), c("corpus", "tdm", "wordcount_table", "lda_mdl", "ng_mdl"))
   
   if (obj == "corpus" || obj == "tdm" || obj == "wordcount_table")
     validate(need(!is.null(localstate$corpus), 
@@ -8,6 +8,9 @@ must_have <- function(obj)
   else if (obj == "lda_mdl")
     validate(need(!is.null(localstate$lda_mdl), 
       "You must first fit an LDA model from the 'Fit' sub-tab of the 'LDA' tab in the 'Analyse' menu."))
+  else if (obj == "ng_mdl")
+    validate(need(!is.null(localstate$ng_mdl), 
+      "You must first fit an ngram model from the 'Fit' sub-tab of the 'Ngram' tab in the 'Analyse' menu."))
   
   invisible()
 }

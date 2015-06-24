@@ -30,6 +30,7 @@
 #' @importFrom markdown markdownToHTML
 #' @importFrom rmarkdown render html_fragment
 #' @importFrom topicmodels LDA terms
+#' @importFrom ngram ngram get.phrasetable babble
 #' 
 #' @keywords Package
 NULL

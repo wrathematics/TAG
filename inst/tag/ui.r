@@ -19,7 +19,8 @@ shinyUI(
         tabPanel("Plots", uiOutput("main_summarize_plot"))
       ),
       navbarMenu("Analyse",
-        tabPanel("LDA", uiOutput("main_analyse_lda"))
+        tabPanel("LDA", uiOutput("main_analyse_lda")),
+        tabPanel("N-Grams", uiOutput("main_analyse_ngram"))
       ),
       tabPanel("Help", uiOutput('main_help'))
     )
