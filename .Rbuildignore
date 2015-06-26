@@ -2,9 +2,9 @@ redocument
 ^\.travis\.yml$
 
 runapp.sh
-
 LICENSE
-
 README.Rmd
 
 src/README
+
+inst/tag/data/books/raw/
