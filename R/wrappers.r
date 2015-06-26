@@ -41,7 +41,7 @@ find_closest_word <- function(input, words)
 #' The number of words.
 #' 
 #' @export
-wc <- function(string)
+wc <- function(string, maxwordlen=16)
 {
-  .Call(R_wc, string)
+  .Call(R_wc, string, as.integer(maxwordlen))
 }

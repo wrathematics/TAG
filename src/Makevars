@@ -1,6 +1,6 @@
 PKG_CFLAGS = -w
 
-OBJECTS = dym.o wrappers.o
+OBJECTS = count.o dym.o wrappers.o
 
 
 ### Start making here.
