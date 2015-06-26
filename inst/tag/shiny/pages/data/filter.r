@@ -61,7 +61,7 @@ output$data_filter_buttonaction <- renderUI({
         setProgress(3/4, message="Updating wordcounts...")
         localstate$wordcount_table <- sort(rowSums(as.matrix(localstate$tdm)), decreasing=TRUE)
         
-        localstate$sum_word <- NULL
+        localstate$sum_wordlens <- NULL
         localstate$lda_mdl <- NULL
         localstate$ng_mdl <- NULL
       })

@@ -54,7 +54,7 @@ output$data_input_book_buttonaction <- renderUI({
     localstate$corpus <- NULL
     localstate$tdm <- NULL
     localstate$wordcount_table <- NULL
-    localstate$sum_word <- NULL
+    localstate$sum_wordlens <- NULL
     localstate$lda_mdl <- NULL
     localstate$ng_mdl <- NULL
     
