@@ -1,4 +1,119 @@
-output$summarize_top10 <- renderUI(
+# ----------------------------------------------------------
+# UI
+# ----------------------------------------------------------
+
+output$main_explore <- renderUI({
+  mainPanel(id="exploretabs_plot", 
+    tabsetPanel(
+      tabPanel("Summary", 
+        sliderInput("explore_corpus_maxwordlen", "Maximum Word Length", min=1, max=128, value=15),
+        uiOutput("explore_corpus"), 
+        plotOutput("explore_corpus_wordlengths")
+      ),
+      tabPanel("Search", uiOutput("explore_termsearch")),
+      tabPanel("Top 10", uiOutput("explore_top10")),
+      tabPanel("Correlation", uiOutput("explore_wordcorr")),
+      tabPanel("Dispersion", uiOutput("explore_dispersionplot")),
+      tabPanel("Zipf", uiOutput("explore_zipf")),
+      tabPanel("Wordcloud", uiOutput("explore_wordcloud"))
+    )
+  )
+})
+
+
+
+# ----------------------------------------------------------
+# Server
+# ----------------------------------------------------------
+
+output$explore_corpus <- renderUI({
+  must_have("corpus")
+  
+  s <- wc(sapply(localstate$corpus, function(i) i$content), input$explore_corpus_maxwordlen)
+  localstate$explore_wordlens <- s$wordlens
+  
+  s$wordlens <- NULL
+  
+  distinct <- tm::nTerms(localstate$tdm)
+  ndocs <- tm::nDocs(localstate$tdm)
+  ram <- paste(memuse::object.size(localstate$corpus))
+  
+  l <- list(Characters=s$chars, Letters=s$letters, Digits=s$digits,
+            Whitespace=s$whitespace, Punctuation=s$punctuation,
+            Words=s$words, "Distinct Words"=distinct, 
+            Sentences=s$sentences, Lines=s$lines, 
+            Documents=ndocs, RAM=ram)
+  
+  df <- data.frame(Count=sapply(l, identity))
+  
+  verticalLayout(
+    renderTable(df, align=c("l", "r")),
+    br(),
+    renderPlot({
+      must_have("corpus")
+      
+      df <- data.frame(length=1:length(localstate$explore_wordlens), characters=localstate$explore_wordlens)
+      indices <- df$characters > 0
+      df <- df[indices, ]
+      df$characters <- 100*df$characters/sum(df$characters)
+      
+      breaks <- df$length
+      labs <- as.character(breaks)
+      if (input$explore_corpus_maxwordlen == labs[length(labs)])
+        labs[length(labs)] <- paste0(tail(labs, 1), "+")
+      
+      ggplot(data=df, aes(length, characters)) + 
+        geom_bar(stat="identity") + 
+        scale_x_continuous(breaks=breaks, labels=labs) +
+        xlab("Characters") +
+        ylab("Percentage of Corpus") +
+        ggtitle("Distribution of Words by Character Length") + 
+        theme_bw()
+    })
+  )
+})
+
+
+
+
+
+output$explore_termsearch <- renderUI({
+  list(
+    sidebarLayout(
+      sidebarPanel(
+        h5("Term Frequency"),
+        checkboxInput("basic_termsearch_checkbox_findclosest", "Find closest match?", value=FALSE),
+        textInput("explore_termsearchbox", ""),
+        render_helpfile("Term Search", "explore/basic_termsearch.md")
+      ),
+      mainPanel(
+        renderUI({
+          must_have("wordcount_table")
+          
+          if (input$explore_termsearchbox == "")
+            return("")
+          
+          term <- input$explore_termsearchbox
+          
+          if (input$basic_termsearch_checkbox_findclosest)
+            term <- find_closest_word(term, names(localstate$wordcount_table))$word
+          
+          freq <- localstate$wordcount_table[term]
+          
+          if (is.na(freq))
+            HTML("Term not found! <br><br> You may need to transform the data first (stem, lowercase, etc.).  See the Data--Transform tab.")
+          else
+            paste0("\"", term, "\" occurs ", freq, " times in the corpus.")
+        })
+      )
+    )
+  )
+})
+
+
+
+
+output$explore_top10 <- renderUI(
   verticalLayout(
     renderPlot({
       must_have("corpus")
@@ -24,20 +139,20 @@ output$summarize_top10 <- renderUI(
       })
     }),
     
-    render_helpfile("Top 10", "summarize/plot_top10.md")
+    render_helpfile("Top 10", "explore/plot_top10.md")
   )
 )
 
 
 
-output$summarize_wordcorr <- renderUI(
+output$explore_wordcorr <- renderUI(
   sidebarLayout(
     sidebarPanel(
       h5("Correlation Plot Options"),
       checkboxInput("plot_termsearch_checkbox_findclosest", "Find closest match?", value=FALSE),
       sliderInput("wordcorr_corr", "Minimum Correlation", min=.05, max=1.0, value=.750000000),
       textInput("wordcorr_word", ""),
-      render_helpfile("Correlation Plot", "summarize/plot_wordcorr.md")
+      render_helpfile("Correlation Plot", "explore/plot_wordcorr.md")
     ),
     mainPanel(
       renderPlot({
@@ -77,7 +192,7 @@ output$summarize_wordcorr <- renderUI(
 
 
 
-output$summarize_zipf <- renderUI(
+output$explore_zipf <- renderUI(
   verticalLayout(
     renderPlot(
       withProgress(message='Rendering plot...', value=0,
@@ -88,7 +203,7 @@ output$summarize_zipf <- renderUI(
       })
     ),
     
-    render_helpfile("Zipf Plot", "summarize/plot_zipf.md")
+    render_helpfile("Zipf Plot", "explore/plot_zipf.md")
   )
 )
 
@@ -97,7 +212,7 @@ output$summarize_zipf <- renderUI(
 inname <- c("Black/White", "Accent", "Dark", "Orange", "Green", "Purple", "Blue", "Grey")
 outname <- c("black", "Accent", "Dark2", "Oranges", "Greens", "Purples", "Blues", "Greys")
 
-output$summarize_wordcloud <- renderUI(
+output$explore_wordcloud <- renderUI(
   sidebarLayout(
     sidebarPanel(
       h5("Wordcloud Options"),
@@ -105,7 +220,7 @@ output$summarize_wordcloud <- renderUI(
       sliderInput("wordcloud_maxwords", "Maximum words:", min=1, max=150, value=25),
       checkboxInput("wordcloud_random.order", "Random order?", value=FALSE),
       selectizeInput("wordcloud_colors", "Colors", inname, "alternating"),
-      render_helpfile("Wordcloud", "summarize/plot_wordcloud.md")
+      render_helpfile("Wordcloud", "explore/plot_wordcloud.md")
     ),
     mainPanel(
       renderPlot({
@@ -130,13 +245,13 @@ output$summarize_wordcloud <- renderUI(
 
 
 
-output$summarize_dispersionplot <- renderUI(
+output$explore_dispersionplot <- renderUI(
   sidebarLayout(
     sidebarPanel(
       h5("Dispersion Plot"),
       checkboxInput("plot_dispersion_checkbox_findclosest", "Find closest match?", value=FALSE),
       textInput("dispersionplot_word", "Word(s) (comma separated)", ""),
-      render_helpfile("Dispersion", "summarize/plot_dispersion.md")
+      render_helpfile("Dispersion", "explore/plot_dispersion.md")
     ),
     mainPanel(
       renderPlot({

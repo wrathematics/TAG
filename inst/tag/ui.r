@@ -21,10 +21,7 @@ shinyUI(
       
       tabPanel("About", uiOutput('main_about')),
       tabPanel("Data", uiOutput('main_data')),
-      navbarMenu("Summarize",
-        tabPanel("Basic", uiOutput("main_summarize_basic")),
-        tabPanel("Plots", uiOutput("main_summarize_plot"))
-      ),
+      tabPanel("Explore", uiOutput("main_explore")),
       navbarMenu("Analyse",
         tabPanel("N-Grams", uiOutput("main_analyse_ngram")),
         tabPanel("LDA", uiOutput("main_analyse_lda"))

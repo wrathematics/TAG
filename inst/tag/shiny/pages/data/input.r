@@ -20,7 +20,7 @@ output$data_import <- renderUI({
 
 
 output$data_input_book_buttonaction <- renderUI({
-  temp <- eventReactive(ignoreNULL=FALSE, input$button_data_input_book, {
+  observeEvent(ignoreNULL=FALSE, input$button_data_input_book, {
     if (input$button_data_input_book > 0)
     {
       withProgress(message='Loading data...', value=0, {
@@ -33,35 +33,40 @@ output$data_input_book_buttonaction <- renderUI({
           localstate$corpus <- corpus
           localstate$tdm <- tdm
           localstate$wordcount_table <- wordcount_table
-          
-#          data(crude, package="tm")
-#          localstate$corpus <- crude
-#          localstate$tdm <- tm::TermDocumentMatrix(localstate$corpus)
-#          localstate$wordcount_table <- sort(rowSums(as.matrix(localstate$tdm)), decreasing=TRUE)
-          
         })
         
         localstate$lda_mdl <- NULL
+        localstate$ng_mdl <- NULL
+        localstate$explore_wordlens <- NULL
         
         setProgress(1)
       })
       
-      HTML(paste("The<i>", input$data_books, "</i>corpus is now ready to use!\nLoading finished in", round(runtime[3], roundlen), "seconds."))
+      localstate$out <- HTML(paste("The<i>", input$data_books, "</i>corpus is now ready to use!\nLoading finished in", round(runtime[3], roundlen), "seconds."))
     }
   })
   
   observeEvent(input$button_data_input_clear, {
-    localstate$corpus <- NULL
-    localstate$tdm <- NULL
-    localstate$wordcount_table <- NULL
-    localstate$sum_wordlens <- NULL
-    localstate$lda_mdl <- NULL
-    localstate$ng_mdl <- NULL
-    
-    HTML("Cleared!")
+    if (input$button_data_input_clear > 0)
+    {
+      localstate$corpus <- NULL
+      localstate$tdm <- NULL
+      localstate$wordcount_table <- NULL
+      localstate$explore_wordlens <- NULL
+      localstate$lda_mdl <- NULL
+      localstate$ng_mdl <- NULL
+      
+      localstate$out <- HTML("Cleared!")
+    }
   })
   
-  out <- temp()
-  if (is.null(localstate$corpus)) return() else out
+  if (is.null(localstate$out)) return() else localstate$out
 })
 
+
+
+
+#          data(crude, package="tm")
+#          localstate$corpus <- crude
+#          localstate$tdm <- tm::TermDocumentMatrix(localstate$corpus)
+#          localstate$wordcount_table <- sort(rowSums(as.matrix(localstate$tdm)), decreasing=TRUE)
