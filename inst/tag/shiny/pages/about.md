@@ -34,6 +34,11 @@ Additionally, we would like to thank:
 * Bob Muenchen for his numerous helpful comments and suggestions.
 * Christian Heckendorf for help with an innumerable number of questions.
 
+Additionally, this project was created using XSEDE resources, services,
+and expertise:
+
+> John Towns, Timothy Cockerill, Maytal Dahan, Ian Foster, Kelly Gaither, Andrew Grimshaw, Victor Hazlewood, Scott Lathrop, Dave Lifka, Gregory D. Peterson, Ralph Roskies, J. Ray Scott, Nancy Wilkins-Diehr, "XSEDE: Accelerating Scientific Discovery", Computing in Science & Engineering, vol.16, no. 5, pp. 62-74, Sept.-Oct. 2014, doi:10.1109/MCSE.2014.80
+
 
 
 ## Theme
