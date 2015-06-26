@@ -36,6 +36,8 @@ find_closest_word <- function(input, words)
 #' 
 #' @param string
 #' A string.
+#' @param maxwordlen
+#' Maximum length of words to consider when finding wordlength counts.
 #' 
 #' @return
 #' The number of words.

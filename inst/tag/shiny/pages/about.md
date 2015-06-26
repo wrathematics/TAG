@@ -7,7 +7,7 @@
 
 ## Basic Text Analysis Tools Without the Programming
 
-* **Version:** 0.0.5
+* **Version:** 0.0.6
 * ![Status](http://img.shields.io/badge/status-In_development_%28UNSTABLE%29-red.svg?style=flat)
 * [![Build Status](https://travis-ci.org/XSEDEScienceGateways/textgateway.png)](https://travis-ci.org/XSEDEScienceGateways/textgateway)
 * [![License](http://img.shields.io/badge/license-AGPL--3-orange.svg?style=flat)](https://www.gnu.org/licenses/agpl-3.0.html)
@@ -39,4 +39,4 @@ Additionally, we would like to thank:
 ## Theme
 
 Note:  changing the theme may break everything; it's very experimental.
-
+  
