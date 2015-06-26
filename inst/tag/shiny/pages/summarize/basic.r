@@ -2,7 +2,7 @@ output$summarize_corpus <- renderUI({
   must_have("corpus")
   
   summary <- wc(sapply(localstate$corpus, function(i) i$content), input$summarize_corpus_maxwordlen)
-  localstate$lens <- summary$wordlens
+  localstate$sum_wordlens <- summary$wordlens
   
   html <- paste("
     <table>
@@ -62,7 +62,7 @@ output$summarize_corpus <- renderUI({
 output$summarize_corpus_wordlengths <- renderPlot({
   must_have("corpus")
   
-  df <- data.frame(length=1:length(localstate$lens), characters=localstate$lens)
+  df <- data.frame(length=1:length(localstate$sum_word), characters=localstate$sum_word)
   df <- df[df$characters > 0, ]
   df$characters <- 100*df$characters/sum(df$characters)
   ggplot(data=df, aes(length, characters)) + 

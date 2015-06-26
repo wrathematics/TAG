@@ -68,6 +68,10 @@ output$data_transform_buttonaction <- renderUI({
         localstate$tdm <- tm::TermDocumentMatrix(localstate$corpus)
         setProgress(3/4, message="Updating wordcounts...")
         localstate$wordcount_table <- sort(rowSums(as.matrix(localstate$tdm)), decreasing=TRUE)
+        
+        localstate$sum_word <- NULL
+        localstate$lda_mdl <- NULL
+        localstate$ng_mdl <- NULL
       })
       
       setProgress(1)
