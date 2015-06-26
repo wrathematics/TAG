@@ -54,31 +54,30 @@ output$summarize_corpus <- renderUI({
   ")
   verticalLayout(
     HTML(html),
-    render_helpfile("Corpus Summary", "summarize/basic_summary.md")
+    renderPlot({
+      must_have("corpus")
+      
+      df <- data.frame(length=1:length(localstate$sum_wordlens), characters=localstate$sum_wordlens)
+      indices <- df$characters > 0
+      df <- df[indices, ]
+      df$characters <- 100*df$characters/sum(df$characters)
+      
+      breaks <- df$length
+      labs <- as.character(breaks)
+      if (input$summarize_corpus_maxwordlen == labs[length(labs)])
+        labs[length(labs)] <- paste0(tail(labs, 1), "+")
+      
+      ggplot(data=df, aes(length, characters)) + 
+        geom_bar(stat="identity") + 
+        scale_x_continuous(breaks=breaks, labels=labs) +
+        xlab("Characters") +
+        ylab("Percentage of Corpus") +
+        ggtitle("Distribution of Words by Character Length") + 
+        theme_bw()
+    })
   )
 })
 
-
-output$summarize_corpus_wordlengths <- renderPlot({
-  must_have("corpus")
-  
-  df <- data.frame(length=1:length(localstate$sum_wordlens), characters=localstate$sum_wordlens)
-  indices <- df$characters > 0
-  df <- df[indices, ]
-  df$characters <- 100*df$characters/sum(df$characters)
-  
-  breaks <- df$length
-  labs <- as.character(breaks)
-  labs[length(labs)] <- paste0(tail(labs, 1), "+")
-  
-  ggplot(data=df, aes(length, characters)) + 
-    geom_bar(stat="identity") + 
-    scale_x_continuous(breaks=breaks, labels=labs) +
-    xlab("Characters") +
-    ylab("Percentage of Corpus") +
-    ggtitle("Distribution of Words by Character Length") + 
-    theme_bw()
-})
 
 
 
@@ -93,30 +92,27 @@ output$summarize_termsearch <- renderUI({
         render_helpfile("Term Search", "summarize/basic_termsearch.md")
       ),
       mainPanel(
-        uiOutput("tabs_search")
+        renderUI({
+          must_have("wordcount_table")
+          
+          if (input$summarize_termsearchbox == "")
+            return("")
+          
+          term <- input$summarize_termsearchbox
+          
+          if (input$basic_termsearch_checkbox_findclosest)
+            term <- find_closest_word(term, names(localstate$wordcount_table))$word
+          
+          freq <- localstate$wordcount_table[term]
+          
+          if (is.na(freq))
+            HTML("Term not found! <br><br> You may need to transform the data first (stem, lowercase, etc.).  See the Data--Transform tab.")
+          else
+            paste0("\"", term, "\" occurs ", freq, " times in the corpus.")
+        })
       )
     )
   )
 })
 
-
-
-output$tabs_search <- renderUI({
-  must_have("wordcount_table")
-  
-  if (input$summarize_termsearchbox == "")
-    return("")
-  
-  term <- input$summarize_termsearchbox
-  
-  if (input$basic_termsearch_checkbox_findclosest)
-    term <- find_closest_word(term, names(localstate$wordcount_table))$word
-  
-  freq <- localstate$wordcount_table[term]
-  
-  if (is.na(freq))
-    HTML("Term not found! <br><br> You may need to transform the data first (stem, lowercase, etc.).  See the Data--Transform tab.")
-  else
-    paste0("\"", term, "\" occurs ", freq, " times in the corpus.")
-})
 

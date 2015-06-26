@@ -4,9 +4,6 @@ output$data_inspect <- renderUI({
   )
 })
 
-
-
-
 output$data_inspect_ <- DT::renderDataTable({
   must_have("corpus")
   

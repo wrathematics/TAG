@@ -15,6 +15,7 @@ get_theme_names <- function()
 }
 
 
+
 output$main_about <- renderUI({
   verticalLayout(
     HTML(markdown::markdownToHTML("shiny/pages/about.md", fragment.only=TRUE, options=c(""))),
@@ -23,11 +24,9 @@ output$main_about <- renderUI({
       choices=get_theme_names(), 
       selected="shiny"), type="pills"
     ),
-    uiOutput("main_about_")
+    renderUI(
+      tags$head(tags$link(rel="stylesheet", type="text/css", href=paste0("css/themes/", input$tag_theme, ".min.css")))
+    )
   )
 })
 
-
-output$main_about_ <- renderUI({
-  tags$head(tags$link(rel="stylesheet", type="text/css", href=paste0("css/themes/", input$tag_theme, ".min.css")))
-})
