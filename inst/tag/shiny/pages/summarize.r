@@ -1,7 +1,11 @@
 output$main_summarize_basic <- renderUI({
   mainPanel(id="summarizetabs_basic", 
     tabsetPanel(
-      tabPanel("Corpus Summary", uiOutput("summarize_corpus")),
+      tabPanel("Corpus Summary", 
+        sliderInput("summarize_corpus_maxwordlen", "Maximum Word Length", min=1, max=128, value=15),
+        uiOutput("summarize_corpus"), 
+        plotOutput("summarize_corpus_wordlengths")
+      ),
       tabPanel("Term Search", uiOutput("summarize_termsearch"))
     )
   )

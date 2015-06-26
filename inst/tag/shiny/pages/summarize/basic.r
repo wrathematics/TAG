@@ -1,19 +1,46 @@
 output$summarize_corpus <- renderUI({
   must_have("corpus")
   
+  summary <- wc(sapply(localstate$corpus, function(i) i$content), input$summarize_corpus_maxwordlen)
+  localstate$lens <- summary$wordlens
+  
   html <- paste("
     <table>
       <tr>
-        <td>Total Letters:</td>
-        <td>", sum(sapply(localstate$corpus, function(i) nchar(i$content))), "</td>
+        <td>Characters:</td>
+        <td>", summary$chars, "</td>
       </tr>
       <tr>
-        <td>Total Words:</td>
-        <td>", sum(sapply(localstate$corpus, function(i) wc(i$content))), "</td>
+        <td>Letters:</td>
+        <td>", summary$letters, "</td>
       </tr>
       <tr>
-        <td>Distinct Terms:</td>
+        <td>Digits:</td>
+        <td>", summary$digits, "</td>
+      </tr>
+      <tr>
+        <td>Punctuation:</td>
+        <td>", summary$punctuation, "</td>
+      </tr>
+      <tr>
+        <td>Whitespace:</td>
+        <td>", summary$whitespace, "</td>
+      </tr>
+      <tr>
+        <td>Lines:</td>
+        <td>", summary$lines, "</td>
+      </tr>
+      <tr>
+        <td>Words:</td>
+        <td>", summary$words, "</td>
+      </tr>
+      <tr>
+        <td>Distinct words:</td>
         <td>", tm::nTerms(localstate$tdm), "</td>
+      </tr>
+      <tr>
+        <td>Sentences:</td>
+        <td>", summary$sentences, "</td>
       </tr>
       <tr>
         <td>Documents:</td>
@@ -30,6 +57,23 @@ output$summarize_corpus <- renderUI({
     render_helpfile("Corpus Summary", "summarize/basic_summary.md")
   )
 })
+
+
+output$summarize_corpus_wordlengths <- renderPlot({
+  must_have("corpus")
+  
+  df <- data.frame(length=1:length(localstate$lens), characters=localstate$lens)
+  df <- df[df$characters > 0, ]
+  df$characters <- 100*df$characters/sum(df$characters)
+  ggplot(data=df, aes(length, characters)) + 
+    geom_bar(stat="identity") + 
+    scale_x_continuous(breaks=df$length) +
+    xlab("Characters") +
+    ylab("Percentage of Corpus") +
+    ggtitle("Distribution of Words by Character Length") + 
+    theme_bw()
+})
+
 
 
 

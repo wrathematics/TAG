@@ -55,6 +55,7 @@ output$data_input_book_buttonaction <- renderUI({
     localstate$tdm <- NULL
     localstate$wordcount_table <- NULL
     localstate$lda_mdl <- NULL
+    localstate$lens <- NULL
     
     HTML("Cleared!")
   })
