@@ -30,6 +30,7 @@ acknowledge these and thank the authors for their work:
 
 Additionally, we would like to thank: 
 
+* Joe Cheng for answering several shiny questions.
 * Mikhail Popov for help with a performance issue in our shiny usage.
 * Bob Muenchen for his numerous helpful comments and suggestions.
 * Christian Heckendorf for help with an innumerable number of questions.
