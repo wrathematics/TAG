@@ -25,6 +25,7 @@ output$main_about <- renderUI({
       selected="shiny"), type="pills"
     ),
     renderUI(
+#      tags$head(tags$link(rel="stylesheet", type="text/css", href="css/shiny.css")),
       tags$head(tags$link(rel="stylesheet", type="text/css", href=paste0("css/themes/", input$tag_theme, ".min.css")))
     )
   )

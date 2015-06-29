@@ -12,15 +12,16 @@ output$data_import <- renderUI({
       actionButton("button_data_input_clear", "Clear")
     ),
     mainPanel(
-      htmlOutput("data_input_book_buttonaction")
+      renderUI(localstate$out)
     )
   )
 })
 
 
 
-output$data_input_book_buttonaction <- renderUI({
-  observeEvent(ignoreNULL=FALSE, input$button_data_input_book, {
+set_data <- function(input)
+{
+  observeEvent(input$button_data_input_book, {
     if (input$button_data_input_book > 0)
     {
       withProgress(message='Loading data...', value=0, {
@@ -60,8 +61,8 @@ output$data_input_book_buttonaction <- renderUI({
     }
   })
   
-  if (is.null(localstate$out)) return() else localstate$out
-})
+  invisible()
+}
 
 
 
