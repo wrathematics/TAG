@@ -1,3 +1,26 @@
+# -----------------------------------------------------------
+# Utils --- must be loaded here
+# -----------------------------------------------------------
+
+update_tdm <- function()
+{
+  evalfun(localstate$tdm <- tm::TermDocumentMatrix(localstate$corpus),
+    comment="Update term-document matrix")
+}
+
+
+update_wordcount <- function()
+{
+  evalfun(localstate$wordcount_table <- sort(rowSums(as.matrix(localstate$tdm)), decreasing=TRUE), 
+    comment="Update wordcount table")
+}
+
+
+
+# -----------------------------------------------------------
+# shiny
+# -----------------------------------------------------------
+
 output$data_import <- renderUI({
   sidebarLayout(
     sidebarPanel(

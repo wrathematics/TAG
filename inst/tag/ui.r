@@ -26,6 +26,7 @@ shinyUI(
         tabPanel("N-Grams", uiOutput("main_analyse_ngram")),
         tabPanel("LDA", uiOutput("main_analyse_lda"))
       ),
+      tabPanel("Script", uiOutput("main_script")),
       tabPanel("Help", uiOutput('main_help'))
     )
   )

@@ -10,28 +10,35 @@ output$analyse_ngram_fit <- renderUI(
       renderText({
         must_have("corpus")
         
-        temp <- eventReactive(input$ngram_button_fit, {
-          withProgress(message='', value=0,
-          {
-            runtime <- system.time({
-              incProgress(0, message="Collapsing corpus...")
-              text <- ngram::concatenate(sapply(localstate$corpus, function(i) i$content), collapse=" ")
-              
-              incProgress(1/2, message="Fitting the model...")
-              localstate$ng_mdl <- ngram::ngram(text, n=input$ngram_n)
-              
-              setProgress(1)
-            })
-          })
-          
-          paste0("Fit an ngram object with ", localstate$ng_mdl@ngsize, " ", localstate$ng_mdl@n, "-grams in ", round(runtime[3], roundlen), " seconds.")
-        })
-        
-        temp()
+        analyse_ngram_reactive()
       })
     )
   )
 )
+
+analyse_ngram_reactive <- eventReactive(input$ngram_button_fit, {
+  withProgress(message='', value=0,
+  {
+    runtime <- system.time({
+      addto_call("### Ngrams\n")
+      
+      incProgress(0, message="Collapsing corpus...")
+      evalfun(text <- ngram::concatenate(sapply(localstate$corpus, function(i) i$content), collapse=" "), 
+        comment="Collapse corpus to a single character vector")
+      
+      incProgress(1/2, message="Fitting the model...")
+      evalfun(localstate$ng_mdl <- ngram::ngram(text, n=input$ngram_n), 
+        comment="Fit an ngram model")
+      
+      setProgress(1)
+    })
+  })
+  
+  addto_call("\n")
+  
+  paste0("Fit an ngram object with ", localstate$ng_mdl@ngsize, " ", localstate$ng_mdl@n, "-grams in ", round(runtime[3], roundlen), " seconds.")
+})
+
 
 
 
@@ -66,6 +73,24 @@ output$analyse_ngram_inspect_ <- DT::renderDataTable({
 
 
 
+
+analyse_ngram_babble_reactive <- eventReactive(input$ngram_button_babble, {
+  withProgress(message='Generating nonsense...', value=0,
+  {
+    seed <- input$ngram_babble_seed
+    if (seed == "")
+      seed <- ngram:::getseed()
+    else if (is.na(as.integer(seed)))
+      stop("Seed must be a number or blank!")
+    else
+      seed <- as.integer(seed) ### FIXME warning for non-ints
+    
+    res <- ngram::babble(localstate$ng_mdl, genlen=input$ngram_babble_genlen, seed=seed)
+  })
+  
+  res
+})
+
 output$analyse_ngram_babble <- renderUI({
   sidebarLayout(
     sidebarPanel(
@@ -80,24 +105,7 @@ output$analyse_ngram_babble <- renderUI({
         must_have("corpus")
         must_have("ng_mdl")
         
-        temp <- eventReactive(input$ngram_button_babble, {
-          withProgress(message='Generating nonsense...', value=0,
-          {
-            seed <- input$ngram_babble_seed
-            if (seed == "")
-              seed <- ngram:::getseed()
-            else if (is.na(as.integer(seed)))
-              stop("Seed must be a number or blank!")
-            else
-              seed <- as.integer(seed) ### FIXME warning for non-ints
-            
-            res <- ngram::babble(localstate$ng_mdl, genlen=input$ngram_babble_genlen, seed=seed)
-          })
-          
-          res
-        })
-        
-        temp()
+        analyse_ngram_babble_reactive()
       })
     )
   )

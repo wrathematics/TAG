@@ -7,6 +7,8 @@ shinyServer(
   {
     ### Any state objects should go here (treat it as a list)
     localstate <- reactiveValues()
+    localstate$out <- "" # data loading output --- kind of a hack, but it seems necessary
+    localstate$call <- "### WARNING: very experimental\nlibrary(TAG)\n\n" # R Markdown document for reproducibility
     
     ### Number of digits to round timing values to
     roundlen <- 3
@@ -17,7 +19,6 @@ shinyServer(
     for (file in files) source(file=file, local=TRUE)
     
     
-    localstate$out <- ""
     set_data(input)
   }
 )

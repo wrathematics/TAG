@@ -17,3 +17,5 @@ helppages <- lapply(helpdirs, function(page) dir(paste0("shiny/help/", page), pa
 names(helppages) <- helpdirs
 helpdirs_display <- c("", helpdirs)
 names(helpdirs_display) <- c("", from_md_to_display(helpdirs))
+
+

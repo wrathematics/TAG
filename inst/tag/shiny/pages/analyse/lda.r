@@ -11,31 +11,40 @@ output$analyse_lda_fit <- renderUI(
       renderText({
         must_have("corpus")
         
-        temp <- eventReactive(input$lda_button_fit, {
-          withProgress(message='Fitting the model...', value=0,
-          {
-            runtime <- system.time({
-              incProgress(0, message="Building to dtm...")
-              DTM <- qdap::as.dtm(localstate$corpus)
-              
-              incProgress(1/2, message="Fitting the model...")
-              localstate$lda_mdl <- topicmodels::LDA(DTM, k=input$lda_ntopics, method=input$lda_method)
-              
-              incProgress(1/3, message="Setting posteriors...")
-              localstate$post <- topicmodels::posterior(localstate$lda_mdl)
-              
-              setProgress(1)
-            })
-          })
-          
-          paste("Fit a", input$lda_method, "LDA topic model in", round(runtime[3], roundlen), "seconds.")
-        })
-        
-        temp()
+        analyse_lda_reactive()
       })
     )
   )
 )
+
+
+analyse_lda_reactive <- eventReactive(input$lda_button_fit, {
+  withProgress(message='Fitting the model...', value=0,
+  {
+    runtime <- system.time({
+      addto_call("### LDA\n")
+      
+      incProgress(0, message="Building to dtm...")
+      evalfun(DTM <- qdap::as.dtm(localstate$corpus), 
+        comment="Build document-term matrix")
+      
+      incProgress(1/2, message="Fitting the model...")
+      evalfun(localstate$lda_mdl <- topicmodels::LDA(DTM, k=input$lda_ntopics, method=input$lda_method), 
+        comment="Fit LDA model")
+      
+      incProgress(1/3, message="Setting posteriors...")
+      evalfun(localstate$post <- topicmodels::posterior(localstate$lda_mdl),
+        comment="Set posteriors")
+      
+      addto_call("\n")
+      
+      setProgress(1)
+    })
+  })
+  
+  
+  paste("Fit a", input$lda_method, "LDA topic model in", round(runtime[3], roundlen), "seconds.")
+})
 
 
 

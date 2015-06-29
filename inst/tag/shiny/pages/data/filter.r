@@ -23,55 +23,70 @@ output$data_filter <- renderUI({
 
 
 
+data_filter_reactive <- eventReactive(input$button_data_filter, {
+  withProgress(message='Processing...', value=0, {
+    
+    n <- input$data_filter_checkbox_remstop
+    
+    runtime <- system.time({
+      if (input$data_filter_checkbox_remstop)
+      {
+        incProgress(0, message="Removing stopwords...")
+        evalfun(localstate$corpus <- tm::tm_map(localstate$corpus, tm::removeWords, tm::stopwords(input$data_filter_stopwords_lang)), 
+          comment="Remove stopwords")
+        
+        incProgress(1/n/2)
+      }
+      if (input$data_filter_checkbox_exclude)
+      {
+        print(input$data_filter_exclude)
+        if (input$data_filter_exclude != "")
+        {
+          evalfun({
+            terms <- input$data_filter_exclude
+            terms <- unlist(strsplit(terms, split=","))
+            
+            localstate$corpus <- tm::tm_map(localstate$corpus, tm::removeWords, terms)
+          })
+        }
+      }
+      
+      incProgress(0, message="Updating tdm...")
+      update_tdm()
+      setProgress(3/4, message="Updating wordcounts...")
+      update_wordcount()
+      
+      localstate$sum_wordlens <- NULL
+      localstate$lda_mdl <- NULL
+      localstate$ng_mdl <- NULL
+    })
+    
+    setProgress(1)
+  })
+  
+  paste("Processing finished in", round(runtime[3], roundlen), "seconds.")
+})
+
+### TODO
+#        terms <- input$data_filter_exclude
+##          terms <- paste0("(", paste0(unlist(strsplit(terms, split=",")), collapse="|"), ")")
+#        terms <- unlist(strsplit(terms, split=","))
+#        
+#        localstate$corpus <- tm::tm_map(localstate$corpus, tm::removeWords, terms)
+##          endofword <- paste0(terms, "(.*?)(\\s|\\n|[:punct:])")
+##          endofline <- paste0(terms, "(.*?)")
+##          
+##          for (i in 1:length(localstate$corpus))
+##          {
+##            
+##            localstate$corpus[[i]]$content <- gsub(localstate$corpus[[i]]$content, pattern=endofword, replacement="")
+##            localstate$corpus[[i]]$content <- gsub(localstate$corpus[[i]]$content, pattern=endofline, replacement="")
+##          }
+
+
 output$data_filter_buttonaction <- renderUI({
   must_have("corpus")
   
-  temp <- eventReactive(input$button_data_filter, {
-    withProgress(message='Processing...', value=0, {
-      
-      n <- input$data_filter_checkbox_remstop
-      
-      runtime <- system.time({
-        if (input$data_filter_checkbox_remstop)
-        {
-          incProgress(0, message="Removing stopwords...")
-          localstate$corpus <- tm::tm_map(localstate$corpus, tm::removeWords, tm::stopwords(input$data_filter_stopwords_lang))
-          incProgress(1/n/2)
-        }
-        if (input$data_filter_checkbox_exclude)
-        {
-          terms <- input$data_filter_exclude
-#          terms <- paste0("(", paste0(unlist(strsplit(terms, split=",")), collapse="|"), ")")
-          terms <- unlist(strsplit(terms, split=","))
-          
-          localstate$corpus <- tm::tm_map(localstate$corpus, tm::removeWords, terms)
-#          endofword <- paste0(terms, "(.*?)(\\s|\\n|[:punct:])")
-#          endofline <- paste0(terms, "(.*?)")
-#          
-#          for (i in 1:length(localstate$corpus))
-#          {
-#            
-#            localstate$corpus[[i]]$content <- gsub(localstate$corpus[[i]]$content, pattern=endofword, replacement="")
-#            localstate$corpus[[i]]$content <- gsub(localstate$corpus[[i]]$content, pattern=endofline, replacement="")
-#          }
-        }
-        
-        incProgress(0, message="Updating tdm...")
-        localstate$tdm <- tm::TermDocumentMatrix(localstate$corpus)
-        setProgress(3/4, message="Updating wordcounts...")
-        localstate$wordcount_table <- sort(rowSums(as.matrix(localstate$tdm)), decreasing=TRUE)
-        
-        localstate$sum_wordlens <- NULL
-        localstate$lda_mdl <- NULL
-        localstate$ng_mdl <- NULL
-      })
-      
-      setProgress(1)
-    })
-    
-    paste("Processing finished in", round(runtime[3], roundlen), "seconds.")
-  })
-  
-  temp()
+  data_filter_reactive()
 })
 
