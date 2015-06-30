@@ -1,4 +1,4 @@
-# Text Gateway 
+# TAG: Text Analysis Gateway
 
 
 
@@ -7,7 +7,7 @@
 * ![Status](http://img.shields.io/badge/status-In_development_%28UNSTABLE%29-red.svg?style=flat)
 * [![Build Status](https://travis-ci.org/XSEDEScienceGateways/textgateway.png)](https://travis-ci.org/XSEDEScienceGateways/textgateway)
 * [![License](http://img.shields.io/badge/license-AGPL--3-orange.svg?style=flat)](https://www.gnu.org/licenses/agpl-3.0.html)
-* **Authors:** &copy; Drew Schmidt and Mike Black
+* **Authors:** The TAG Team:  Drew Schmidt and Mike Black
 
 
 The Text Analytics Gateway (TAG) is an interactive webapp for

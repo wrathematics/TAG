@@ -13,7 +13,7 @@
 * [![License](http://img.shields.io/badge/license-AGPL--3-orange.svg?style=flat)](https://www.gnu.org/licenses/agpl-3.0.html)
 * **Source:** [GitHub](https://github.com/XSEDEScienceGateways/textgateway)
 * **Problems:** [Bug reports and feature reqests](https://github.com/XSEDEScienceGateways/textgateway/issues)
-* **Authors:** Drew Schmidt and Mike Black
+* **Authors:** The TAG Team:  Drew Schmidt and Mike Black
 
 
 
@@ -45,4 +45,4 @@ and expertise:
 ## Theme
 
 Note:  changing the theme may break everything; it's very experimental.
-   
+     
