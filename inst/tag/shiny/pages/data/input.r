@@ -47,6 +47,8 @@ set_data <- function(input)
   observeEvent(input$button_data_input_book, {
     if (input$button_data_input_book > 0)
     {
+      clear_state()
+      
       withProgress(message='Loading data...', value=0, {
         runtime <- system.time({
           book <- input$data_books
@@ -58,10 +60,6 @@ set_data <- function(input)
           localstate$tdm <- tdm
           localstate$wordcount_table <- wordcount_table
         })
-        
-        localstate$lda_mdl <- NULL
-        localstate$ng_mdl <- NULL
-        localstate$explore_wordlens <- NULL
         
         setProgress(1)
       })
@@ -79,17 +77,7 @@ clear_data <- function(input)
   observeEvent(input$button_data_input_clear, {
     if (input$button_data_input_clear > 0)
     {
-      localstate$corpus <- NULL
-      localstate$tdm <- NULL
-      localstate$wordcount_table <- NULL
-      
-      localstate$explore_wordlens <- NULL
-      
-      localstate$lda_mdl <- NULL
-      localstate$lda_out <- NULL
-      
-      localstate$ng_mdl <- NULL
-      
+      clear_state()
       localstate$out <- HTML("Cleared!")
     }
   })
@@ -98,6 +86,31 @@ clear_data <- function(input)
   invisible()
 }
 
+
+
+clear_modelstate <- function()
+{
+  localstate$explore_wordlens <- NULL
+  
+  localstate$lda_mdl <- NULL
+  localstate$lda_out <- NULL
+  
+  localstate$ng_mdl <- NULL
+  localstate$ng_out <- NULL
+  
+  invisible()
+}
+
+clear_state <- function()
+{
+  localstate$corpus <- NULL
+  localstate$tdm <- NULL
+  localstate$wordcount_table <- NULL
+  
+  clear_modelstate()
+  
+  invisible()
+}
 
 
 #          data(crude, package="tm")

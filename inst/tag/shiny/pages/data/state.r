@@ -31,6 +31,9 @@ output$data_state_load <- renderUI({
     runtime <- system.time({
       tmp <- readRDS(statefile$datapath)
       
+      ### Check for breakage in state across versions
+      check.tagversion(tmp$tagversion)
+      
       localstate$tagversion <- get.tagversion()
       
       localstate$corpus <- tmp$corpus
@@ -44,6 +47,7 @@ output$data_state_load <- renderUI({
       localstate$lda_out <- tmp$lda_out
       
       localstate$ng_mdl <- tmp$ng_mdl
+      localstate$ng_out <- tmp$ng_out
       
       localstate$explore_wordlens <- tmp$explore_wordlens
       

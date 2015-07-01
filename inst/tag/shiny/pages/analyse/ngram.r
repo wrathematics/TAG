@@ -10,35 +10,41 @@ output$analyse_ngram_fit <- renderUI(
       renderText({
         must_have("corpus")
         
-        analyse_ngram_reactive()
+        localstate$ng_out
       })
     )
   )
 )
 
-analyse_ngram_reactive <- eventReactive(input$ngram_button_fit, {
-  withProgress(message='', value=0,
-  {
-    runtime <- system.time({
-      addto_call("### Ngrams\n")
-      
-      incProgress(0, message="Collapsing corpus...")
-      evalfun(text <- ngram::concatenate(sapply(localstate$corpus, function(i) i$content), collapse=" "), 
-        comment="Collapse corpus to a single character vector")
-      
-      incProgress(1/2, message="Fitting the model...")
-      evalfun(localstate$ng_mdl <- ngram::ngram(text, n=input$ngram_n), 
-        comment="Fit an ngram model")
-      
-      setProgress(1)
+
+
+analyse_ngram <- function(input)
+{
+  observeEvent(input$ngram_button_fit, {
+    withProgress(message='', value=0,
+    {
+      runtime <- system.time({
+        addto_call("### Ngrams\n")
+        
+        incProgress(0, message="Collapsing corpus...")
+        evalfun(text <- ngram::concatenate(sapply(localstate$corpus, function(i) i$content), collapse=" "), 
+          comment="Collapse corpus to a single character vector")
+        
+        incProgress(1/2, message="Fitting the model...")
+        evalfun(localstate$ng_mdl <- ngram::ngram(text, n=input$ngram_n), 
+          comment="Fit an ngram model")
+        
+        setProgress(1)
+      })
     })
+    
+    addto_call("\n")
+    
+    localstate$ng_out <- HTML(paste0("Fit an ngram object with ", localstate$ng_mdl@ngsize, " ", localstate$ng_mdl@n, "-grams in ", round(runtime[3], roundlen), " seconds."))
   })
   
-  addto_call("\n")
-  
-  paste0("Fit an ngram object with ", localstate$ng_mdl@ngsize, " ", localstate$ng_mdl@n, "-grams in ", round(runtime[3], roundlen), " seconds.")
-})
-
+  invisible()
+}
 
 
 

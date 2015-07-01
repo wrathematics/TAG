@@ -15,7 +15,11 @@ output$data_filter <- renderUI({
         render_helpfile("Filter", "data/filter.md")
       ),
       mainPanel(
-        htmlOutput("data_filter_buttonaction")
+        renderUI({
+          must_have("corpus")
+          
+          data_filter_reactive()
+        })
       )
     )
   )
@@ -29,6 +33,7 @@ data_filter_reactive <- eventReactive(input$button_data_filter, {
     n <- input$data_filter_checkbox_remstop
     
     runtime <- system.time({
+      
       if (input$data_filter_checkbox_remstop)
       {
         incProgress(0, message="Removing stopwords...")
@@ -56,9 +61,8 @@ data_filter_reactive <- eventReactive(input$button_data_filter, {
       setProgress(3/4, message="Updating wordcounts...")
       update_wordcount()
       
-      localstate$sum_wordlens <- NULL
-      localstate$lda_mdl <- NULL
-      localstate$ng_mdl <- NULL
+      
+      clear_modelstate()
     })
     
     setProgress(1)
@@ -82,11 +86,4 @@ data_filter_reactive <- eventReactive(input$button_data_filter, {
 ##            localstate$corpus[[i]]$content <- gsub(localstate$corpus[[i]]$content, pattern=endofword, replacement="")
 ##            localstate$corpus[[i]]$content <- gsub(localstate$corpus[[i]]$content, pattern=endofline, replacement="")
 ##          }
-
-
-output$data_filter_buttonaction <- renderUI({
-  must_have("corpus")
-  
-  data_filter_reactive()
-})
 

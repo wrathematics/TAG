@@ -3,7 +3,6 @@ evalfun <- function(arg, comment)
 {
   call <- match.call()
   call[[1]] <- NULL
-  
   call <- capture.output(call$arg)
   
   call <- gsub(call, pattern="localstate$", replacement="", fixed=TRUE)

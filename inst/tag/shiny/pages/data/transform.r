@@ -12,7 +12,11 @@ output$data_transform <- renderUI({
         render_helpfile("Transform", "data/transform.md")
       ),
       mainPanel(
-        htmlOutput("data_transform_buttonaction")
+        renderUI({
+          must_have("corpus")
+          
+          data_transform_reactive()
+        })
       )
     )
   )
@@ -77,20 +81,13 @@ data_transform_reactive <- eventReactive(input$button_data_transform, {
       if (n > 0)
         addto_call("\n")
       
-      localstate$sum_wordlens <- NULL
-      localstate$lda_mdl <- NULL
-      localstate$ng_mdl <- NULL
+      
+      clear_modelstate()
     })
     
     setProgress(1)
   })
   
   paste("Processing finished in", round(runtime[3], roundlen), "seconds.")
-})
-
-output$data_transform_buttonaction <- renderUI({
-  must_have("corpus")
-  
-  data_transform_reactive()
 })
 

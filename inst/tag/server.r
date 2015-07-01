@@ -9,12 +9,17 @@ shinyServer(
     localstate <- reactiveValues()
     localstate$out <- "" # data loading output --- kind of a hack, but it seems necessary
     localstate$call <- "### WARNING: very experimental\nlibrary(TAG)\n\n" # R Markdown document for reproducibility
-    localstate$tagversion <- get.tagversion()
+    localstate$tagversion <- get.tagversion() # state versioning
     
     ### Number of digits to round timing values to
     roundlen <- 3
     
-    options(shiny.maxRequestSize = 9*1024^2)
+    ### Set the max file (including state) upload size to 1/4*maxram (or 2 GiB if lookup fails)
+    sysram <- try(as.numeric(memuse::Sys.meminfo()$totalram), silent=TRUE)
+    if (inherits(sysram, "try-error"))
+      sysram <- 2^31
+    
+    options(shiny.maxRequestSize = sysram)
     
     
     ### Load the app
@@ -23,7 +28,10 @@ shinyServer(
     for (file in files) source(file=file, local=TRUE)
     
     
+    # Buttons in shiny are really annoying fyi
     set_data(input)
     clear_data(input)
+    analyse_lda(input)
+    analyse_ngram(input)
   }
 )
