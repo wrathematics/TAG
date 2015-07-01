@@ -8,10 +8,11 @@ output$analyse_lda_fit <- renderUI(
       render_helpfile("LDA Fit", "analyse/lda_fit.md")
     ),
     mainPanel(
-      renderText({
+      renderUI({
         must_have("corpus")
         
         analyse_lda_reactive()
+        localstate$lda_out
       })
     )
   )
@@ -43,7 +44,7 @@ analyse_lda_reactive <- eventReactive(input$lda_button_fit, {
   })
   
   
-  paste("Fit a", input$lda_method, "LDA topic model in", round(runtime[3], roundlen), "seconds.")
+  localstate$lda_out <- HTML(paste("Fit a", input$lda_method, "LDA topic model in", round(runtime[3], roundlen), "seconds."))
 })
 
 

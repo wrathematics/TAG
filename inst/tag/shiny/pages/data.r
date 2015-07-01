@@ -4,7 +4,8 @@ output$main_data <- renderUI({
       tabPanel("Import", htmlOutput("data_import")),
       tabPanel("Transform", htmlOutput("data_transform")),
       tabPanel("Filter", htmlOutput("data_filter")),
-      tabPanel("Inspect", htmlOutput("data_inspect"))
+      tabPanel("Inspect", htmlOutput("data_inspect")),
+      tabPanel("State", htmlOutput("data_state"))
     )
   )
 })

@@ -70,23 +70,33 @@ set_data <- function(input)
     }
   })
   
+  
+  invisible()
+}
+
+clear_data <- function(input)
+{
   observeEvent(input$button_data_input_clear, {
     if (input$button_data_input_clear > 0)
     {
       localstate$corpus <- NULL
       localstate$tdm <- NULL
       localstate$wordcount_table <- NULL
+      
       localstate$explore_wordlens <- NULL
+      
       localstate$lda_mdl <- NULL
+      localstate$lda_out <- NULL
+      
       localstate$ng_mdl <- NULL
       
       localstate$out <- HTML("Cleared!")
     }
   })
   
+  
   invisible()
 }
-
 
 
 
