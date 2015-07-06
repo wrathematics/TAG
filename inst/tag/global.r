@@ -19,3 +19,12 @@ helpdirs_display <- c("", helpdirs)
 names(helpdirs_display) <- c("", from_md_to_display(helpdirs))
 
 
+### Misc globals
+localstate_init_call <- function()
+{
+  "### WARNING: very experimental\nlibrary(TAG)\n\n"
+}
+
+
+plotnote <- HTML("NOTE: to save the image, right click it and select \"Save Image As\".")
+

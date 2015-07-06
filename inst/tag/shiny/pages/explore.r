@@ -22,6 +22,13 @@ output$main_explore <- renderUI({
 
 
 
+show_plotnote_message <- renderUI({
+  must_have("corpus", silent=TRUE)
+  plotnote
+})
+
+
+
 # ----------------------------------------------------------
 # Server
 # ----------------------------------------------------------
@@ -115,6 +122,8 @@ output$explore_termsearch <- renderUI({
 
 output$explore_top10 <- renderUI(
   verticalLayout(
+    show_plotnote_message,
+    
     renderPlot({
       must_have("corpus")
       
@@ -155,6 +164,8 @@ output$explore_wordcorr <- renderUI(
       render_helpfile("Correlation Plot", "explore/plot_wordcorr.md")
     ),
     mainPanel(
+      show_plotnote_message,
+      
       renderPlot({
         must_have("corpus")
         
@@ -194,6 +205,7 @@ output$explore_wordcorr <- renderUI(
 
 output$explore_zipf <- renderUI(
   verticalLayout(
+    show_plotnote_message,
     renderPlot(
       withProgress(message='Rendering plot...', value=0,
       {
@@ -223,6 +235,8 @@ output$explore_wordcloud <- renderUI(
       render_helpfile("Wordcloud", "explore/plot_wordcloud.md")
     ),
     mainPanel(
+      show_plotnote_message,
+      
       renderPlot({
         must_have("corpus")
         
@@ -254,6 +268,8 @@ output$explore_dispersionplot <- renderUI(
       render_helpfile("Dispersion", "explore/plot_dispersion.md")
     ),
     mainPanel(
+      show_plotnote_message,
+      
       renderPlot({
         must_have("corpus")
         
