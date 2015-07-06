@@ -5,7 +5,7 @@
 
 # TAG: Text Analysis Gateway
 
-## Basic Text Analysis Tools Without the Programming
+### Basic Text Analysis Tools Without the Programming
 
 * **Version:** 0.0.7
 * ![Status](http://img.shields.io/badge/status-In_development_%28UNSTABLE%29-red.svg?style=flat)
@@ -17,7 +17,7 @@
 
 
 
-## Acknowledgements
+### Acknowledgements
 
 This project's rapid creation would not have been possible without
 the numerous excellent R packages available to us.  We wish to
@@ -42,7 +42,7 @@ and expertise:
 
 
 
-## Theme
+### Theme
 
 Note:  changing the theme may break everything; it's very experimental.
-      
+       
