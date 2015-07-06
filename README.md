@@ -51,6 +51,7 @@ From then on, you can install the current build of the textgateway
 package via:
 
 ```r
+devtools::install_github("wrathematics/ngram")
 devtools::install_github("XSEDEScienceGateways/textgateway")
 ```
 
@@ -66,7 +67,7 @@ web browser.
 You can also easily run the app from any interactive R session:
 
 ```r
-library(textgateway)
-textgateway()
+library(TAG)
+runTAG()
 ```
 
