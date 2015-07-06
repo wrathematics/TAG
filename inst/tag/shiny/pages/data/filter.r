@@ -32,6 +32,9 @@ data_filter_reactive <- eventReactive(input$button_data_filter, {
     
     n <- input$data_filter_checkbox_remstop
     
+    if (n > 0)
+      addto_call("### Filter text\n")
+    
     runtime <- system.time({
       
       if (input$data_filter_checkbox_remstop)
@@ -61,6 +64,8 @@ data_filter_reactive <- eventReactive(input$button_data_filter, {
       setProgress(3/4, message="Updating wordcounts...")
       update_wordcount()
       
+      if (n > 0)
+        addto_call("\n")
       
       clear_modelstate()
     })

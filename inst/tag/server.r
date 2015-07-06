@@ -7,8 +7,7 @@ shinyServer(
   {
     ### Any state objects should go here (treat it as a list)
     localstate <- reactiveValues()
-    localstate$out <- "" # data loading output --- kind of a hack, but it seems necessary
-    localstate$call <- "### WARNING: very experimental\nlibrary(TAG)\n\n" # R Markdown document for reproducibility
+    localstate$call <- localstate_init_call()
     localstate$tagversion <- get.tagversion() # state versioning
     
     ### Number of digits to round timing values to
@@ -30,6 +29,7 @@ shinyServer(
     
     # Buttons in shiny are really annoying fyi
     set_data(input)
+    tag_load_state(input)
     clear_data(input)
     analyse_lda(input)
     analyse_ngram(input)
