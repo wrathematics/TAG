@@ -47,6 +47,13 @@ you can run the following from R:
 install.packages("devtools")
 ```
 
+Note that you will need to be able to install R packages from
+source.  So in addition, you will need:
+
+* **Windows**: [Rtools](http://cran.r-project.org/bin/windows/Rtools/)
+* **Mac**: [XCode command line tools](https://developer.apple.com/downloads)
+* **Linux**: gcc/gfortran, and R.  On Ubuntu `apt-get install r-base-dev`.
+
 From then on, you can install the current build of the textgateway
 package via:
 
@@ -54,6 +61,7 @@ package via:
 devtools::install_github("wrathematics/ngram")
 devtools::install_github("XSEDEScienceGateways/textgateway")
 ```
+
 
 
 
