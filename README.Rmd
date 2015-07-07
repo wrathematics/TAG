@@ -61,8 +61,11 @@ From then on, you can install the current build of the textgateway
 package via:
 
 ```r
-devtools::install_github("wrathematics/ngram")
-devtools::install_github("XSEDEScienceGateways/textgateway")
+library(devtools)
+
+install_github("cpsievert/LDAvis")
+install_github("wrathematics/ngram")
+install_github("XSEDEScienceGateways/textgateway")
 ```
 
 
