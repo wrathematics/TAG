@@ -4,9 +4,11 @@ library(shiny)
 shinyUI(
   fluidPage(
     tags$head(
+      tags$link(rel="stylesheet", type="text/css", href="css/bar.css"),
+      
       tags$style(HTML("
         .shiny-output-error-validation {
-          color: green;
+          color: blue;
         }
       "))
     ),

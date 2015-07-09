@@ -1,0 +1,9 @@
+.shiny-progress .bar {
+  opacity: 0.8;
+  transition-duration: 60ms;
+}
+
+.shiny-progress .progress {
+  height: 12px;
+}
+
