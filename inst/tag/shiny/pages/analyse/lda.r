@@ -57,6 +57,7 @@ output$analyse_lda_topics <- renderUI(
     sidebarPanel(
       h5("Latent Dirichlet Allocation"),
       sliderInput("lda_nterms", "Number of terms", min=5, max=50, value=10),
+      downloadButton('lda_topics_save', 'Save', class="dlButton"),
       render_helpfile("LDA Topics", "analyse/lda_topics.md")
     ),
     mainPanel(
@@ -69,6 +70,18 @@ output$analyse_lda_topics <- renderUI(
     )
   )
 )
+
+
+output$lda_topics_save <- downloadHandler(
+  filename=function(){
+    "lda_topics.csv"
+  },
+  content=function(file){
+    obj <- topicmodels::terms(localstate$lda_mdl, input$lda_nterms)
+    write.csv(obj, file=file, row.names=FALSE)
+  }
+)
+
 
 
 
