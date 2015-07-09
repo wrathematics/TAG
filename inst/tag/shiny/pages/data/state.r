@@ -116,6 +116,7 @@ clear_modelstate <- function()
   localstate$lda_out <- NULL
   
   localstate$ng_mdl <- NULL
+  localstate$ng_pt <- NULL
   localstate$ng_out <- NULL
   
   invisible()

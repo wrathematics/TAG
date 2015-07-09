@@ -50,7 +50,8 @@ analyse_ngram <- function(input)
 
 output$analyse_ngram_phrasetable <- renderUI({
   mainPanel(
-    DT::dataTableOutput("analyse_ngram_inspect_")
+    DT::dataTableOutput("analyse_ngram_inspect_"),
+    downloadButton('ngram_phrasetable_save', 'Save', class="dlButton")
   )
 })
 
@@ -64,8 +65,10 @@ output$analyse_ngram_inspect_ <- DT::renderDataTable({
     rownames(pt) <- NULL
     colnames(pt)[2:3] <- c("frequency", "proportion")
     
+    localstate$ng_pt <- pt
+    
     incProgress(3/4, message="Rendering...")
-    DT::datatable(pt, extensions="Scroller", escape=TRUE,
+    DT::datatable(localstate$ng_pt, extensions="Scroller", escape=TRUE,
       options = list(
         deferRender = TRUE,
         dom = "frtiS",
@@ -77,6 +80,14 @@ output$analyse_ngram_inspect_ <- DT::renderDataTable({
   })
 })
 
+output$ngram_phrasetable_save <- downloadHandler(
+  filename=function(){
+    "ngram_phrasetable.csv"
+  },
+  content=function(file){
+    write.csv(localstate$ng_pt, file=file, row.names=FALSE)
+  }
+)
 
 
 
@@ -103,7 +114,7 @@ output$analyse_ngram_babble <- renderUI({
       h5("Ngram Babbling"),
       sliderInput("ngram_babble_genlen", "Number of terms", min=5, max=500, value=100),
       textInput("ngram_babble_seed", "Seed"),
-      actionButton("ngram_button_babble", "Regenerate"),
+      actionButton("ngram_button_babble", "Generate"),
       render_helpfile("Ngram Babbling", "analyse/ngram_babble.md")
     ),
     mainPanel(
