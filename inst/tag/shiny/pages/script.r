@@ -14,9 +14,8 @@ get_callscript <- function()
   code <- paste0(
 "# TAG Script
 This script is roughly what is run underneath TAG as you perform your
-analysis.  The goal is to be able to enhance reproducibility, and
-so that you can just re-run an analysis script if a small change is
-needed, rather than remember what you clicked and in what order, etc.
+analysis.  The goal is to be able to enhance reproducibility, help
+you learn R, and speed up making minor changes to an analysis.
 
 HOWEVER, this feature is currently very experimental and should not be
 considered fully implemented.
