@@ -7,6 +7,6 @@ README.Rmd
 
 src/README
 
-inst/tag/data/books/raw/
+inst/extradata/books/raw/
 
 CONVENTIONS.md

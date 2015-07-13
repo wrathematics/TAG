@@ -7,8 +7,9 @@ stopwords_list <- c("danish", "dutch", "english", "finnish", "french", "german",
 
 
 ### Data import---book globals
-booklist_names <- readLines("data/books/booklist_names.txt")
-booklist <- dir("data/books/", pattern=".rda")
+datadir <- system.file(package="TAG", "extradata")
+booklist_names <- readLines(paste0(datadir, "/books/booklist_names.txt"))
+booklist <- dir(paste0(datadir, "/books/"), pattern=".rda")
 
 
 ### Help system globals

@@ -53,7 +53,7 @@ set_data <- function(input)
           book <- input$data_books
           bookfile <- booklist[which(booklist_names == book)]
           
-          load(paste0("data/books/", bookfile))
+          load(paste0(datadir, "/books/", bookfile))
           
           localstate$corpus <- corpus
           localstate$tdm <- tdm
