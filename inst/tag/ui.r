@@ -21,7 +21,6 @@ shinyUI(
       windowTitle="TAG: Text Analytics Gateway", id="nav_tag", 
       inverse=TRUE, collapsible=FALSE, 
       
-      tabPanel("About", uiOutput('main_about')),
       tabPanel("Data", uiOutput('main_data')),
       tabPanel("Explore", uiOutput("main_explore")),
       navbarMenu("Analyse",
@@ -29,7 +28,10 @@ shinyUI(
         tabPanel("LDA", uiOutput("main_analyse_lda"))
       ),
       tabPanel("Script", uiOutput("main_script")),
-      tabPanel("Help", uiOutput('main_help'))
+      navbarMenu("Help",
+        tabPanel("About", uiOutput('main_about')),
+        tabPanel("Help", uiOutput('main_help'))
+      )
     )
   )
 )

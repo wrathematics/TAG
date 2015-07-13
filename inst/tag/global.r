@@ -2,14 +2,23 @@ source(file="shiny/utils/help.r")
 source(file="shiny/utils/validate.r")
 
 
+
 ### Filter globals
 stopwords_list <- c("danish", "dutch", "english", "finnish", "french", "german", "hungarian", "italian", "norwegian", "portuguese", "russian", "spanish", "swedish")
 
 
-### Data import---book globals
-datadir <- system.file(package="TAG", "extradata")
-booklist_names <- readLines(paste0(datadir, "/books/booklist_names.txt"))
-booklist <- dir(paste0(datadir, "/books/"), pattern=".rda")
+
+### Data import
+extradata_data <- system.file(package="TAG", "extradata")
+
+# book globals
+extradata_books_titles <- readLines(paste0(extradata_data, "/books/titles"))
+extradata_books <- dir(paste0(extradata_data, "/books/"), pattern=".rda")
+
+# speech globals
+extradata_speeches_titles <- readLines(paste0(extradata_data, "/speeches/titles"))
+extradata_speeches <- dir(paste0(extradata_data, "/speeches/"), pattern=".rda")
+
 
 
 ### Help system globals
@@ -18,6 +27,7 @@ helppages <- lapply(helpdirs, function(page) dir(paste0("shiny/help/", page), pa
 names(helppages) <- helpdirs
 helpdirs_display <- c("", helpdirs)
 names(helpdirs_display) <- c("", from_md_to_display(helpdirs))
+
 
 
 ### Misc globals

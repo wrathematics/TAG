@@ -8,5 +8,6 @@ README.Rmd
 src/README
 
 inst/extradata/books/raw/
+inst/extradata/speeches/raw/
 
 CONVENTIONS.md

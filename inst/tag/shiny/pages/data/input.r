@@ -30,8 +30,13 @@ output$data_import <- renderUI({
         fileInput('uploadState', 'Load previous app state:', accept=".rda"),
         uiOutput("refreshOnUpload")
       ),
-      selectizeInput("data_books", "Books", booklist_names),
-      actionButton("button_data_input_book", "Choose!")
+      selectizeInput("data_books", "Books", extradata_books_titles),
+      actionButton("button_data_input_books", "Load Book"),
+      
+      br(),br(),
+      
+      selectizeInput("data_speeches", "Speeches", extradata_speeches_titles),
+      actionButton("button_data_input_speeches", "Load Speech")
     ),
     mainPanel(
       renderUI(localstate$input_out)
@@ -43,17 +48,17 @@ output$data_import <- renderUI({
 
 set_data <- function(input)
 {
-  observeEvent(input$button_data_input_book, {
-    if (input$button_data_input_book > 0)
+  observeEvent(input$button_data_input_books, {
+    if (input$button_data_input_books > 0)
     {
       clear_state()
       
       withProgress(message='Loading data...', value=0, {
         runtime <- system.time({
           book <- input$data_books
-          bookfile <- booklist[which(booklist_names == book)]
+          bookfile <- extradata_books[which(extradata_books_titles == book)]
           
-          load(paste0(datadir, "/books/", bookfile))
+          load(paste0(extradata_data, "/books/", bookfile))
           
           localstate$corpus <- corpus
           localstate$tdm <- tdm
@@ -64,6 +69,31 @@ set_data <- function(input)
       })
       
       localstate$input_out <- HTML(paste("The<i>", input$data_books, "</i>corpus is now ready to use!\nLoading finished in", round(runtime[3], roundlen), "seconds."))
+    }
+  })
+  
+  
+  observeEvent(input$button_data_input_speeches, {
+    if (input$button_data_input_speeches > 0)
+    {
+      clear_state()
+      
+      withProgress(message='Loading data...', value=0, {
+        runtime <- system.time({
+          speech <- input$data_speeches
+          speechfile <- extradata_speeches[which(extradata_speeches_titles == speech)]
+          
+          load(paste0(extradata_data, "/speeches/", speechfile))
+          
+          localstate$corpus <- corpus
+          localstate$tdm <- tdm
+          localstate$wordcount_table <- wordcount_table
+        })
+        
+        setProgress(1)
+      })
+      
+      localstate$input_out <- HTML(paste("The<i>", input$data_speeches, "</i>corpus is now ready to use!\nLoading finished in", round(runtime[3], roundlen), "seconds."))
     }
   })
   
