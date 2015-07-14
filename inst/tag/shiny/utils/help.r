@@ -9,6 +9,7 @@ render_helpfile <- function(title, file)
   thisyear <- format(Sys.Date(), "%Y")
   
   html <- sprintf("
+    <hr>
     <div class='modal fade' id='%s' tabindex='-1' role='dialog' aria-labelledby='%s_label' aria-hidden='true'>
       <div class='modal-dialog'>
         <div class='modal-content'>
@@ -27,7 +28,7 @@ render_helpfile <- function(title, file)
         </div>
       </div>
     </div>
-    <i title='Help' class='glyphicon glyphicon-question-sign' data-toggle='modal' data-target='#%s'></i>
+    <i title='Help' class='glyphicon glyphicon-question-sign' data-toggle='modal' data-target='#%s'>Click me!</i>
      ", link, link, link, title, body, thisyear, link)
   
   html <- enc2utf8(html)

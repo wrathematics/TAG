@@ -7,7 +7,7 @@ must_have <- function(obj, silent=FALSE)
     if (silent)
       msg <- ""
     else
-      msg <- "You must first select a corpus from the 'Import' sub-tab of the 'Data' tab."
+      msg <- "You must first select a text source from the 'Import' sub-tab of the 'Data' tab."
     
     validate(need(!is.null(localstate$corpus), msg))
   }
