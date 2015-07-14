@@ -36,6 +36,5 @@ localstate_init_call <- function()
   "### WARNING: very experimental\nlibrary(TAG)\n\n"
 }
 
-
 plotnote <- HTML("NOTE: to save the image, right click it and select \"Save Image As\".")
 

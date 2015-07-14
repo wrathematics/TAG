@@ -5,15 +5,15 @@ output$main_help <- renderUI({
         selectizeInput("help_topic", "Help Topic", helpdirs_display),
         conditionalPanel(
           condition=paste0("input.help_topic == '", helpdirs[1], "'"),
-          radioButtons("helpdirs_1", helpdirs[1], choices=from_md_to_display(helppages[helpdirs[1]][[1]]))
+          radioButtons("helpdirs_1", title_case(helpdirs[1]), choices=from_md_to_display(helppages[helpdirs[1]][[1]]))
         ),
         conditionalPanel(
           condition=paste0("input.help_topic == '", helpdirs[2], "'"),
-          radioButtons("helpdirs_2", helpdirs[2], choices=from_md_to_display(helppages[helpdirs[2]][[1]]))
+          radioButtons("helpdirs_2", title_case(helpdirs[2]), choices=from_md_to_display(helppages[helpdirs[2]][[1]]))
         ),
         conditionalPanel(
           condition=paste0("input.help_topic == '", helpdirs[3], "'"),
-          radioButtons("helpdirs_3", helpdirs[3], choices=from_md_to_display(helppages[helpdirs[3]][[1]]))
+          radioButtons("helpdirs_3", title_case(helpdirs[3]), choices=from_md_to_display(helppages[helpdirs[3]][[1]]))
         )
       ),
       mainPanel(
@@ -25,6 +25,10 @@ output$main_help <- renderUI({
 
 
 output$help_ <- renderUI({
+  
+  print(helpdirs)
+print(helppages)
+
   if (input$help_topic == "")
     HTML(markdown::markdownToHTML("shiny/pages/help.md", fragment.only=TRUE, options=c("")))
   else if (input$help_topic == helpdirs[1])

@@ -9,7 +9,8 @@ output$data_state <- renderUI({
       fileInput('data_state_file', label=NULL, accept=".rda"),
       br(),br(),
       h5("Clear state"),
-      actionButton("button_data_input_clear", "Clear")
+      actionButton("button_data_input_clear", "Clear"),
+      render_helpfile("Data", "data/state.md")
     ),
     mainPanel(
       renderUI(localstate$state_out)
