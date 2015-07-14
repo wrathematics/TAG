@@ -4,13 +4,18 @@ output$analyse_ngram_fit <- renderUI(
       h5("N-Grams"),
       sliderInput("ngram_n", "Number of words per 'gram' (n)", min=1, max=10, value=2),
       actionButton("ngram_button_fit", "Fit"),
-      render_helpfile("Ngram Fit", "analyse/ngram_fit.md")
+      downloadButton('ngram_phrasetable_save', 'Save', class="dlButton"),
+      render_helpfile("Analyse", "analyse/ngram_fit.md")
     ),
     mainPanel(
-      renderText({
+      renderUI({
         must_have("corpus")
         
-        localstate$ng_out
+        verticalLayout(
+          HTML(localstate$ng_out),
+          br(),br(),
+          DT::dataTableOutput("analyse_ngram_inspect_")
+        )
       })
     )
   )
@@ -40,7 +45,7 @@ analyse_ngram <- function(input)
     
     addto_call("\n")
     
-    localstate$ng_out <- HTML(paste0("Fit an ngram object with ", localstate$ng_mdl@ngsize, " ", localstate$ng_mdl@n, "-grams in ", round(runtime[3], roundlen), " seconds."))
+    localstate$ng_out <- HTML(paste0("Fit an ngram model with ", localstate$ng_mdl@ngsize, " ", localstate$ng_mdl@n, "-grams in ", round(runtime[3], roundlen), " seconds."))
   })
   
   invisible()
@@ -48,16 +53,10 @@ analyse_ngram <- function(input)
 
 
 
-output$analyse_ngram_phrasetable <- renderUI({
-  mainPanel(
-    DT::dataTableOutput("analyse_ngram_inspect_"),
-    downloadButton('ngram_phrasetable_save', 'Save', class="dlButton")
-  )
-})
-
 output$analyse_ngram_inspect_ <- DT::renderDataTable({
   must_have("corpus")
-  must_have("ng_mdl")
+  
+  validate(need(!is.null(localstate$ng_mdl), ""))
   
   withProgress(message='Generating phrase table...', value=0, {
     pt <- ngram::get.phrasetable(localstate$ng_mdl)
@@ -85,6 +84,9 @@ output$ngram_phrasetable_save <- downloadHandler(
     "ngram_phrasetable.csv"
   },
   content=function(file){
+    if (is.null(localstate$ng_mdl))
+      stop("ERROR: You must first fit an ngram model before you can download an n-gram phrasetable!")
+    
     write.csv(localstate$ng_pt, file=file, row.names=FALSE)
   }
 )

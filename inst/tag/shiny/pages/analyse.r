@@ -14,7 +14,7 @@ output$main_analyse_ngram <- renderUI({
   mainPanel(id="analysetabs", 
     tabsetPanel(
       tabPanel("Fit", uiOutput("analyse_ngram_fit")),
-      tabPanel("Phrase Table", uiOutput("analyse_ngram_phrasetable")),
+#      tabPanel("Phrase Table", uiOutput("analyse_ngram_phrasetable")),
       tabPanel("Babble", uiOutput("analyse_ngram_babble"))
     )
   )
