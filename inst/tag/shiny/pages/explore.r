@@ -12,7 +12,7 @@ output$main_explore <- renderUI({
       ),
       tabPanel("Search", uiOutput("explore_termsearch")),
       tabPanel("Top 10", uiOutput("explore_top10")),
-      tabPanel("Correlation", uiOutput("explore_wordcorr")),
+#      tabPanel("Correlation", uiOutput("explore_wordcorr")),
       tabPanel("Dispersion", uiOutput("explore_dispersionplot")),
       tabPanel("Zipf", uiOutput("explore_zipf")),
       tabPanel("Wordcloud", uiOutput("explore_wordcloud"))
@@ -89,7 +89,7 @@ output$explore_termsearch <- renderUI({
     sidebarLayout(
       sidebarPanel(
         radioButtons(inputId="explore_termsearch_type", 
-                   label="Search by...", c("Term"="Term", "Frequency"="Frequency"), 
+                   label="Search by...", c("Term"="Term", "Count"="Count", "Frequency"="Frequency"), 
                    selected="", inline=FALSE),
         
         br(),
@@ -100,16 +100,22 @@ output$explore_termsearch <- renderUI({
           textInput("explore_termsearchbox", "")
         ),
         
+        conditionalPanel(condition = "input.explore_termsearch_type == 'Count'",
+          numericInput("explore_termsearch_minwordcount", "Minimum Count", min=1, value=5),
+          numericInput("explore_termsearch_maxwordcount", "Maximum Count", min=1, value=100)
+        ),
+        
         conditionalPanel(condition = "input.explore_termsearch_type == 'Frequency'",
           sliderInput("explore_termsearch_minwordfreq", "Minimum Frequency %", min=0, max=100, value=1),
           sliderInput("explore_termsearch_maxwordfreq", "Maximum Frequency %", min=0, max=100, value=100)
         ),
         
-        render_helpfile("Explore", "explore/basic_termsearch.md")
+        render_helpfile("Explore Search", "explore/basic_termsearch.md")
       ),
       mainPanel(
         renderUI({
           must_have("wordcount_table")
+          
           
           if (is.null(input$explore_termsearch_type))
             return("")
@@ -126,12 +132,14 @@ output$explore_termsearch <- renderUI({
             
             freq <- localstate$wordcount_table[term]
             
+            nwords <- sum(localstate$wordcount_table)
+            
             if (is.na(freq))
               HTML("Term not found! <br><br> You may need to transform the data first (stem, lowercase, etc.).  See the Data--Transform tab.")
             else
-              paste0("\"", term, "\" occurs ", freq, " times in the corpus.")
+              paste0("\"", term, "\" occurs ", freq, " times, and accounts for ", round(freq/nwords, roundlen)*100, "% of the text.")
           }
-          else if (input$explore_termsearch_type == "Frequency")
+          else
           {
             DT::dataTableOutput("explore_termsearch_frequency_rendertable")
           }
@@ -143,13 +151,41 @@ output$explore_termsearch <- renderUI({
 
 
 output$explore_termsearch_frequency_rendertable <- DT::renderDataTable({
-    if (input$explore_termsearch_minwordfreq > input$explore_termsearch_maxwordfreq)
-      stop("Bad inputs; must have max frequency >= min frequency")
-    
-    tab <- localstate$wordcount_table*100/sum(localstate$wordcount_table)
-            ind <- which(tab >= input$explore_termsearch_minwordfreq & tab <= input$explore_termsearch_maxwordfreq)
+    if (input$explore_termsearch_type == "Count")
+    {
+      min <- input$explore_termsearch_minwordcount
+      max <- input$explore_termsearch_maxwordcount
+      
+      if (min == '' || max == '')
+        stop("Bad inputs; min and max count values must be supplied")
+      else if (min > max)
+        stop("Bad inputs; must have max count >= min count")
+      else if (min < 1 || max < 1)
+        stop("Bad inputs; min and max count must be at least 1 each.")
+      
+      tab <- localstate$wordcount_table
+      
+      
+      if (max == "")
+        ind <- which(tab >= min)
+      else
+        ind <- which(tab >= min & tab <= max)
+    }
+    else if (input$explore_termsearch_type == "Frequency")
+    {
+      min <- input$explore_termsearch_minwordfreq
+      max <- input$explore_termsearch_maxwordfreq
+      
+      if (min > max)
+        stop("Bad inputs; must have max frequency >= min frequency")
+      
+      tab <- localstate$wordcount_table*100/sum(localstate$wordcount_table)
+      
+      ind <- which(tab >= min & tab <= max)
+    }
     
     df <- data.frame(Count=localstate$wordcount_table[ind], Frequency=tab[ind])
+    
     
     DT::datatable(df, extensions="Scroller", escape=TRUE,
       options = list(
@@ -171,7 +207,7 @@ output$explore_top10 <- renderUI(
         radioButtons(inputId="explore_top10_yaxis", 
                      label="Y-Axis", c("Count"="Count", "Percent"="Percent"), 
                      selected="Count", inline=FALSE),
-        render_helpfile("Explore", "explore/plot_top10.md")
+        render_helpfile("Explore Top 10", "explore/plot_top10.md")
       ),
       mainPanel(
         verticalLayout(
@@ -222,7 +258,7 @@ output$explore_wordcorr <- renderUI(
       checkboxInput("plot_termsearch_checkbox_findclosest", "Find closest match?", value=FALSE),
       sliderInput("wordcorr_corr", "Minimum Correlation", min=.05, max=1.0, value=.750000000),
       textInput("wordcorr_word", ""),
-      render_helpfile("Explore", "explore/plot_wordcorr.md")
+      render_helpfile("Explore Word Correlation", "explore/plot_wordcorr.md")
     ),
     mainPanel(
       show_plotnote_message,
@@ -276,7 +312,7 @@ output$explore_zipf <- renderUI(
       })
     ),
     
-    render_helpfile("Explore", "explore/plot_zipf.md")
+    render_helpfile("Explore Zipf's Law", "explore/plot_zipf.md")
   )
 )
 
@@ -293,7 +329,7 @@ output$explore_wordcloud <- renderUI(
       sliderInput("wordcloud_maxwords", "Maximum words:", min=1, max=150, value=25),
       checkboxInput("wordcloud_random.order", "Random order?", value=FALSE),
       selectizeInput("wordcloud_colors", "Colors", inname, "alternating"),
-      render_helpfile("Explore", "explore/plot_wordcloud.md")
+      render_helpfile("Explore Wordcloud", "explore/plot_wordcloud.md")
     ),
     mainPanel(
       show_plotnote_message,
@@ -326,7 +362,7 @@ output$explore_dispersionplot <- renderUI(
       h5("Dispersion Plot"),
       checkboxInput("plot_dispersion_checkbox_findclosest", "Find closest match?", value=FALSE),
       textInput("dispersionplot_word", "Word(s) (comma separated)", ""),
-      render_helpfile("Explore", "explore/plot_dispersion.md")
+      render_helpfile("Explore Dispersion", "explore/plot_dispersion.md")
     ),
     mainPanel(
       show_plotnote_message,
