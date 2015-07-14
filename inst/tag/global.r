@@ -1,5 +1,5 @@
-source(file="shiny/utils/help.r")
-source(file="shiny/utils/validate.r")
+source(file="./shiny/utils/help.r")
+source(file="./shiny/utils/validate.r")
 
 
 

@@ -2,7 +2,7 @@ library(TAG)
 library(ggplot2)
 
 
-shinyServer(
+server <- shinyServer(
   function(input, output, session)
   {
     ### Any state objects should go here (treat it as a list)

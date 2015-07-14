@@ -1,0 +1,32 @@
+---
+title: "Test"
+author: "Drew Schmidt"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: html_document
+runtime: shiny
+---
+
+```{r, echo=FALSE}
+library(knitr)
+knitr::opts_knit$set(root.dir = system.file("tag", package="TAG"))
+```
+
+<br><br>
+This is just a test to demonstrate integrating a subset of
+TAG functionality into an interactive tutorial document.
+
+```{r, echo=FALSE}
+source("global.r")
+source("server.r")
+
+ui <- shinyUI(
+  fluidPage(
+    tabsetPanel(
+      tabPanel("Import", htmlOutput("data_import")),
+      tabPanel("Inspect", htmlOutput("data_inspect"))
+    )
+  )
+)
+
+shinyApp(ui=ui, server=server)
+```
