@@ -1,4 +1,8 @@
 ## Wordcloud.
 
-A wordcloud (or tag cloud) is a visual representation of 
-unstructured text data in which a
+It's a wordcloud!
+
+A wordcloud plots words from a text where the more frequently a word
+occurs, the more prominently that word will be featured (size and color,
+often by centrality as well).
+
