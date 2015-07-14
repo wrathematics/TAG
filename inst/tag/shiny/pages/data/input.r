@@ -58,7 +58,7 @@ output$data_import <- renderUI({
         actionButton("button_data_input_speeches", "Load Speech")
       ),
       
-      render_helpfile("Data", "data/import.md")
+      render_helpfile("Data Input", "data/import.md")
     ),
     mainPanel(
       renderUI(localstate$input_out)

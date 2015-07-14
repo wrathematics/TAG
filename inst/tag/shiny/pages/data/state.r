@@ -10,7 +10,7 @@ output$data_state <- renderUI({
       br(),br(),
       h5("Clear state"),
       actionButton("button_data_input_clear", "Clear"),
-      render_helpfile("Data", "data/state.md")
+      render_helpfile("Data State", "data/state.md")
     ),
     mainPanel(
       renderUI(localstate$state_out)

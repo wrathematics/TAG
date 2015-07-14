@@ -9,7 +9,7 @@ output$data_transform <- renderUI({
         checkboxInput("data_transform_checkbox_stem", "Stem?", value=FALSE),
         
         actionButton("button_data_transform", "Transform"),
-        render_helpfile("Data", "data/transform.md")
+        render_helpfile("Data Transform", "data/transform.md")
       ),
       mainPanel(
         renderUI({

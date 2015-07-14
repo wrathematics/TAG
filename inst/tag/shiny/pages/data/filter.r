@@ -12,7 +12,7 @@ output$data_filter <- renderUI({
         textInput("data_filter_exclude", "Exclude Text"),
         
         actionButton("button_data_filter", "Filter"),
-        render_helpfile("Data", "data/filter.md")
+        render_helpfile("Data Filter", "data/filter.md")
       ),
       mainPanel(
         renderUI({
