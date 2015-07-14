@@ -98,7 +98,7 @@ clear_data <- function(input)
     if (input$button_data_input_clear > 0)
     {
       clear_state()
-      localstate$state_out <- HTML("Cleared!")
+      localstate$state_out <- HTML("Cleared all internal state data!")
     }
   })
   
