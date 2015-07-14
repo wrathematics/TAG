@@ -5,7 +5,7 @@ output$analyse_lda_fit <- renderUI(
       sliderInput("lda_ntopics", "Number of Topics", min=1, max=20, value=3),
       selectizeInput("lda_method", "Method", c("Gibbs", "VEM"), "Gibbs"),
       actionButton("lda_button_fit", "Fit"),
-      render_helpfile("LDA Fit", "analyse/lda_fit.md")
+      render_helpfile("Analyse", "analyse/lda_fit.md")
     ),
     mainPanel(
       renderUI({

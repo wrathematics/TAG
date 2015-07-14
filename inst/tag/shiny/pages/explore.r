@@ -105,7 +105,7 @@ output$explore_termsearch <- renderUI({
           sliderInput("explore_termsearch_maxwordfreq", "Maximum Frequency %", min=0, max=100, value=100)
         ),
         
-        render_helpfile("Term Search", "explore/basic_termsearch.md")
+        render_helpfile("Explore", "explore/basic_termsearch.md")
       ),
       mainPanel(
         renderUI({
@@ -171,7 +171,7 @@ output$explore_top10 <- renderUI(
         radioButtons(inputId="explore_top10_yaxis", 
                      label="Y-Axis", c("Count"="Count", "Percent"="Percent"), 
                      selected="Count", inline=FALSE),
-        render_helpfile("Top 10", "explore/plot_top10.md")
+        render_helpfile("Explore", "explore/plot_top10.md")
       ),
       mainPanel(
         verticalLayout(
@@ -222,7 +222,7 @@ output$explore_wordcorr <- renderUI(
       checkboxInput("plot_termsearch_checkbox_findclosest", "Find closest match?", value=FALSE),
       sliderInput("wordcorr_corr", "Minimum Correlation", min=.05, max=1.0, value=.750000000),
       textInput("wordcorr_word", ""),
-      render_helpfile("Correlation Plot", "explore/plot_wordcorr.md")
+      render_helpfile("Explore", "explore/plot_wordcorr.md")
     ),
     mainPanel(
       show_plotnote_message,
@@ -276,7 +276,7 @@ output$explore_zipf <- renderUI(
       })
     ),
     
-    render_helpfile("Zipf Plot", "explore/plot_zipf.md")
+    render_helpfile("Explore", "explore/plot_zipf.md")
   )
 )
 
@@ -293,7 +293,7 @@ output$explore_wordcloud <- renderUI(
       sliderInput("wordcloud_maxwords", "Maximum words:", min=1, max=150, value=25),
       checkboxInput("wordcloud_random.order", "Random order?", value=FALSE),
       selectizeInput("wordcloud_colors", "Colors", inname, "alternating"),
-      render_helpfile("Wordcloud", "explore/plot_wordcloud.md")
+      render_helpfile("Explore", "explore/plot_wordcloud.md")
     ),
     mainPanel(
       show_plotnote_message,
@@ -326,7 +326,7 @@ output$explore_dispersionplot <- renderUI(
       h5("Dispersion Plot"),
       checkboxInput("plot_dispersion_checkbox_findclosest", "Find closest match?", value=FALSE),
       textInput("dispersionplot_word", "Word(s) (comma separated)", ""),
-      render_helpfile("Dispersion", "explore/plot_dispersion.md")
+      render_helpfile("Explore", "explore/plot_dispersion.md")
     ),
     mainPanel(
       show_plotnote_message,
