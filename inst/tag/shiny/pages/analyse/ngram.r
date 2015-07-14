@@ -5,7 +5,7 @@ output$analyse_ngram_fit <- renderUI(
       sliderInput("ngram_n", "Number of words per 'gram' (n)", min=1, max=10, value=2),
       actionButton("ngram_button_fit", "Fit"),
       downloadButton('ngram_phrasetable_save', 'Save', class="dlButton"),
-      render_helpfile("Analyse", "analyse/ngram_fit.md")
+      render_helpfile("Analyse Ngrams", "analyse/ngram_fit.md")
     ),
     mainPanel(
       renderUI({
