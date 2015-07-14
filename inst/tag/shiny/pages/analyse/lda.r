@@ -5,7 +5,7 @@ output$analyse_lda_fit <- renderUI(
       sliderInput("lda_ntopics", "Number of Topics", min=1, max=20, value=3),
       selectizeInput("lda_method", "Method", c("Gibbs", "VEM"), "Gibbs"),
       actionButton("lda_button_fit", "Fit"),
-      render_helpfile("Analyse", "analyse/lda_fit.md")
+      render_helpfile("Analyse LDA Fit", "analyse/lda_fit.md")
     ),
     mainPanel(
       renderUI({
@@ -58,7 +58,7 @@ output$analyse_lda_topics <- renderUI(
       h5("Latent Dirichlet Allocation"),
       sliderInput("lda_nterms", "Number of terms", min=5, max=50, value=10),
       downloadButton('lda_topics_save', 'Save', class="dlButton"),
-      render_helpfile("LDA Topics", "analyse/lda_topics.md")
+      render_helpfile("Analyse LDA Topics", "analyse/lda_topics.md")
     ),
     mainPanel(
       renderTable({
@@ -90,7 +90,7 @@ output$analyse_lda_vis <- renderUI({
     sidebarPanel(
       h5("LDA Vis"),
       sliderInput("lda_vis_nterms", "Number of terms", min=5, max=50, value=10),
-      render_helpfile("LDA Vis", "analyse/lda_vis.md")
+      render_helpfile("Analyse LDA Vis", "analyse/lda_vis.md")
     ),
     mainPanel(
       LDAvis::visOutput('analyse_lda_vis_')

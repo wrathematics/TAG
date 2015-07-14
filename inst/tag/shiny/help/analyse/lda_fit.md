@@ -1,2 +1,3 @@
-## Latent Dirichlet Allocation
+## Latent Dirichlet Allocation (LDA)
+
 
