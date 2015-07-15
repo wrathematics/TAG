@@ -38,12 +38,14 @@ find_closest_word <- function(input, words)
 #' A string.
 #' @param maxwordlen
 #' Maximum length of words to consider when finding wordlength counts.
+#' @param maxsenlen
+#' Maximum length of sentences to consider when finding sentencelength counts.
 #' 
 #' @return
 #' The number of words.
 #' 
 #' @export
-wc <- function(string, maxwordlen=16)
+wc <- function(string, maxwordlen=16, maxsenlen=20)
 {
-  .Call(R_wc, string, as.integer(maxwordlen))
+  .Call(R_wc, string, as.integer(maxwordlen), as.integer(maxsenlen))
 }

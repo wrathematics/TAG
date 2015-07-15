@@ -4,10 +4,10 @@ output$data_state <- renderUI({
       h4("Manage TAG State"),
       h5("Save state"),
       downloadButton('data_state_save', 'Save', class="dlButton"),
-      br(),br(),br(),
+      br(),hr(),
       h5("Load state"),
       fileInput('data_state_file', label=NULL, accept=".rda"),
-      br(),br(),
+      hr(),
       h5("Clear state"),
       actionButton("button_data_input_clear", "Clear"),
       render_helpfile("Data State", "data/state.md")
@@ -71,8 +71,6 @@ tag_load_state <- function(input)
 #        localstate$ng_mdl <- tmp$ng_mdl
 #        localstate$ng_out <- tmp$ng_out
         
-        localstate$explore_wordlens <- tmp$explore_wordlens
-        
         rm(tmp);invisible(gc())
       })
       
@@ -111,8 +109,6 @@ clear_data <- function(input)
 
 clear_modelstate <- function()
 {
-  localstate$explore_wordlens <- NULL
-  
   localstate$lda_mdl <- NULL
   localstate$lda_out <- NULL
   

@@ -39,11 +39,12 @@
 #include <stdbool.h>
 
 
-SEXP R_wc(SEXP string, SEXP wordlen_max_)
+SEXP R_wc(SEXP string, SEXP wordlen_max_, SEXP senlen_max_)
 {
   int chars = 0, letters = 0, whitespace = 0, punctuation = 0, digits = 0;
   int words = 0, sentences = 0, lines = 0;
   const int wordlen_max = INT(wordlen_max_);
+  const int senlen_max = INT(senlen_max_);
   char c, *str;
   bool multispace_correction;
   
@@ -56,12 +57,17 @@ SEXP R_wc(SEXP string, SEXP wordlen_max_)
   for (int i=0; i<wordlen_max; i++)
     INTEGER(wordlens)[i] = 0;
   
+  SEXP senlens;
+  PROTECT(senlens = allocVector(INTSXP, senlen_max));
+  for (int i=0; i<senlen_max; i++)
+    INTEGER(senlens)[i] = 0;
+  
   const int lenstr = LENGTH(string);
   
   for (int j=0; j<lenstr; j++)
   {
     int i = 0;
-    int wordlen_current =  0;
+    int wordlen_current =  0, senlen_current =  0;
     str = CHARPT(string, j);
     
     lines++;
@@ -71,6 +77,8 @@ SEXP R_wc(SEXP string, SEXP wordlen_max_)
       chars++;
       
       multispace_correction = false;
+      
+      // new word
       if (isspace(c))
       {
         if (c != '\n')
@@ -81,20 +89,28 @@ SEXP R_wc(SEXP string, SEXP wordlen_max_)
         words++;
         INTEGER(wordlens)[MIN(wordlen_current, wordlen_max)-1]++;
         wordlen_current =  0;
+        senlen_current++;
       }
       else
       {
         wordlen_current++;
         
-        if (isalpha(c))
-          letters++;
-        else if (isdigit(c))
-          digits++;
-        else if (ispunct(c))
+        if (ispunct(c))
         {
           punctuation++;
           if (c=='.' || c==';' || c=='!' || c=='?')
+          {
             sentences++;
+            INTEGER(senlens)[MIN(senlen_current, senlen_max)-1]++;
+            senlen_current =  0;
+          }
+        }
+        else
+        {
+          if (isalpha(c))
+            letters++;
+          else if (isdigit(c))
+            digits++;
         }
       }
       
@@ -136,6 +152,7 @@ SEXP R_wc(SEXP string, SEXP wordlen_max_)
     {
       words--;
       INTEGER(wordlens)[MIN(wordlen_current, wordlen_max)-1]--;
+      senlen_current--;
     }
   }
   
@@ -148,7 +165,7 @@ SEXP R_wc(SEXP string, SEXP wordlen_max_)
   LEN1INTVEC(Rsentences, sentences);
   LEN1INTVEC(Rlines, lines);
   
-  PROTECT(ret = allocVector(VECSXP, 9));
+  PROTECT(ret = allocVector(VECSXP, 10));
   SET_VECTOR_ELT(ret, 0, Rchars);
   SET_VECTOR_ELT(ret, 1, Rletters);
   SET_VECTOR_ELT(ret, 2, Rwhitespace);
@@ -158,8 +175,9 @@ SEXP R_wc(SEXP string, SEXP wordlen_max_)
   SET_VECTOR_ELT(ret, 6, Rsentences);
   SET_VECTOR_ELT(ret, 7, Rlines);
   SET_VECTOR_ELT(ret, 8, wordlens);
+  SET_VECTOR_ELT(ret, 9, senlens);
   
-  PROTECT(ret_names = allocVector(STRSXP, 9));
+  PROTECT(ret_names = allocVector(STRSXP, 10));
   SET_STRING_ELT(ret_names, 0, mkChar("chars"));
   SET_STRING_ELT(ret_names, 1, mkChar("letters"));
   SET_STRING_ELT(ret_names, 2, mkChar("whitespace"));
@@ -169,9 +187,10 @@ SEXP R_wc(SEXP string, SEXP wordlen_max_)
   SET_STRING_ELT(ret_names, 6, mkChar("sentences"));
   SET_STRING_ELT(ret_names, 7, mkChar("lines"));
   SET_STRING_ELT(ret_names, 8, mkChar("wordlens"));
+  SET_STRING_ELT(ret_names, 9, mkChar("senlens"));
   setAttrib(ret, R_NamesSymbol, ret_names);
   
-  UNPROTECT(11);
+  UNPROTECT(12);
   return ret;
 }
 
