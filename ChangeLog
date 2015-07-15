@@ -1,0 +1,57 @@
+Version 0.0.10:
+  * Added syllable counter.
+
+Version 0.0.9:
+  * Added help.
+  * Refactored summary tab.
+  * Added vm deployment script.
+  * Made on-tab help system more prominent.
+
+Version 0.0.8:
+  * Added local file and text box inputs.
+  * Added new features to term search.
+  * Added new features to Top 10 plot.
+  * Added speech data.
+  * Made status bar more prominent.
+
+Version 0.0.7:
+  * Added save instructions to plots.
+  * Renamed textgateway() to runTAG() (also fixed it).
+  * Added state management.
+  * Added XSEDE branding.
+
+Version 0.0.6:
+  * Numerous performance fixes (eventReactive/observeEvent fixes).
+  * Changed data input ux significantly.
+
+Version 0.0.5:
+  * Added 'thanks' to about tab.
+  * Lots of plot tweaks.
+  * Fixed cleanup on data change.
+  * Expanded summary statistics.
+
+Version 0.0.4:
+  * Added dispersion plot.
+  * Added ngrams.
+  * Split filter into filter and transform.
+  * Added conventions document.
+  * Added help tab.
+  * Add inspect tab.
+
+Version 0.0.3:
+  * Added validation.
+  * Cleaned up about tab.
+  * Better messaging in progress bars.
+  * Fixed LDAvis bug.
+
+Version 0.0.2:
+  * Integrated LDAvis.
+  * Added basic word counter.
+  * Add a "nearest match" via levenshtein distance in term search.
+  * Switch state to reactive value.
+  * Added basic book importer.
+  * Fixed sourcing problem.
+  * Added LDA model fitter.
+
+Version 0.0.1:
+  * Package creation.
