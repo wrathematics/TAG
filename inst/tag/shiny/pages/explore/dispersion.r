@@ -1,7 +1,7 @@
 output$explore_dispersionplot <- renderUI(
   sidebarLayout(
     sidebarPanel(
-      h5("Dispersion Plot"),
+      h5(strong("Search Strictness")),
       checkboxInput("plot_dispersion_checkbox_findclosest", "Find closest match?", value=FALSE),
       textInput("dispersionplot_word", "Word(s) (comma separated)", ""),
       render_helpfile("Explore Dispersion", "explore/plot_dispersion.md")

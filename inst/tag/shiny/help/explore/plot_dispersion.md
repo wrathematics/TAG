@@ -1,5 +1,8 @@
 ## Dispersion
 
+Enter a term or list of terms (comma separated) and see where it/they
+appear throughout the text.
+
 The dispersion, or lexical dispersion, plots visually display the
 frequency of occurrence of a term in a text.
 

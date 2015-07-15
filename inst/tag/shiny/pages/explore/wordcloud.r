@@ -4,7 +4,6 @@ wordcloud_outname <- c("black", "Accent", "Dark2", "Oranges", "Greens", "Purples
 output$explore_wordcloud <- renderUI(
   sidebarLayout(
     sidebarPanel(
-      h5("Wordcloud Options"),
       sliderInput("wordcloud_minfreq", "Minimum frequency:", min=1, max=50, value=15),
       sliderInput("wordcloud_maxwords", "Maximum words:", min=1, max=150, value=25),
       checkboxInput("wordcloud_random.order", "Random order?", value=FALSE),
