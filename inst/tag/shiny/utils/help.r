@@ -28,7 +28,10 @@ render_helpfile <- function(title, file)
         </div>
       </div>
     </div>
-    <i title='Help' class='glyphicon glyphicon-question-sign' data-toggle='modal' data-target='#%s'>Click me!</i>
+    <div title='Help' data-toggle='modal' data-target='#%s'>
+      <i>Click me!</i>
+      <div title='Help' class='glyphicon glyphicon-question-sign'></div>
+    </div>
      ", link, link, link, title, body, thisyear, link)
   
   html <- enc2utf8(html)
