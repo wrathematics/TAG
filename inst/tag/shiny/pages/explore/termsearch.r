@@ -20,8 +20,7 @@ output$explore_termsearch <- renderUI({
         ),
         
         conditionalPanel(condition = "input.explore_termsearch_type == 'Percent'",
-          sliderInput("explore_termsearch_minwordfreq", "Minimum %", min=0, max=100, value=1),
-          sliderInput("explore_termsearch_maxwordfreq", "Maximum %", min=0, max=100, value=100)
+          sliderInput("explore_termsearch_wordfreq", "Min/Max %", min=0, max=100, value=c(1, 100))
         ),
         
         render_helpfile("Explore Search", "explore/basic_termsearch.md")
@@ -87,11 +86,8 @@ output$explore_termsearch_rendertable <- DT::renderDataTable({
     }
     else if (input$explore_termsearch_type == "Percent")
     {
-      min <- input$explore_termsearch_minwordfreq
-      max <- input$explore_termsearch_maxwordfreq
-      
-      if (min > max)
-        stop("Bad inputs; must have max frequency >= min frequency")
+      min <- input$explore_termsearch_wordfreq[1]
+      max <- input$explore_termsearch_wordfreq[2]
       
       tab <- localstate$wordcount_table
       tab_pct <- tab*100/sum(tab)
