@@ -4,14 +4,16 @@
 \alias{wc}
 \title{Count Words of a String}
 \usage{
-wc(string, maxwordlen = 16, maxsenlen = 20)
+wc(string, maxwordlen = 16, maxsenlen = 20, maxsyllen = 10)
 }
 \arguments{
 \item{string}{A string.}
 
-\item{maxwordlen}{Maximum length of words to consider when finding wordlength counts.}
+\item{maxwordlen}{Maximum length of words to consider.}
 
-\item{maxsenlen}{Maximum length of sentences to consider when finding sentencelength counts.}
+\item{maxsenlen}{Maximum length of sentences to consider.}
+
+\item{maxsyllen}{Maximum length of syllables to consider.}
 }
 \value{
 The number of words.
