@@ -1,10 +1,10 @@
 ## Search
 
-The search feature works in 3 separate ways:
+The search feature works in 3 separate ways.  You can specify:
 
-* Specify a word and get counts and percentage of text.
-* Specify a lower and upper count and get all words occurring at least as many times as the min count and no more than the max count.
-* Specify lower and upper frequencies (percentage of the text) and all words that make up that amount of the tex will be shown.
+* a word and get occurrence counts for that word.
+* min/max counts and get a table of all words occurring in the text within that frequency range.
+* min/max percentages and get a table of all words comprising a percentage of the text falling within the specified range.
 
 
 By default, the search by term is exact.  If you select the "Find closest match"

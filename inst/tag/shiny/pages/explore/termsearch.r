@@ -3,7 +3,7 @@ output$explore_termsearch <- renderUI({
     sidebarLayout(
       sidebarPanel(
         radioButtons(inputId="explore_termsearch_type", 
-                   label="Search by...", c("Term"="Term", "Count"="Count", "Frequency"="Frequency"), 
+                   label="Search by...", c("Term"="Term", "Count"="Count", "Percent"="Percent"), 
                    selected="", inline=FALSE),
         
         br(),
@@ -19,9 +19,9 @@ output$explore_termsearch <- renderUI({
           numericInput("explore_termsearch_maxwordcount", "Maximum Count", min=1, value=100)
         ),
         
-        conditionalPanel(condition = "input.explore_termsearch_type == 'Frequency'",
-          sliderInput("explore_termsearch_minwordfreq", "Minimum Frequency %", min=0, max=100, value=1),
-          sliderInput("explore_termsearch_maxwordfreq", "Maximum Frequency %", min=0, max=100, value=100)
+        conditionalPanel(condition = "input.explore_termsearch_type == 'Percent'",
+          sliderInput("explore_termsearch_minwordfreq", "Minimum %", min=0, max=100, value=1),
+          sliderInput("explore_termsearch_maxwordfreq", "Maximum %", min=0, max=100, value=100)
         ),
         
         render_helpfile("Explore Search", "explore/basic_termsearch.md")
@@ -49,13 +49,13 @@ output$explore_termsearch <- renderUI({
             nwords <- sum(localstate$wordcount_table)
             
             if (is.na(freq))
-              HTML("Term not found! <br><br> You may need to transform the data first (stem, lowercase, etc.).  See the Data--Transform tab.")
+              HTML("Term not found! <br><br> You may need to transform the data first (stem, lowercase, etc.), or try the 'Find closest match' feature.")
             else
-              paste0("\"", term, "\" occurs ", freq, " times, and accounts for ", round(freq/nwords, roundlen)*100, "% of the text.")
+              paste0("\"", term, "\" occurs ", freq, " times, and its usage accounts for ", round(freq/nwords, roundlen)*100, "% of the text.")
           }
           else
           {
-            DT::dataTableOutput("explore_termsearch_frequency_rendertable")
+            DT::dataTableOutput("explore_termsearch_rendertable")
           }
         })
       )
@@ -64,7 +64,7 @@ output$explore_termsearch <- renderUI({
 })
 
 
-output$explore_termsearch_frequency_rendertable <- DT::renderDataTable({
+output$explore_termsearch_rendertable <- DT::renderDataTable({
     if (input$explore_termsearch_type == "Count")
     {
       min <- input$explore_termsearch_minwordcount
@@ -78,14 +78,14 @@ output$explore_termsearch_frequency_rendertable <- DT::renderDataTable({
         stop("Bad inputs; min and max count must be at least 1 each.")
       
       tab <- localstate$wordcount_table
-      
+      tab_pct <- tab*100/sum(tab)
       
       if (max == "")
         ind <- which(tab >= min)
       else
         ind <- which(tab >= min & tab <= max)
     }
-    else if (input$explore_termsearch_type == "Frequency")
+    else if (input$explore_termsearch_type == "Percent")
     {
       min <- input$explore_termsearch_minwordfreq
       max <- input$explore_termsearch_maxwordfreq
@@ -93,12 +93,13 @@ output$explore_termsearch_frequency_rendertable <- DT::renderDataTable({
       if (min > max)
         stop("Bad inputs; must have max frequency >= min frequency")
       
-      tab <- localstate$wordcount_table*100/sum(localstate$wordcount_table)
+      tab <- localstate$wordcount_table
+      tab_pct <- tab*100/sum(tab)
       
-      ind <- which(tab >= min & tab <= max)
+      ind <- which(tab_pct >= min & tab_pct <= max)
     }
     
-    df <- data.frame(Count=localstate$wordcount_table[ind], Frequency=tab[ind])
+    df <- data.frame(Count=tab[ind], Percent=tab_pct[ind])
     
     
     DT::datatable(df, extensions="Scroller", escape=TRUE,
