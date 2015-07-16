@@ -6,3 +6,15 @@
 
 inst/tag/rsconnect
 inst/deploy_shinyapps
+
+
+*.aux
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+*.bbl
+*.blg
+*.backup

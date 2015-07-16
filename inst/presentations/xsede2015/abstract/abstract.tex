@@ -1,0 +1,98 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage{amsfonts, amsmath, hanging, hyperref, parskip, times}
+\usepackage[numbers]{natbib}
+\usepackage[pdftex]{graphicx}
+\hypersetup{
+  colorlinks,
+  linkcolor=blue,
+  urlcolor=blue,
+  citecolor=blue
+}
+
+\let\section=\subsubsection
+\newcommand{\pkg}[1]{{\normalfont\fontseries{b}\selectfont #1}} 
+\let\proglang=\textit
+\let\code=\texttt 
+\renewcommand{\title}[1]{\begin{center}{\bf \LARGE #1}\end{center}}
+\newcommand{\affiliations}{\footnotesize\centering}
+\newcommand{\keywords}{\paragraph{Keywords:}}
+
+\setlength{\topmargin}{-15mm}
+\setlength{\oddsidemargin}{-2mm}
+\setlength{\textwidth}{165mm}
+\setlength{\textheight}{250mm}
+
+\begin{document}
+\pagestyle{empty}
+
+\title{XSEDE Text Analytics Gateway}
+
+\begin{center}
+  {\bf Mike Black$^1$, Drew Schmidt$^2$}
+\end{center}
+
+\begin{affiliations}
+1. National Center for Supercomputing Applications, University of Illinois at 
+Urbana-Champaign \\[-2pt]
+2.National Institute for Computational Sciences, University of Tennessee 
+\\[-2pt]
+$^1$\underline{mlblac02@gmail.com}\\[-2pt]
+$^2$\underline{schmidt@math.utk.edu}\\
+\end{affiliations}
+
+
+\vskip 0.8cm
+
+Increasingly, researchers in the humanities and social sciences are becoming 
+more interested in utilizing computational resources to answer their questions. 
+ This is particularly relevant for text analysis, which has historically been 
+dominated in these fields by qualitative methods.  We believe the resistance to 
+quantitative methods is, in part, due to a ``technological familiarity gap'' 
+in these fields.
+
+The XSEDE Text Analytics Gateway hopes to be transformational in this regard.  
+The goal of the project is to provide researchers with a user-friendly text 
+analytics workflow system. Unlike other web-based text mining portals in these 
+disciplines such as TaPoR and HTRC, the XSEDE Text Analytics Gateway will not 
+merely present users with a list of data retrieval operations. Instead, this 
+project implements interactive documentation to walk users through the decisions 
+needed to combine data retrieval, preprocessing, analysis, and postprocessing 
+into a single, complete workflow. In this respect, the gateway is both a 
+research and pedagogical tool. 
+
+The initial audience for the gateway will be researchers with little background 
+in computational methods; however, a simpler interface will also be available 
+for those with more experience in text analytics who would like to design their 
+own workflows independent of the examples provided by the interactive 
+documentation. Ideally, these more experienced researchers will be able to use 
+this gateway as a place to test and design methodologies in pursuit of larger 
+projects. Sample data will be provided for novice users, and the team is 
+currently exploring the possibility of integrating access to web APIs from 
+relevant data sources for more advanced users.
+
+The core of the gateway’s text analytics functionality will be implemented in 
+the popular programming language and analysis package R.  The interface is 
+being designed with shiny, an R package that connects R to the web and 
+allows for the easy creation of interactive webapps.  The ``interactive 
+documentation'' will be created using RMarkdown, which is an enhancement to the 
+simple document system markdown.  Elements of the gateway will be embedded 
+directly into these markdown documents.
+
+The XSEDE Text Analytics Gateway is currently in the prototyping stage, with 
+basic preprocessing and analytics implemented in the non-documentation driven 
+interface. Currently, several example case study workflows have been drafted for 
+implemented in Markdown. The immediate next steps will be to implement one or 
+two sets of interactive documentation, move the framework onto the new XSEDE 
+resource Comet, and begin small scale user testing with a sample data set.  In 
+this poster, we will share the early developments of the project, including 
+technical issues and community building challenges.  The poster should appeal to 
+practitioners and gateway developers alike.
+
+
+
+%% references: 
+\nocite{shiny,rlang, rmd}
+\bibliographystyle{chicago}
+\bibliography{bib}
+
+\end{document}
