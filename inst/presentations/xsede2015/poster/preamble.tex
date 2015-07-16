@@ -1,0 +1,69 @@
+\usepackage{etex}
+\usepackage[absolute,overlay]{textpos}
+\setlength{\TPHorizModule}{1cm}
+\setlength{\TPVertModule}{1cm}
+
+\newcommand{\bX}{\textbf{X}}
+
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{pstricks}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{tcolorbox}
+
+\definecolor{gray}{rgb}{.6,.6,.6}
+\definecolor{orange}{rgb}{1,0.5,0}
+\definecolor{grayish}{rgb}{.9, .9, .9}
+\definecolor{dkgray}{rgb}{.375, .375, .375}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\definecolor{dkblue}{rgb}{0, 0, .5}
+
+\lstset{ %
+  language=R,    
+  numbers=left,
+  stepnumber=1,       
+  numbersep=6pt,      
+  showspaces=false,      
+  showstringspaces=false,  
+  showtabs=false,    
+  frame=single,      
+  rulecolor=\color{black},   
+  tabsize=4,     
+  captionpos=t,     
+  breaklines=true,     
+  breakatwhitespace=true,   
+  title=\lstname,              
+  basicstyle=\ttfamily\color{black}\scriptsize, 
+  backgroundcolor=\color{grayish},  
+  numberstyle=\tiny\color{black},  
+  keywordstyle=\color{blue}, 
+  commentstyle=\color{dkgreen}, 
+  stringstyle=\color{mauve}, 
+  xleftmargin=.3in,
+  xrightmargin=.3in,
+  aboveskip=-0.8cm,
+  belowskip=.2cm,
+  morekeywords={expm, ddmatrix}
+}
+
+
+
+  
+
+\def\mytemparray{}
+
+\newcommand\doatpos[3]{%
+    \bgroup
+    \def\mytemparray{{ #2 }}
+    \pgfmathparse{\mytemparray[0]} \edef\mya{\pgfmathresult}
+    \pgfmathparse{\mytemparray[1]} \edef\myb{\pgfmathresult}
+    \pgfmathparse{\mytemparray[2]} \edef\myc{\pgfmathresult}
+    \begin{tikzpicture}[remember picture, overlay]
+      \node[anchor=#1, opacity=\myc] at ( \mya pt, \myb  pt) {#3};
+    \end{tikzpicture}%
+    \egroup
+}
