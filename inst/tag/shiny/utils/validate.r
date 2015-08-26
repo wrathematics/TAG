@@ -2,7 +2,7 @@ must_have <- function(obj, silent=FALSE)
 {
   obj <- match.arg(tolower(obj), c("corpus", "tdm", "wordcount_table", "lda_mdl", "ng_mdl"))
   
-  if (obj == "corpus" || obj == "tdm" || obj == "wordcount_table")
+  if (obj == "corpus")
   {
     if (silent)
       msg <- ""
@@ -29,6 +29,9 @@ must_have <- function(obj, silent=FALSE)
     
     validate(need(!is.null(localstate$ng_mdl), msg))
   }
+  
+  if (obj == "tdm" || obj == "wordcount_table")
+    update_secondary()
   
   invisible()
 }

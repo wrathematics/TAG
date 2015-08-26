@@ -119,11 +119,19 @@ clear_modelstate <- function()
   invisible()
 }
 
+clear_secondary <- function()
+{
+  localstate$tdm <- NULL
+  localstate$wordcount_table <- NULL
+  
+  
+  invisible()
+}
+
 clear_state <- function()
 {
   localstate$corpus <- NULL
-  localstate$tdm <- NULL
-  localstate$wordcount_table <- NULL
+  clear_secondary()
   
   localstate$input_out <- NULL
   

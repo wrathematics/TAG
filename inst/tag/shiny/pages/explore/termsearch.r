@@ -27,7 +27,9 @@ output$explore_termsearch <- renderUI({
       ),
       mainPanel(
         renderUI({
-          must_have("wordcount_table")
+          must_have("corpus")
+          
+          update_secondary()
           
           
           if (is.null(input$explore_termsearch_type))

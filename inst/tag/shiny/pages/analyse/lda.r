@@ -102,6 +102,8 @@ output$analyse_lda_vis_ <- LDAvis::renderVis({
   must_have("corpus")
   must_have("lda_mdl")
   
+  update_secondary()
+  
   withProgress(message='Preparing the data...', value=0,
   {
     phi <- localstate$post$terms

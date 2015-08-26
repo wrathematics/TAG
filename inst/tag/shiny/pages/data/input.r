@@ -2,17 +2,53 @@
 # Utils --- must be loaded here
 # -----------------------------------------------------------
 
+### Demand updates
 update_tdm <- function()
 {
   evalfun(localstate$tdm <- tm::TermDocumentMatrix(localstate$corpus),
     comment="Update term-document matrix")
 }
 
-
 update_wordcount <- function()
 {
   evalfun(localstate$wordcount_table <- sort(rowSums(as.matrix(localstate$tdm)), decreasing=TRUE), 
     comment="Update wordcount table")
+}
+
+
+
+### Updates lazily
+update_secondary <- function()
+{
+  n <- 0L
+  if (is.null(localstate$tdm))
+    n <- n+1L
+  if (is.null(localstate$wordcount_table))
+    n <- n+1L
+  
+  if (n == 0L) 
+    return(invisible())
+  
+  withProgress(message='', value=0, {
+    i = 0
+    
+    if (is.null(localstate$tdm))
+    {
+      incProgress(0, message="Updating tdm...")
+      update_tdm()
+      setProgress(i/n)
+      i <- i+1
+    }
+    
+    if (is.null(localstate$wordcount_table))
+    {
+      incProgress(0, message="Updating wordcounts...")
+      update_wordcount()
+      setProgress(i/n)
+    }
+  })
+  
+  invisible()
 }
 
 

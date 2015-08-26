@@ -14,6 +14,8 @@ output$explore_top10 <- renderUI(
           renderPlot({
             must_have("corpus")
             
+            update_secondary()
+            
             withProgress(message='Rendering plot...', value=0,
             {
               tot <- sum(localstate$wordcount_table)

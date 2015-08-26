@@ -73,10 +73,7 @@ data_transform_reactive <- eventReactive(input$button_data_transform, {
         incProgress(1/n/2)
       }
       
-      incProgress(0, message="Updating tdm...")
-      update_tdm()
-      setProgress(3/4, message="Updating wordcounts...")
-      update_wordcount()
+      clear_secondary()
       
       if (n > 0)
         addto_call("\n")

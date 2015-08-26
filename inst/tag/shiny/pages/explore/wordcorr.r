@@ -13,6 +13,8 @@ output$explore_wordcorr <- renderUI(
       renderPlot({
         must_have("corpus")
         
+        update_secondary()
+        
         term <- input$wordcorr_word
         if (term == "")
           return("")

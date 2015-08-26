@@ -2,23 +2,44 @@ output$data_filter <- renderUI({
   list(
     sidebarLayout(
       sidebarPanel(
-        selectizeInput("data_filter_stopwords_lang", "Stopwords Language", stopwords_list, "english"),
-        checkboxInput("data_filter_checkbox_remstop", "Remove stopwords?", value=TRUE),
-        hr(),
         
-        checkboxInput("data_filter_checkbox_exclude", "Exclude list?", value=TRUE),
-        checkboxInput("data_filter_checkbox_greedy", "Exclude greedily?", value=TRUE),
-        checkboxInput("data_filter_checkbox_greedy", "Exclude ignores case?", value=FALSE),
-        textInput("data_filter_exclude", "Exclude Text"),
+        radioButtons(inputId="data_filter_type", 
+                   label="Select Filter Method", 
+                   c("Stopwords"="stopwords", "Custom"="custom"), 
+                   selected="", inline=FALSE),
         
-        actionButton("button_data_filter", "Filter"),
+        # Stopwords
+        conditionalPanel(condition = "input.data_filter_type == 'stopwords'",
+          br(),
+          selectizeInput("data_filter_stopwords_lang", "Stopwords Language", stopwords_list, "english"),
+          checkboxInput("data_filter_checkbox_remstop", "Remove stopwords?", value=TRUE),
+          actionButton("button_data_filter_stopwords", "Filter Stopwords"),
+          hr()
+        ),
+        
+        # Custom
+        conditionalPanel(condition = "input.data_filter_type == 'custom'",
+          br(),
+          checkboxInput("data_filter_checkbox_greedy", "Exclude greedily?", value=FALSE),
+          checkboxInput("data_filter_checkbox_greedy", "Exclude ignores case?", value=FALSE),
+          textInput("data_filter_exclude", "Exclude Text"),
+          actionButton("button_data_filter_custom", "Filter Custom"),
+          hr()
+        ),
+        
+        
         render_helpfile("Data Filter", "data/filter.md")
       ),
       mainPanel(
         renderUI({
           must_have("corpus")
           
-          data_filter_reactive()
+          a <- data_filter_stopwords_reactive()
+          b <- data_filter_custom_reactive()
+          
+          if (!is.null(a)) a
+          else
+            b
         })
       )
     )
@@ -27,45 +48,54 @@ output$data_filter <- renderUI({
 
 
 
-data_filter_reactive <- eventReactive(input$button_data_filter, {
+data_filter_stopwords_reactive <- eventReactive(input$button_data_filter_stopwords, {
   withProgress(message='Processing...', value=0, {
     
-    n <- input$data_filter_checkbox_remstop
+    addto_call("### Filter stopwords\n")
     
-    if (n > 0)
-      addto_call("### Filter text\n")
+    runtime <- system.time({
+      incProgress(0, message="Removing stopwords...")
+      evalfun(localstate$corpus <- tm::tm_map(localstate$corpus, tm::removeWords, tm::stopwords(input$data_filter_stopwords_lang)), 
+        comment="Remove stopwords")
+      
+      clear_secondary()
+      
+      addto_call("\n")
+      
+      clear_modelstate()
+    })
+    
+    setProgress(1)
+  })
+  
+  paste("Processing finished in", round(runtime[3], roundlen), "seconds.")
+})
+
+
+
+
+data_filter_custom_reactive <- eventReactive(input$button_data_filter_custom, {
+  withProgress(message='Processing...', value=0, {
+    
+    addto_call("### Filter custom list\n")
     
     runtime <- system.time({
       
-      if (input$data_filter_checkbox_remstop)
+      if (input$data_filter_exclude != "")
       {
-        incProgress(0, message="Removing stopwords...")
-        evalfun(localstate$corpus <- tm::tm_map(localstate$corpus, tm::removeWords, tm::stopwords(input$data_filter_stopwords_lang)), 
-          comment="Remove stopwords")
-        
-        incProgress(1/n/2)
+        evalfun({
+          terms <- input$data_filter_exclude
+          terms <- unlist(strsplit(terms, split=","))
+          
+          localstate$corpus <- tm::tm_map(localstate$corpus, tm::removeWords, terms)
+        })
       }
-      if (input$data_filter_checkbox_exclude)
-      {
-        print(input$data_filter_exclude)
-        if (input$data_filter_exclude != "")
-        {
-          evalfun({
-            terms <- input$data_filter_exclude
-            terms <- unlist(strsplit(terms, split=","))
-            
-            localstate$corpus <- tm::tm_map(localstate$corpus, tm::removeWords, terms)
-          })
-        }
-      }
+      else
+        stop("Exclusion list is empty!")
       
-      incProgress(0, message="Updating tdm...")
-      update_tdm()
-      setProgress(3/4, message="Updating wordcounts...")
-      update_wordcount()
+      cleare_secondary()
       
-      if (n > 0)
-        addto_call("\n")
+      addto_call("\n")
       
       clear_modelstate()
     })

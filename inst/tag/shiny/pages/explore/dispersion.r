@@ -12,6 +12,8 @@ output$explore_dispersionplot <- renderUI(
       renderPlot({
         must_have("corpus")
         
+        update_secondary()
+        
         term <- input$dispersionplot_word
         if (term == "")
           return("")

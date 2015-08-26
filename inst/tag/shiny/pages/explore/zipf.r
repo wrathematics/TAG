@@ -4,7 +4,9 @@ output$explore_zipf <- renderUI(
     renderPlot(
       withProgress(message='Rendering plot...', value=0,
       {
-        must_have("tdm")
+        must_have("corpus")
+        
+        update_secondary()
         
         tm::Zipf_plot(localstate$tdm)
       })

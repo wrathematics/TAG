@@ -43,6 +43,7 @@ countvar <- function(x, avg) sum(sapply(1:length(x), function(i) x[i]*(i-avg)^2)
 
 output$explore_summary_ <- renderUI({
   must_have("corpus")
+  must_have("tdm")
   
   s <- TAG::wc(sapply(localstate$corpus, function(i) i$content), input$explore_corpus_maxwordlen, input$explore_corpus_maxsenlen)
   
