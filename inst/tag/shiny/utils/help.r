@@ -29,7 +29,7 @@ render_helpfile <- function(title, file)
       </div>
     </div>
     <div title='Help' data-toggle='modal' data-target='#%s'>
-      <i>Click me!</i>
+      <i>Click for help</i>
       <div title='Help' class='glyphicon glyphicon-question-sign'></div>
     </div>
      ", link, link, link, title, body, thisyear, link)
