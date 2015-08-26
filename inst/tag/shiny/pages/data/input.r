@@ -60,13 +60,26 @@ update_secondary <- function()
 output$data_import <- renderUI({
   sidebarLayout(
     sidebarPanel(
+      
+      h4("Data Import"),
+      
       radioButtons(inputId="data_input_type", 
-                   label="Select Input Type", 
-                   c("Local File"="files", "Text Box"="box", "Book"="book", "Speech"="speech"), 
+                   label="Select Input Type",
+                   c("Custom Data"="custom", "Example Data"="example"),
                    selected="", inline=FALSE),
       
+      
+      ### Custom data
+      conditionalPanel(condition = "input.data_input_type == 'custom'",
+        br(),
+        radioButtons(inputId="data_input_method_custom", 
+                     label="Input Method", 
+                     c("Local File"="files", "Text Box"="box"), 
+                     selected="", inline=FALSE)
+      ),
+      
       # Local file
-      conditionalPanel(condition = "input.data_input_type == 'files'",
+      conditionalPanel(condition = "input.data_input_method_custom == 'files'",
         br(),
         fileInput('data_localtext_file', label="Input File", 
         multiple=FALSE, ### FIXME
@@ -74,21 +87,32 @@ output$data_import <- renderUI({
       ),
       
       # Text box
-      conditionalPanel(condition = "input.data_input_type == 'box'",
+      conditionalPanel(condition = "input.data_input_method_custom == 'box'",
         br(),
         tags$textarea(id="data_input_textbox", rows=6, cols=40, ""),
         actionButton("button_data_input_textbox", "Load Textbox")
       ),
       
+      
+      
+      ### Example data
+      conditionalPanel(condition = "input.data_input_type == 'example'",
+        br(),
+        radioButtons(inputId="data_input_method_example", 
+                     label="Example Source", 
+                     c("Book"="book", "Speech"="speech"), 
+                     selected="", inline=FALSE)
+      ),
+      
       # Book
-      conditionalPanel(condition = "input.data_input_type == 'book'",
+      conditionalPanel(condition = "input.data_input_method_example == 'book'",
         br(),
         selectizeInput("data_books", "Books", extradata_books_titles),
         actionButton("button_data_input_books", "Load Book")
       ),
       
       # Speech
-      conditionalPanel(condition = "input.data_input_type == 'speech'",
+      conditionalPanel(condition = "input.data_input_method_example == 'speech'",
         br(),
         selectizeInput("data_speeches", "Speeches", extradata_speeches_titles),
         actionButton("button_data_input_speeches", "Load Speech")
