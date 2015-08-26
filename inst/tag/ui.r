@@ -6,11 +6,7 @@ shinyUI(
     tags$head(
       tags$link(rel="stylesheet", type="text/css", href="css/bar.css"),
       
-      tags$style(HTML("
-        .shiny-output-error-validation {
-          color: blue;
-        }
-      "))
+      tags$style(HTML(".shiny-output-error-validation {color: blue;}"))
     ),
     tags$footer(
       tags$link(rel="stylesheet", type="text/css", href="css/logo.css")
