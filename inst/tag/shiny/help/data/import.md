@@ -10,31 +10,29 @@ data and models), see the 'State' sub-tab under 'Data' main tab.
 
 
 
-#### Local File
+#### Custom Data
 
+* **Local File**
 Click the 'Browse' button to select your local text file you wish to
 upload.  The file should end in the extension `.txt`.
 
-
-
-#### Text Box
-
+* **Text Box**.
 Simply paste your text into the box and select 'Load Textbox'.
 
+* **List of URL's**
+Enter a list of url's (one per line), and the text content of those
+web pages will automatically be scraped and brought into TAG.
 
 
-#### Book
 
-Several English Language books are available
+#### Example Data
 
-The books have already been pre-processed for use with the TAG
+have already been pre-processed for use with the TAG
 system, so they should load very quickly.
 
+* **Book**
+Several English Language books.
 
+* **Speech**
+Several famous historical speeches.
 
-#### Speech
-
-Several famous historical speeches 
-
-The speeches have already been pre-processed for use with the TAG
-system, so they should load very quickly.
