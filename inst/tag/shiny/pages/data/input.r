@@ -74,7 +74,7 @@ output$data_import <- renderUI({
         br(),
         radioButtons(inputId="data_input_method_custom", 
                      label="Input Method", 
-                     c("Local File"="files", "Text Box"="box"), 
+                     c("Local File"="files", "Text Box"="box", "List of URL's"="urls"), 
                      selected="", inline=FALSE)
       ),
       
@@ -91,6 +91,13 @@ output$data_import <- renderUI({
         br(),
         tags$textarea(id="data_input_textbox", rows=6, cols=40, ""),
         actionButton("button_data_input_textbox", "Load Textbox")
+      ),
+      
+      # Lise of url's
+      conditionalPanel(condition = "input.data_input_method_custom == 'urls'",
+        br(),
+        tags$textarea(id="data_input_urls", rows=6, cols=40, ""),
+        actionButton("button_data_input_urls", "Scrape URL's")
       ),
       
       
@@ -131,6 +138,8 @@ output$data_import <- renderUI({
 
 set_data <- function(input)
 {
+  ### Custom data
+  
   # Local file
   tmp <- eventReactive(input$data_localtext_file, {
     textfile <- input$data_localtext_file
@@ -192,6 +201,34 @@ set_data <- function(input)
   })
   
   
+  
+  # List of url's
+  observeEvent(input$button_data_input_urls, {
+    if (input$button_data_input_urls > 0)
+    {
+      clear_state()
+      
+      withProgress(message='Scraping pages...', value=0, {
+        runtime <- system.time({
+          urls <- unlist(strsplit(input$data_input_urls, split="\n"))
+          
+          pages <- sapply(urls, function(url) rvest::html_text(rvest::html(url)))
+          
+          setProgress(1/2, message="Creating corpus...")
+          localstate$corpus <- tm::Corpus(tm::VectorSource(pages))
+        })
+        
+        setProgress(1)
+      })
+      
+      localstate$input_out <- HTML(paste("Your web corpus is now ready to use!\nLoading and processing finished in", round(runtime[3], roundlen), "seconds."))
+    }
+  })
+  
+  
+  
+  
+  ### Example data
   
   # Book
   observeEvent(input$button_data_input_books, {
