@@ -1,5 +1,10 @@
+Version 0.0.11:
+  * 
+
 Version 0.0.10:
   * Added syllable counter.
+  * Added "list of url's" data import.
+  * Added lazy update system to tdm and wct.
 
 Version 0.0.9:
   * Added help.
