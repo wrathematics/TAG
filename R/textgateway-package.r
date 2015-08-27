@@ -31,7 +31,7 @@
 #' @importFrom rmarkdown render html_fragment
 #' @importFrom topicmodels LDA terms
 #' @importFrom ngram ngram get.phrasetable babble
-#' @importFrom html html_text
+#' @importFrom rvest html html_text
 #' 
 #' @keywords Package
 NULL
