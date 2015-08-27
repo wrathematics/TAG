@@ -36,7 +36,8 @@ In addition to needing R, you need the following packages:
 * topicmodels (>= 0.2.1),
 * LDAvis (>= 0.3.1),
 * DT (>= 0.1),
-* ngram (>= 2.0)
+* ngram (>= 2.0),
+* rvest (>= 0.2.0)
 
 
 The easiest way to install this package is use the devtools package,
