@@ -17,12 +17,13 @@ render_helpfile <- function(title, file)
             <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
             <h4 class='modal-title' id='%s_label'>%s</h4>
           </div>
-          <div class='modal-body'>%s<br>
+          <div class='modal-body'>%s
+          <br><br>
             <font size='1'>
             &copy;%s Drew Schmidt and Mike Black.
             All documentation is released under a
               <a rel='license' href='http://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>Creative Commons License</a>.
-              <img alt='' style='border-width:0' src='cc.png'>
+              <img alt='' style='border-width:0' height=20px src='./img/cc.png'>
             </font>
           </div>
         </div>
@@ -58,14 +59,13 @@ render_helpfile_inplace <- function(title, files)
   link <- paste0(gsub(title, pattern=" ", replacement=""), "_help")
   thisyear <- format(Sys.Date(), "%Y")
   
-  html <- sprintf("
-    %s
-    <br>
+  html <- sprintf("%s
+    <br><br>
     <font size='1'>
       &copy;%s Drew Schmidt and Mike Black.
       All documentation is released under a
       <a rel='license' href='http://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>Creative Commons License</a>.
-      <img alt='' style='border-width:0' src='cc.png'>
+      <img alt='' style='border-width:0' height=20px src='./img/cc.png'>
     </font>
      ", body, thisyear, link)
   
