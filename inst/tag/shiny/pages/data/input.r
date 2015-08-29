@@ -79,7 +79,7 @@ output$data_import <- renderUI({
       ),
       
       # Local file
-      conditionalPanel(condition = "input.data_input_method_custom == 'files'",
+      conditionalPanel(condition = "input.data_input_type == 'custom' && input.data_input_method_custom == 'files'",
         br(),
         fileInput('data_localtext_file', label="Input File", 
         multiple=FALSE, ### FIXME
@@ -87,14 +87,14 @@ output$data_import <- renderUI({
       ),
       
       # Text box
-      conditionalPanel(condition = "input.data_input_method_custom == 'box'",
+      conditionalPanel(condition = "input.data_input_type == 'custom' && input.data_input_method_custom == 'box'",
         br(),
         tags$textarea(id="data_input_textbox", rows=6, cols=40, ""),
         actionButton("button_data_input_textbox", "Load Textbox")
       ),
       
       # Lise of url's
-      conditionalPanel(condition = "input.data_input_method_custom == 'urls'",
+      conditionalPanel(condition = "input.data_input_type == 'custom' && input.data_input_method_custom == 'urls'",
         br(),
         tags$textarea(id="data_input_urls", rows=6, cols=40, ""),
         actionButton("button_data_input_urls", "Scrape URL's")
@@ -112,14 +112,14 @@ output$data_import <- renderUI({
       ),
       
       # Book
-      conditionalPanel(condition = "input.data_input_method_example == 'book'",
+      conditionalPanel(condition = "input.data_input_type == 'example' && input.data_input_method_example == 'book'",
         br(),
         selectizeInput("data_books", "Books", extradata_books_titles),
         actionButton("button_data_input_books", "Load Book")
       ),
       
       # Speech
-      conditionalPanel(condition = "input.data_input_method_example == 'speech'",
+      conditionalPanel(condition = "input.data_input_type == 'example' && input.data_input_method_example == 'speech'",
         br(),
         selectizeInput("data_speeches", "Speeches", extradata_speeches_titles),
         actionButton("button_data_input_speeches", "Load Speech")
