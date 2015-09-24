@@ -4,7 +4,10 @@
 # This script should deploy TAG on a new Ubuntu 14.04 vm.
 #----------------------------------------------------------------
 
-export MAKE="/usr/bin/make -j 9"   # I recommend ncores+1
+NCORES=8
+export MAKE="/usr/bin/make -j $(( $NCORES+1 ))"
+
+CODENAME=`lsb_release -c | sed -e "s/Codename:\t//"`
 
 
 ### Preliminaries
@@ -19,7 +22,7 @@ sudo apt-get install git tmux openjdk-7-jre openjdk-7-jdk libgsl0-dev libxml2-de
 
 
 ### Set up R
-sudo cat "deb http://cran.rstudio.com/bin/linux/ubuntu trusty/" >> /etc/apt/sources.list
+sudo cat "deb http://cran.rstudio.com/bin/linux/ubuntu $CODENAME/" >> /etc/apt/sources.list
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
 sudo apt-get update
 sudo apt-get install r-base-dev
