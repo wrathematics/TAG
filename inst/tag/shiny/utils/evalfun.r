@@ -9,26 +9,24 @@ evalfun <- function(arg, comment)
   
   if (grepl(call, pattern="input$", fixed=TRUE))
   {
-    split <- strsplit(call, split="input$", fixed=TRUE)[[1]]
+    m <- gregexpr(call, pattern="input\\$.*,", perl=TRUE)
+    l1 <- regmatches(call, m)
+    m <- gregexpr(call, pattern="input\\$[^,]*\\)", perl=TRUE)
+    l2 <- regmatches(call, m)
+    call_in <- c(l1, l2)
     
-    for (i in 2:length(split)) ### Here length is at least 2 b/c of grep; if you wonder why I'm bringing this up, 2:length(x) is non-empty if length(x) is 1. Welcome to R!
+    ### Here length is at least 2 b/c of grep; if you wonder why I'm bringing this up, 2:length(x) is non-empty if length(x) is 1. Welcome to R!
+    for (i in 1:length(call_in))
     {
-      inputarg <- strsplit(split[i], split="(,|\\))")[[1]]
-      inputarg_eval <- eval(parse(text=paste0("input$", inputarg[1])))
+      if (length(call_in[[i]]) == 0)
+        next
       
-      for (finisher in c(",", ")"))
-      {
-        if (grepl(split[i], pattern=finisher))
-        {
-            split[i] <- paste0(inputarg_eval, finisher)
-          
-          if (length(inputarg) > 1)
-            split[i] <- paste(split[i], paste(inputarg[2:length(inputarg)], collapse=", "), collapse=",")
-        }
-      }
+      finisher <- regmatches(call_in[[i]], regexpr(call_in[[i]], pattern="(,|\\))"))
+      inputarg <- gsub(call_in[[i]], pattern=finisher, replacement="")
+      inputarg_eval <- eval(parse(text=inputarg))
+      
+      call <- gsub(call, pattern=inputarg, replacement=inputarg_eval)
     }
-    
-    call <- paste0(paste0(split, collapse=""), "\n")
   }
   
   if (!missing(comment))
@@ -48,7 +46,3 @@ addto_call <- function(x)
   
   invisible()
 }
-
-###input <- list(a=1, b=2)
-
-###evalfun(c <- foo(input$a, x, y, input$b), input)
