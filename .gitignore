@@ -7,6 +7,7 @@
 inst/tag/rsconnect
 inst/deploy_shinyapps
 
+*.html
 
 *.aux
 *.log
