@@ -31,6 +31,7 @@ output$explore_top10 <- renderUI(
               
               g <- ggplot(top10, aes(x=terms, y=pcttot)) + 
                    geom_point() + 
+                   geom_line(aes(group=1)) + 
                    xlab("Term") + 
                    theme_bw() + 
                    theme(axis.text.x=element_text(angle=22, hjust=1))
