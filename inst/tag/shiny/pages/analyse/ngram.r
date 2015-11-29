@@ -35,9 +35,13 @@ analyse_ngram <- function(input)
         evalfun(text <- ngram::concatenate(sapply(localstate$corpus, function(i) i$content), collapse=" "), 
           comment="Collapse corpus to a single character vector")
         
-        incProgress(1/2, message="Fitting the model...")
+        incProgress(1/3, message="Fitting the model...")
         evalfun(localstate$ng_mdl <- ngram::ngram(text, n=input$ngram_n), 
-          comment="Fit an ngram model")
+          comment="Fit an n-gram model")
+        
+        incProgress(1/3, message="Get the n-gram phrasetable")
+        evalfun(localstate$pt <- ngram::get.phrasetable(localstate$ng_mdl),
+          comment="Generate the n-gram phrasetable")
         
         setProgress(1)
       })
@@ -58,8 +62,8 @@ output$analyse_ngram_inspect_ <- DT::renderDataTable({
   
   validate(need(!is.null(localstate$ng_mdl), ""))
   
-  withProgress(message='Generating phrase table...', value=0, {
-    pt <- ngram::get.phrasetable(localstate$ng_mdl)
+  withProgress(message='Updating phrase table...', value=0, {
+    pt <- localstate$pt
     pt$prop <- round(pt$prop, roundlen)
     rownames(pt) <- NULL
     colnames(pt)[2:3] <- c("frequency", "proportion")
@@ -129,4 +133,3 @@ output$analyse_ngram_babble <- renderUI({
     )
   )
 })
-
