@@ -55,7 +55,7 @@ output$explore_summary_ <- renderUI({
         renderTable(align=c("l", "r"), {
           distinct <- tm::nTerms(localstate$tdm)
           ndocs <- tm::nDocs(localstate$tdm)
-          ram <- paste(memuse::object.size(localstate$corpus))
+          ram <- paste(memuse::memuse(localstate$corpus))
           
           l <- list(Characters=s$chars, Letters=s$letters, Digits=s$digits,
                     Whitespace=s$whitespace, Punctuation=s$punctuation,

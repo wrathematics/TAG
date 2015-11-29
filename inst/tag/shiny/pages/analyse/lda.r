@@ -18,6 +18,7 @@ output$analyse_lda_fit <- renderUI(
 )
 
 
+
 analyse_lda <- function(input)
 {
   observeEvent(input$lda_button_fit, {
@@ -52,6 +53,7 @@ analyse_lda <- function(input)
 }
 
 
+
 output$analyse_lda_topics <- renderUI(
   sidebarLayout(
     sidebarPanel(
@@ -72,6 +74,7 @@ output$analyse_lda_topics <- renderUI(
 )
 
 
+
 output$lda_topics_save <- downloadHandler(
   filename=function(){
     "lda_topics.csv"
@@ -81,7 +84,6 @@ output$lda_topics_save <- downloadHandler(
     write.csv(obj, file=file, row.names=FALSE)
   }
 )
-
 
 
 
@@ -116,4 +118,3 @@ output$analyse_lda_vis_ <- LDAvis::renderVis({
     LDAvis::createJSON(phi, theta, doc.length, vocab, term.frequency, R=input$lda_vis_nterms)
   })
 })
-

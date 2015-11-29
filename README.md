@@ -25,7 +25,7 @@ In addition to needing R, you need the following packages:
 
 * shiny (>= 0.11.1),
 * ggplot2 (>= 1.0.0),
-* memuse (>= 1.1),
+* memuse (>= 3.0.0),
 * tm (>= 0.6),
 * wordcloud (>= 2.5),
 * RColorBrewer (>= 1.0.5),
