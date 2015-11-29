@@ -68,6 +68,7 @@ tag_load_state <- function(input)
         ### ngram relies on external memory that we lose control over :()
         localstate$ng_mdl <- NULL
         localstate$ng_out <- NULL
+        localstate$ng_pt <- NULL
 #        localstate$ng_mdl <- tmp$ng_mdl
 #        localstate$ng_out <- tmp$ng_out
         
@@ -115,6 +116,7 @@ clear_modelstate <- function()
   localstate$ng_mdl <- NULL
   localstate$ng_pt <- NULL
   localstate$ng_out <- NULL
+  localstate$ng_pt <- NULL
   
   invisible()
 }
@@ -141,4 +143,3 @@ clear_state <- function()
   
   invisible()
 }
-

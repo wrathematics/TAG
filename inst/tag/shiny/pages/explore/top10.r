@@ -48,4 +48,3 @@ output$explore_top10 <- renderUI(
     )
   )
 )
-

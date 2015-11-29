@@ -19,6 +19,7 @@ output$analyse_lda_fit <- renderUI(
 
 
 
+# called in server.r
 analyse_lda <- function(input)
 {
   observeEvent(input$lda_button_fit, {

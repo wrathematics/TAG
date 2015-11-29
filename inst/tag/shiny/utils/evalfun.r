@@ -36,7 +36,7 @@ evalfun <- function(arg, comment)
   
   localstate$call <- c(localstate$call, comment, call)
   
-  arg
+  eval(arg)
 }
 
 
