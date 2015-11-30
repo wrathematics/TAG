@@ -89,15 +89,13 @@ output$lda_topics_save <- downloadHandler(
 
 
 output$analyse_lda_vis <- renderUI({
-  sidebarLayout(
-    sidebarPanel(
+  verticalLayout(
+    list(
       h5("LDA Vis"),
       sliderInput("lda_vis_nterms", "Number of terms", min=5, max=50, value=10),
       render_helpfile("Analyse LDA Vis", "analyse/lda_vis.md")
     ),
-    mainPanel(
-      LDAvis::visOutput('analyse_lda_vis_')
-    )
+    LDAvis::visOutput('analyse_lda_vis_')
   )
 })
 

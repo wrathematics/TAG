@@ -110,9 +110,7 @@ output$explore_summary_ <- renderUI({
     
     ### Wordlen plot
     renderPlot({
-      g <- TAG_summary_plotter(s$wordlens, input$explore_corpus_maxwordlen)
-      
-      g + 
+      TAG_summary_plotter(s$wordlens, input$explore_corpus_maxwordlen) +
         xlab("Characters Per Word") +
         ylab("Percentage of Corpus") +
         ggtitle("Word Length Distribution")
@@ -125,9 +123,7 @@ output$explore_summary_ <- renderUI({
         return("")
       }
       
-      g <- TAG_summary_plotter(s$senlens, input$explore_corpus_maxsenlen)
-      
-      g + 
+      TAG_summary_plotter(s$senlens, input$explore_corpus_maxsenlen) + 
         xlab("Words Per Sentence") +
         ylab("Percentage of Corpus") +
         ggtitle("Sentence Length Distribution")
@@ -135,9 +131,7 @@ output$explore_summary_ <- renderUI({
     
     ### Syllen plot
     renderPlot({
-      g <- TAG_summary_plotter(s$syllens, input$explore_corpus_maxsyllen)
-      
-      g + 
+      TAG_summary_plotter(s$syllens, input$explore_corpus_maxsyllen) +
         xlab("Syllables Per Word") +
         ylab("Percentage of Corpus") +
         ggtitle("Syllable Length Distribution")
