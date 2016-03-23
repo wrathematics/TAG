@@ -2,11 +2,17 @@
 # Utils --- must be loaded here
 # -----------------------------------------------------------
 
+
+library(tm)
+
 ### Demand updates
 update_tdm <- function()
 {
   evalfun(localstate$tdm <- tm::TermDocumentMatrix(localstate$corpus),
     comment="Update term-document matrix")
+    #make sure all rows have nonzero entries
+    rowTotals <- apply(localstate$tdm,1,sum)
+    localstate$tdm <- localstate$tdm[rowTotals>0, ]
 }
 
 update_wordcount <- function()
@@ -67,25 +73,28 @@ output$data_import <- renderUI({
                    label="Select Input Type",
                    c("Custom Data"="custom", "Example Data"="example"),
                    selected="", inline=FALSE),
-      
+
+
+      ###ceb add checkbox to indicate appending to document list
+      checkboxInput("data_import_checkbox_append_document_list","Append to document list?", value=FALSE),
       
       ### Custom data
       conditionalPanel(condition = "input.data_input_type == 'custom'",
         br(),
         radioButtons(inputId="data_input_method_custom", 
                      label="Input Method", 
-                     c("Local File"="files", "Text Box"="box", "List of URL's"="urls"), 
+                     c("Local File(s)"="files", "Text Box"="box", "List of URL's"="urls"), 
                      selected="", inline=FALSE)
       ),
       
       # Local file
       conditionalPanel(condition = "input.data_input_type == 'custom' && input.data_input_method_custom == 'files'",
         br(),
-        fileInput('data_localtext_file', label="Input File", 
-        multiple=FALSE, ### FIXME
+        fileInput('data_localtext_files', label="Input File", 
+        multiple=TRUE, 
         accept=c(".txt"))
       ),
-      
+
       # Text box
       conditionalPanel(condition = "input.data_input_type == 'custom' && input.data_input_method_custom == 'box'",
         br(),
@@ -93,7 +102,7 @@ output$data_import <- renderUI({
         actionButton("button_data_input_textbox", "Load Textbox")
       ),
       
-      # Lise of url's
+      # List of url's
       conditionalPanel(condition = "input.data_input_type == 'custom' && input.data_input_method_custom == 'urls'",
         br(),
         tags$textarea(id="data_input_urls", rows=6, cols=40, ""),
@@ -140,57 +149,81 @@ set_data <- function(input)
 {
   ### Custom data
   
-  # Local file
-  tmp <- eventReactive(input$data_localtext_file, {
-    textfile <- input$data_localtext_file
-    
-    if (!is.null(textfile))
+
+  # Local files 
+  tmp <- eventReactive(input$data_localtext_files, {
+    textdir <- input$data_localtext_files
+    if (!is.null(textdir))
     {
-      clear_state()
-      
+      if(!input$data_import_checkbox_append_document_list){ clear_state() }
       withProgress(message='Reading data...', value=0, {
         runtime <- system.time({
-          dir <- sub(textfile$datapath, pattern="/[^/]*$", replacement="")
-          
+          dir <- sub(textdir$datapath[1], pattern="/[^/]*$", replacement="")
+          #cat(file=stderr(),"dir=",dir,"\n")
           setProgress(1/4, message="Creating corpus...")
-          localstate$corpus <- tm::Corpus(tm::DirSource(dir))
-          
+          source <- tm::DirSource(dir)
+          if(length(localstate$corpus) > 0){
+            #docs <- c( unlist( sapply(localstate$corpus,'[',"content") ),
+            #          unlist( sapply(tm::Corpus(source),'[',"content"))) 
+            #localstate$corpus <- tm::Corpus(tm::VectorSource( docs[docs != ""] ))
+            docs <- unlist( sapply(tm::Corpus(source),'[',"content"))
+            docs <-docs[docs != ""]
+            docs <- as.data.frame( 
+                                   c( unlist( sapply(localstate$corpus,'[',"content") ),
+                                      docs ) 
+                                 )
+            #localstate$corpus <- tm::Corpus(tm::DataframeSource( docs[docs != ""] ))
+            localstate$corpus <- tm::Corpus(tm::DataframeSource( docs ))
+          }
+          else{
+            #docs <- unlist( sapply(tm::Corpus(source),'[',"content"))
+            #remove empty lines
+            #docs <- docs[docs != ""]
+            #collapse into single string 
+            #docs <- as.data.frame( paste(docs,sep="",collapse="") )
+            #docs <- as.data.frame( docs )
+            #localstate$corpus <- tm::Corpus(tm::DataframeSource( docs )) 
+            #localstate$corpus <- tm::Corpus(tm::VectorSource( docs )) 
+            localstate$corpus <- tm::Corpus(source) 
+          }
           setProgress(1/2, message="Creating tdm...")
-          localstate$tdm <- tm::TermDocumentMatrix(localstate$corpus)
-          
+          update_tdm()
           setProgress(3/4, message="Creating wordcounts...")
-          localstate$wordcount_table <- sort(rowSums(as.matrix(localstate$tdm)), decreasing=TRUE)
+          update_wordcount()
         })
       })
-      
       localstate$input_out <- HTML(paste("Successfully loaded and processed", length(dir(dir)), "file(s) in", round(runtime[3], roundlen), "seconds."))
     }
     else
       localstate$input_out <- HTML("")
   })
-  
   observe(tmp())
-  
-  
-  
+
+
   # Text box
   observeEvent(input$button_data_input_textbox, {
     if (input$button_data_input_textbox > 0)
     {
-      clear_state()
+
+      if(!input$data_import_checkbox_append_document_list)
+      { clear_state() }
       
       withProgress(message='Reading data...', value=0, {
         runtime <- system.time({
           text <- unlist(strsplit(input$data_input_textbox, split="\n"))
           
           setProgress(1/4, message="Creating corpus...")
-          localstate$corpus <- tm::Corpus(tm::VectorSource(text))
-          
+          tmp <- text
+          if(length(localstate$corpus) > 0){ 
+             tmp <- c( unlist( sapply(localstate$corpus,'[',"content") ), text ) 
+          }
+          localstate$corpus <- tm::Corpus(tm::VectorSource( tmp[tmp != ""] )) 
+
           setProgress(1/2, message="Creating tdm...")
-          localstate$tdm <- tm::TermDocumentMatrix(localstate$corpus)
-          
+          update_tdm()
+
           setProgress(3/4, message="Creating wordcounts...")
-          localstate$wordcount_table <- sort(rowSums(as.matrix(localstate$tdm)), decreasing=TRUE)
+          update_wordcount()
         })
         
         setProgress(1)
@@ -206,7 +239,8 @@ set_data <- function(input)
   observeEvent(input$button_data_input_urls, {
     if (input$button_data_input_urls > 0)
     {
-      clear_state()
+      if(!input$data_import_checkbox_append_document_list)
+      { clear_state() }
       
       withProgress(message='Scraping pages...', value=0, {
         runtime <- system.time({
@@ -214,8 +248,18 @@ set_data <- function(input)
           
           pages <- sapply(urls, function(url) rvest::html_text(rvest::html(url)))
           
-          setProgress(1/2, message="Creating corpus...")
-          localstate$corpus <- tm::Corpus(tm::VectorSource(pages))
+          setProgress(1/4, message="Creating corpus...")
+          tmp <- pages 
+          if(length(localstate$corpus) > 0){
+            tmp <- c( unlist( sapply(localstate$corpus,'[',"content") ), pages )  
+          }
+          localstate$corpus <-  tm::Corpus( tm::VectorSource( tmp[tmp != ""] ) )
+        
+          setProgress(1/2, message="Creating tdm...")
+          update_tdm()
+
+          setProgress(3/4, message="Creating wordcounts...")
+          update_wordcount()
         })
         
         setProgress(1)
@@ -234,7 +278,8 @@ set_data <- function(input)
   observeEvent(input$button_data_input_books, {
     if (input$button_data_input_books > 0)
     {
-      clear_state()
+      if(!input$data_import_checkbox_append_document_list)
+      { clear_state() }
       
       withProgress(message='Loading data...', value=0, {
         runtime <- system.time({
@@ -243,9 +288,21 @@ set_data <- function(input)
           
           load(paste0(extradata_data, "/books/", bookfile))
           
-          localstate$corpus <- corpus
-          localstate$tdm <- tdm
-          localstate$wordcount_table <- wordcount_table
+          setProgress(1/4, message="Creating corpus...")
+          tmp <- sapply(corpus ,function(elem) elem$content)
+          if(length(localstate$corpus) > 0){ 
+
+            tmp <- c( unlist( sapply(localstate$corpus,function(elem) elem$content)),
+                      unlist( sapply(corpus ,          function(elem) elem$content))) 
+          }
+          #localstate$corpus <- corpus 
+          localstate$corpus <-  tm::Corpus( tm::VectorSource( tmp[tmp != ""] ) )
+
+          setProgress(1/2, message="Creating tdm...")
+          update_tdm()
+
+          setProgress(3/4, message="Creating wordcounts...")
+          update_wordcount()
         })
         
         setProgress(1)
@@ -261,7 +318,8 @@ set_data <- function(input)
   observeEvent(input$button_data_input_speeches, {
     if (input$button_data_input_speeches > 0)
     {
-      clear_state()
+      if(!input$data_import_checkbox_append_document_list)
+      { clear_state() }
       
       withProgress(message='Loading data...', value=0, {
         runtime <- system.time({
@@ -270,9 +328,19 @@ set_data <- function(input)
           
           load(paste0(extradata_data, "/speeches/", speechfile))
           
-          localstate$corpus <- corpus
-          localstate$tdm <- tdm
-          localstate$wordcount_table <- wordcount_table
+          setProgress(1/4, message="Creating corpus...")
+          tmp <- unlist( sapply(corpus,'[',"content") )
+          if(length(localstate$corpus) > 0){ 
+            tmp <- c( unlist( sapply(localstate$corpus,function(elem) elem$content)),
+                      unlist( sapply(corpus ,          function(elem) elem$content))) 
+          }
+          localstate$corpus <-  tm::Corpus( tm::VectorSource( tmp[tmp != ""] ) )
+
+          setProgress(1/2, message="Creating tdm...")
+          update_tdm()
+
+          setProgress(3/4, message="Creating wordcounts...")
+          update_wordcount()
         })
         
         setProgress(1)

@@ -31,6 +31,10 @@ analyse_lda <- function(input)
         incProgress(0, message="Building to dtm...")
         evalfun(DTM <- qdap::as.dtm(localstate$corpus), 
           comment="Build document-term matrix")
+
+        #make sure all rows have nonzero entries     
+        rowTotals <- apply(DTM,1,sum)
+        DTM <- DTM[rowTotals>0, ]
         
         incProgress(1/2, message="Fitting the model...")
         evalfun(localstate$lda_mdl <- topicmodels::LDA(DTM, k=input$lda_ntopics, method=input$lda_method), 
