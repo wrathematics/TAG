@@ -2,7 +2,7 @@
 # Utils --- must be loaded here
 # -----------------------------------------------------------
 
-
+library(shinyFiles)
 library(tm)
 
 ### Demand updates
@@ -74,7 +74,6 @@ output$data_import <- renderUI({
                    c("Custom Data"="custom", "Example Data"="example"),
                    selected="", inline=FALSE),
 
-
       ###ceb add checkbox to indicate appending to document list
       checkboxInput("data_import_checkbox_append_document_list","Append to document list?", value=FALSE),
       
@@ -83,16 +82,17 @@ output$data_import <- renderUI({
         br(),
         radioButtons(inputId="data_input_method_custom", 
                      label="Input Method", 
-                     c("Local File(s)"="files", "Text Box"="box", "List of URL's"="urls"), 
+                     c("Local File(s)"="files","Text Box"="box", "List of URL's"="urls"), 
                      selected="", inline=FALSE)
       ),
-      
+       
       # Local file
       conditionalPanel(condition = "input.data_input_type == 'custom' && input.data_input_method_custom == 'files'",
         br(),
-        fileInput('data_localtext_files', label="Input File", 
-        multiple=TRUE, 
-        accept=c(".txt"))
+        fileInput('data_localtext_files', label="Input File", multiple=TRUE, 
+        accept=c('text/plain','text/csv','text/tab-separated-values','text/richtext','application/excel','text/x-c') 
+        )
+                   #accept=c('text/csv','text/tab-separated-values','text/plain','application/plain','application/excel','text/x-c','text/x-fortran','text/x-h','text/richtext',".cpp",'.hpp','application/pdf','application/msword')
       ),
 
       # Text box
@@ -108,8 +108,6 @@ output$data_import <- renderUI({
         tags$textarea(id="data_input_urls", rows=6, cols=40, ""),
         actionButton("button_data_input_urls", "Scrape URL's")
       ),
-      
-      
       
       ### Example data
       conditionalPanel(condition = "input.data_input_type == 'example'",
@@ -144,13 +142,11 @@ output$data_import <- renderUI({
 
 
 
-
 set_data <- function(input)
 {
   ### Custom data
-  
 
-  # Local files 
+  # Local files
   tmp <- eventReactive(input$data_localtext_files, {
     textdir <- input$data_localtext_files
     if (!is.null(textdir))
@@ -159,38 +155,24 @@ set_data <- function(input)
       withProgress(message='Reading data...', value=0, {
         runtime <- system.time({
           dir <- sub(textdir$datapath[1], pattern="/[^/]*$", replacement="")
-          #cat(file=stderr(),"dir=",dir,"\n")
           setProgress(1/4, message="Creating corpus...")
           source <- tm::DirSource(dir)
+
+          #If we are appending to corpus 
           if(length(localstate$corpus) > 0){
-            #docs <- c( unlist( sapply(localstate$corpus,'[',"content") ),
-            #          unlist( sapply(tm::Corpus(source),'[',"content"))) 
-            #localstate$corpus <- tm::Corpus(tm::VectorSource( docs[docs != ""] ))
-            docs <- unlist( sapply(tm::Corpus(source),'[',"content"))
-            docs <-docs[docs != ""]
-            docs <- as.data.frame( 
-                                   c( unlist( sapply(localstate$corpus,'[',"content") ),
-                                      docs ) 
-                                 )
-            #localstate$corpus <- tm::Corpus(tm::DataframeSource( docs[docs != ""] ))
-            localstate$corpus <- tm::Corpus(tm::DataframeSource( docs ))
+            localstate$corpus <- c(tm::Corpus(source),localstate$corpus)
           }
-          else{
-            #docs <- unlist( sapply(tm::Corpus(source),'[',"content"))
-            #remove empty lines
-            #docs <- docs[docs != ""]
-            #collapse into single string 
-            #docs <- as.data.frame( paste(docs,sep="",collapse="") )
-            #docs <- as.data.frame( docs )
-            #localstate$corpus <- tm::Corpus(tm::DataframeSource( docs )) 
-            #localstate$corpus <- tm::Corpus(tm::VectorSource( docs )) 
+          else
+          {
             localstate$corpus <- tm::Corpus(source) 
           }
+
           setProgress(1/2, message="Creating tdm...")
           update_tdm()
           setProgress(3/4, message="Creating wordcounts...")
           update_wordcount()
         })
+        setProgress(1)
       })
       localstate$input_out <- HTML(paste("Successfully loaded and processed", length(dir(dir)), "file(s) in", round(runtime[3], roundlen), "seconds."))
     }
@@ -210,18 +192,25 @@ set_data <- function(input)
       
       withProgress(message='Reading data...', value=0, {
         runtime <- system.time({
-          text <- unlist(strsplit(input$data_input_textbox, split="\n"))
-          
+          #don't split into separate elements
+          #text <- unlist(strsplit(input$data_input_textbox, split="\n"))
+          text <- input$data_input_textbox
           setProgress(1/4, message="Creating corpus...")
-          tmp <- text
+          source <- text
+          # collapse string so that we have one document created in vectorsource
+          #source <- paste(source, sep="\n", collapse="\n") 
+          #source <- source[source != ""] 
+          source <- tm::VectorSource( source )
           if(length(localstate$corpus) > 0){ 
-             tmp <- c( unlist( sapply(localstate$corpus,'[',"content") ), text ) 
+             #tmp <- c( unlist( sapply(localstate$corpus,'[',"content") ), text ) 
+             localstate$corpus <- c(localstate$corpus,tm::Corpus(source)) 
           }
-          localstate$corpus <- tm::Corpus(tm::VectorSource( tmp[tmp != ""] )) 
-
+          else
+          {          
+            localstate$corpus <- tm::Corpus(source) 
+          }
           setProgress(1/2, message="Creating tdm...")
           update_tdm()
-
           setProgress(3/4, message="Creating wordcounts...")
           update_wordcount()
         })
@@ -245,19 +234,25 @@ set_data <- function(input)
       withProgress(message='Scraping pages...', value=0, {
         runtime <- system.time({
           urls <- unlist(strsplit(input$data_input_urls, split="\n"))
+          #remove empty lines from list of url's
+          urls <- urls[urls != ""] 
           
           pages <- sapply(urls, function(url) rvest::html_text(rvest::html(url)))
           
           setProgress(1/4, message="Creating corpus...")
-          tmp <- pages 
+          source <- pages
+          #source <- source[source != ""] 
           if(length(localstate$corpus) > 0){
-            tmp <- c( unlist( sapply(localstate$corpus,'[',"content") ), pages )  
+            corpus <- tm::Corpus( tm::VectorSource( source ) )  
+            localstate$corpus <- c(localstate$corpus,corpus)
           }
-          localstate$corpus <-  tm::Corpus( tm::VectorSource( tmp[tmp != ""] ) )
-        
+          else
+          {
+            corpus <- tm::Corpus( tm::VectorSource( source ) )  
+            localstate$corpus <- corpus 
+          } 
           setProgress(1/2, message="Creating tdm...")
           update_tdm()
-
           setProgress(3/4, message="Creating wordcounts...")
           update_wordcount()
         })
@@ -289,18 +284,17 @@ set_data <- function(input)
           load(paste0(extradata_data, "/books/", bookfile))
           
           setProgress(1/4, message="Creating corpus...")
-          tmp <- sapply(corpus ,function(elem) elem$content)
+          #tmp <- sapply(corpus ,function(elem) elem$content)
           if(length(localstate$corpus) > 0){ 
-
-            tmp <- c( unlist( sapply(localstate$corpus,function(elem) elem$content)),
-                      unlist( sapply(corpus ,          function(elem) elem$content))) 
+            localstate$corpus <- c(localstate$corpus, corpus)
           }
-          #localstate$corpus <- corpus 
-          localstate$corpus <-  tm::Corpus( tm::VectorSource( tmp[tmp != ""] ) )
+          else
+          {
+            localstate$corpus <- corpus 
+          }
 
           setProgress(1/2, message="Creating tdm...")
           update_tdm()
-
           setProgress(3/4, message="Creating wordcounts...")
           update_wordcount()
         })
@@ -327,18 +321,16 @@ set_data <- function(input)
           speechfile <- extradata_speeches[which(extradata_speeches_titles == speech)]
           
           load(paste0(extradata_data, "/speeches/", speechfile))
-          
           setProgress(1/4, message="Creating corpus...")
-          tmp <- unlist( sapply(corpus,'[',"content") )
           if(length(localstate$corpus) > 0){ 
-            tmp <- c( unlist( sapply(localstate$corpus,function(elem) elem$content)),
-                      unlist( sapply(corpus ,          function(elem) elem$content))) 
+            localstate$corpus <- c(localstate$corpus, corpus)
           }
-          localstate$corpus <-  tm::Corpus( tm::VectorSource( tmp[tmp != ""] ) )
-
+          else
+          {
+            localstate$corpus <- corpus 
+          }
           setProgress(1/2, message="Creating tdm...")
           update_tdm()
-
           setProgress(3/4, message="Creating wordcounts...")
           update_wordcount()
         })
