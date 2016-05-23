@@ -21,6 +21,21 @@ update_wordcount <- function()
     comment="Update wordcount table")
 }
 
+clean_corpus <- function()
+{
+  #Check corpus for validity and enforce
+  #remove all documents in corpus with zero entries
+  evalfun(DTM <- qdap::as.dtm(localstate$corpus),comment="Build document-term matrix")
+  rowTotals <- apply(DTM,1,sum)
+  empty.rows <- DTM[rowTotals==0, ]$dimnames[1][[1]]
+  localstate$corpus <- tm_filter(localstate$corpus,
+                                 FUN=function(doc) !is.element(meta(doc)$id, empty.rows))
+  #reset any analysis objects to null.
+  localstate$lda_mdl <- NULL
+  localstate$ng_mdl <- NULL 
+  #localstate$input_out <- HTML(paste("inspect(corpus)= [\n\n ", inspect(localstate$corpus), " \n\n]"))
+}
+
 
 
 ### Updates lazily
@@ -155,9 +170,8 @@ set_data <- function(input)
       withProgress(message='Reading data...', value=0, {
         runtime <- system.time({
           dir <- sub(textdir$datapath[1], pattern="/[^/]*$", replacement="")
-          setProgress(1/4, message="Creating corpus...")
+          setProgress(1/5, message="Creating corpus...")
           source <- tm::DirSource(dir)
-
           #If we are appending to corpus 
           if(length(localstate$corpus) > 0){
             localstate$corpus <- c(tm::Corpus(source),localstate$corpus)
@@ -166,10 +180,11 @@ set_data <- function(input)
           {
             localstate$corpus <- tm::Corpus(source) 
           }
-
-          setProgress(1/2, message="Creating tdm...")
+          setProgress(2/5, message="Removing empty documents...")
+          clean_corpus()
+          setProgress(3/5, message="Creating tdm...")
           update_tdm()
-          setProgress(3/4, message="Creating wordcounts...")
+          setProgress(4/5, message="Creating wordcounts...")
           update_wordcount()
         })
         setProgress(1)
@@ -186,38 +201,31 @@ set_data <- function(input)
   observeEvent(input$button_data_input_textbox, {
     if (input$button_data_input_textbox > 0)
     {
-
       if(!input$data_import_checkbox_append_document_list)
       { clear_state() }
-      
       withProgress(message='Reading data...', value=0, {
         runtime <- system.time({
-          #don't split into separate elements
-          #text <- unlist(strsplit(input$data_input_textbox, split="\n"))
           text <- input$data_input_textbox
-          setProgress(1/4, message="Creating corpus...")
-          source <- text
-          # collapse string so that we have one document created in vectorsource
-          #source <- paste(source, sep="\n", collapse="\n") 
-          #source <- source[source != ""] 
-          source <- tm::VectorSource( source )
+          setProgress(1/5, message="Creating corpus...")
+          source <- tm::VectorSource( text )
+          corpus <- tm::Corpus(source)
           if(length(localstate$corpus) > 0){ 
-             #tmp <- c( unlist( sapply(localstate$corpus,'[',"content") ), text ) 
-             localstate$corpus <- c(localstate$corpus,tm::Corpus(source)) 
+            meta(corpus[[1]],tag="id") <-  sprintf("%d",length(localstate$corpus)+1)      
+            localstate$corpus <- c(localstate$corpus,corpus) 
           }
           else
           {          
-            localstate$corpus <- tm::Corpus(source) 
+            localstate$corpus <- corpus
           }
-          setProgress(1/2, message="Creating tdm...")
+          setProgress(2/5, message="Removing empty documents...")
+          clean_corpus()
+          setProgress(3/5, message="Creating tdm...")
           update_tdm()
-          setProgress(3/4, message="Creating wordcounts...")
+          setProgress(4/5, message="Creating wordcounts...")
           update_wordcount()
         })
-        
         setProgress(1)
       })
-      
       localstate$input_out <- HTML(paste("Your text box corpus is now ready to use!\nLoading and processing finished in", round(runtime[3], roundlen), "seconds."))
     }
   })
@@ -236,30 +244,27 @@ set_data <- function(input)
           urls <- unlist(strsplit(input$data_input_urls, split="\n"))
           #remove empty lines from list of url's
           urls <- urls[urls != ""] 
-          
           pages <- sapply(urls, function(url) rvest::html_text(rvest::html(url)))
-          
-          setProgress(1/4, message="Creating corpus...")
-          source <- pages
-          #source <- source[source != ""] 
+          setProgress(1/5, message="Creating corpus...")
+          source <- tm::VectorSource( pages ) 
+          corpus <- tm::Corpus( source )  
           if(length(localstate$corpus) > 0){
-            corpus <- tm::Corpus( tm::VectorSource( source ) )  
+            meta(corpus[[1]],tag="id") <-  sprintf("%d",length(localstate$corpus)+1)      
             localstate$corpus <- c(localstate$corpus,corpus)
           }
           else
           {
-            corpus <- tm::Corpus( tm::VectorSource( source ) )  
             localstate$corpus <- corpus 
           } 
-          setProgress(1/2, message="Creating tdm...")
+          setProgress(2/5, message="Removing empty documents...")
+          clean_corpus()
+          setProgress(3/5, message="Creating tdm...")
           update_tdm()
-          setProgress(3/4, message="Creating wordcounts...")
+          setProgress(4/5, message="Creating wordcounts...")
           update_wordcount()
         })
-        
         setProgress(1)
       })
-      
       localstate$input_out <- HTML(paste("Your web corpus is now ready to use!\nLoading and processing finished in", round(runtime[3], roundlen), "seconds."))
     }
   })
@@ -283,7 +288,7 @@ set_data <- function(input)
           
           load(paste0(extradata_data, "/books/", bookfile))
           
-          setProgress(1/4, message="Creating corpus...")
+          setProgress(1/5, message="Creating corpus...")
           #tmp <- sapply(corpus ,function(elem) elem$content)
           if(length(localstate$corpus) > 0){ 
             localstate$corpus <- c(localstate$corpus, corpus)
@@ -293,9 +298,11 @@ set_data <- function(input)
             localstate$corpus <- corpus 
           }
 
-          setProgress(1/2, message="Creating tdm...")
+          setProgress(2/5, message="Removing empty documents...")
+          clean_corpus()
+          setProgress(3/5, message="Creating tdm...")
           update_tdm()
-          setProgress(3/4, message="Creating wordcounts...")
+          setProgress(4/5, message="Creating wordcounts...")
           update_wordcount()
         })
         
@@ -321,7 +328,7 @@ set_data <- function(input)
           speechfile <- extradata_speeches[which(extradata_speeches_titles == speech)]
           
           load(paste0(extradata_data, "/speeches/", speechfile))
-          setProgress(1/4, message="Creating corpus...")
+          setProgress(1/5, message="Creating corpus...")
           if(length(localstate$corpus) > 0){ 
             localstate$corpus <- c(localstate$corpus, corpus)
           }
@@ -329,9 +336,11 @@ set_data <- function(input)
           {
             localstate$corpus <- corpus 
           }
-          setProgress(1/2, message="Creating tdm...")
+          setProgress(2/5, message="Removing empty documents...")
+          clean_corpus()
+          setProgress(3/5, message="Creating tdm...")
           update_tdm()
-          setProgress(3/4, message="Creating wordcounts...")
+          setProgress(4/5, message="Creating wordcounts...")
           update_wordcount()
         })
         
@@ -341,7 +350,6 @@ set_data <- function(input)
       localstate$input_out <- HTML(paste("The<i>", input$data_speeches, "</i>corpus is now ready to use!\nLoading finished in", round(runtime[3], roundlen), "seconds."))
     }
   })
-  
   
   invisible()
 }
