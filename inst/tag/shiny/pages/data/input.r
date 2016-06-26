@@ -33,7 +33,6 @@ clean_corpus <- function()
   #reset any analysis objects to null.
   localstate$lda_mdl <- NULL
   localstate$ng_mdl <- NULL 
-  #localstate$input_out <- HTML(paste("inspect(corpus)= [\n\n ", inspect(localstate$corpus), " \n\n]"))
 }
 
 
@@ -105,9 +104,10 @@ output$data_import <- renderUI({
       conditionalPanel(condition = "input.data_input_type == 'custom' && input.data_input_method_custom == 'files'",
         br(),
         fileInput('data_localtext_files', label="Input File", multiple=TRUE, 
-        accept=c('text/plain','text/csv','text/tab-separated-values','text/richtext','application/excel','text/x-c') 
-        )
-                   #accept=c('text/csv','text/tab-separated-values','text/plain','application/plain','application/excel','text/x-c','text/x-fortran','text/x-h','text/richtext',".cpp",'.hpp','application/pdf','application/msword')
+          # We can add more file types to upload, but anything other than text types will likely crash during processing. 
+          # To use pdf or word files, preprocessing them into text format will be necessary 
+          accept=c('text/plain','text/csv','text/tab-separated-values','text/richtext','text/x-c') 
+        ) 
       ),
 
       # Text box
@@ -164,6 +164,8 @@ set_data <- function(input)
   # Local files
   tmp <- eventReactive(input$data_localtext_files, {
     textdir <- input$data_localtext_files
+    #remove non ascii characters 
+    textdir$datapath[1] <- iconv(textdir$datapath[1], "", "ASCII", sub="")
     if (!is.null(textdir))
     {
       if(!input$data_import_checkbox_append_document_list){ clear_state() }
