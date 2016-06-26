@@ -7,6 +7,8 @@ evalfun <- function(arg, comment)
   
   call <- gsub(call, pattern="localstate$", replacement="", fixed=TRUE)
   
+  call <- paste0(call, collapse="\n")
+
   if (grepl(call, pattern="input$", fixed=TRUE))
   {
     m <- gregexpr(call, pattern="input\\$.*,", perl=TRUE)

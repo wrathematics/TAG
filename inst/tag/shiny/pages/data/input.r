@@ -2,7 +2,6 @@
 # Utils --- must be loaded here
 # -----------------------------------------------------------
 
-library(shinyFiles)
 library(tm)
 
 ### Demand updates
@@ -28,7 +27,7 @@ clean_corpus <- function()
   evalfun(DTM <- qdap::as.dtm(localstate$corpus),comment="Build document-term matrix")
   rowTotals <- apply(DTM,1,sum)
   empty.rows <- DTM[rowTotals==0, ]$dimnames[1][[1]]
-  localstate$corpus <- tm_filter(localstate$corpus,
+  localstate$corpus <- tm::tm_filter(localstate$corpus,
                                  FUN=function(doc) !is.element(meta(doc)$id, empty.rows))
   #reset any analysis objects to null.
   localstate$lda_mdl <- NULL
