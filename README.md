@@ -37,7 +37,8 @@ In addition to needing R, you need the following packages:
 * LDAvis (>= 0.3.1),
 * DT (>= 0.1),
 * ngram (>= 2.0),
-* rvest (>= 0.2.0)
+* rvest (>= 0.2.0),
+* shinyFiles (>= 0.6.0)
 
 
 The easiest way to install this package is use the devtools package,
