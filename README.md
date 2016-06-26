@@ -7,14 +7,14 @@
 * ![Status](http://img.shields.io/badge/status-In_development_%28UNSTABLE%29-red.svg?style=flat)
 * [![Build Status](https://travis-ci.org/XSEDEScienceGateways/textgateway.png)](https://travis-ci.org/XSEDEScienceGateways/textgateway)
 * [![License](http://img.shields.io/badge/license-AGPL--3-orange.svg?style=flat)](https://www.gnu.org/licenses/agpl-3.0.html)
-* **Authors:** The TAG Team:  Drew Schmidt and Mike Black
+* **Authors:** The TAG Team: Drew Schmidt and Mike Black
 
 
 The Text Analytics Gateway (TAG) is an interactive webapp for
 performing simple analyses on unstructured text.
 
 When the gateway becomes mature enough, it will be made available
-one XSEDE compute resources.  However, it is completely open
+one XSEDE compute resources. However, it is completely open
 source and you are free to install it on your laptop or a different
 remote resource.
 
@@ -41,7 +41,7 @@ In addition to needing R, you need the following packages:
 
 
 The easiest way to install this package is use the devtools package,
-which will handle dependency resolution for you.  To install devtools,
+which will handle dependency resolution for you. To install devtools,
 you can run the following from R:
 
 ```r
@@ -49,21 +49,17 @@ install.packages("devtools")
 ```
 
 Note that you will need to be able to install R packages from
-source.  So in addition, you will need:
+source. So in addition, you will need:
 
 * **Windows**: [Rtools](http://cran.r-project.org/bin/windows/Rtools/)
 * **Mac**: [XCode command line tools](https://developer.apple.com/downloads)
-* **Linux**: gcc/gfortran, and R.  On Ubuntu `apt-get install r-base-dev`.
+* **Linux**: gcc/gfortran, and R. On Ubuntu `apt-get install r-base-dev`.
 
 From then on, you can install the current build of the textgateway
 package via:
 
 ```r
-library(devtools)
-
-install_github("cpsievert/LDAvis")
-install_github("wrathematics/ngram")
-install_github("XSEDEScienceGateways/textgateway")
+devtools::install_github("XSEDEScienceGateways/textgateway")
 ```
 
 
@@ -83,3 +79,9 @@ library(TAG)
 runTAG()
 ```
 
+
+## Acknowledgements
+
+Work for this project was supported in part by the project *Extreme Science and Engineering Discovery Environment (XSEDE)*, which is supported by National Science Foundation grant number ACI-1053575.
+
+Any opinions, findings, and conclusions or recommendations expressed in this material are those of the authors and do not necessarily reflect the views of the National Science Foundation.
