@@ -13,7 +13,7 @@ shinyUI(
     ),
     
     navbarPage(
-      title=div(a(href="http://xsede.org", target="new", img(src="img/xsede_small.png"))), 
+      title=div(a(href="http://github.com/wrathematics/TAG", target="new", img(src="img/tag_small.png"))), 
       windowTitle="TAG: Text Analytics Gateway", id="nav_tag", 
       inverse=TRUE, collapsible=FALSE, 
       
@@ -31,4 +31,3 @@ shinyUI(
     )
   )
 )
-
