@@ -19,6 +19,7 @@ When the gateway becomes mature enough, it will be made available one XSEDE comp
 
 In addition to needing R, you need the following packages:
 
+* utils,
 * shiny (>= 0.11.1),
 * ggplot2 (>= 1.0.0),
 * memuse (>= 3.0.0),

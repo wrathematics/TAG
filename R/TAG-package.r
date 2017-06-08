@@ -24,6 +24,7 @@
 #' @import tm
 #' @import LDAvis
 #' 
+#' @importFrom utils packageVersion
 #' @importFrom memuse memuse
 #' @importFrom wordcloud wordcloud
 #' @importFrom RColorBrewer brewer.pal
