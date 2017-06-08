@@ -22,9 +22,9 @@
 #' @import ggplot2
 #' @import SnowballC
 #' @import tm
-#' @import memuse
 #' @import LDAvis
 #' 
+#' @importFrom memuse memuse
 #' @importFrom wordcloud wordcloud
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom qdap apply_as_df word_cor as.dtm
