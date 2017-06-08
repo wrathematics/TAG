@@ -27,8 +27,7 @@ Authors@R: c(person("Drew", "Schmidt", email="wrathematics@gmail.com",
     role=c("aut", "cre")), 
     person("Mike", "Black", role="aut"),
     person("Chad", "Burdyshaw", role="ctb"),
-    person("Vincent", "Nijs", role=c("ctb", "cph"), comment="some help file 
-    generation code taken from radiant"),
+    person("Vincent", "Nijs", role=c("ctb", "cph"), comment="some help file generation code taken from radiant"),
     person("University of Tennessee", role="cph"), 
     person("University of Illinois, Urbana-Champaign", role="cph"))
 Maintainer: Drew Schmidt <wrathematics@gmail.com>
