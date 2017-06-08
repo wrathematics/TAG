@@ -45,8 +45,8 @@ output$explore_summary_ <- renderUI({
   must_have("corpus")
   must_have("tdm")
   
-  s <- TAG::wc(sapply(localstate$corpus, function(i) i$content), input$explore_corpus_maxwordlen, input$explore_corpus_maxsenlen)
-  
+  s <- TAG::wc(unlist(sapply(localstate$corpus, function(elem) elem$content)), input$explore_corpus_maxwordlen, input$explore_corpus_maxsenlen)
+
   verticalLayout(
     ### Top row
     fluidRow(
