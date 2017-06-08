@@ -9,4 +9,3 @@ runTAG()
 \description{
 Run the Text Gateway App
 }
-

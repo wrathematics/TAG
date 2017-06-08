@@ -14,4 +14,3 @@ find_closest_word(input, words)
 \description{
 Find Closest Word
 }
-

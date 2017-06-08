@@ -12,4 +12,3 @@ levenshtein_dist(s, t)
 \description{
 Levenshtein Distance
 }
-

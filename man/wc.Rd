@@ -26,4 +26,3 @@ The basic logic is to call a word something separated by one or
 more "spaces" (literal space, tab, ...).  Special treatment is
 given to multiline text with a dangling dash.
 }
-

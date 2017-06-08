@@ -14,11 +14,10 @@ TODO
    License: \tab AGPL-3 \cr 
 }
 }
-\author{
-Drew Schmidt
-}
 \references{
 Project home page: \url{https://github.com/XSEDEScienceGateways/textgateway}
 }
+\author{
+Drew Schmidt
+}
 \keyword{Package}
-
