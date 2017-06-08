@@ -16,18 +16,14 @@ cat(paste0(paste0(about, collapse="\n"), "\n"), file=aboutfile, append=FALSE)
 
 * **Version:** `r tagversion`
 * ![Status](http://img.shields.io/badge/status-In_development_%28UNSTABLE%29-red.svg?style=flat)
-* [![Build Status](https://travis-ci.org/XSEDEScienceGateways/textgateway.png)](https://travis-ci.org/XSEDEScienceGateways/textgateway)
+* [![Build Status](https://travis-ci.org/wrathematics/textgateway.png)](https://travis-ci.org/wrathematics/textgateway)
 * [![License](http://img.shields.io/badge/license-AGPL--3-orange.svg?style=flat)](https://www.gnu.org/licenses/agpl-3.0.html)
 * **Authors:** The TAG Team: Drew Schmidt and Mike Black
 
 
-The Text Analytics Gateway (TAG) is an interactive webapp for
-performing simple analyses on unstructured text.
+The Text Analytics Gateway (TAG) is an interactive webapp for performing simple analyses on unstructured text.
 
-When the gateway becomes mature enough, it will be made available
-one XSEDE compute resources. However, it is completely open
-source and you are free to install it on your laptop or a different
-remote resource.
+When the gateway becomes mature enough, it will be made available one XSEDE compute resources. However, it is completely open source and you are free to install it on your laptop or a different remote resource.
 
 
 ## Installation
@@ -42,26 +38,22 @@ cat(paste0("*", deps, collapse="\n"))
 ```
 
 
-The easiest way to install this package is use the devtools package,
-which will handle dependency resolution for you. To install devtools,
-you can run the following from R:
+The easiest way to install this package is use the devtools package, which will handle dependency resolution for you. To install devtools, you can run the following from R:
 
 ```r
 install.packages("devtools")
 ```
 
-Note that you will need to be able to install R packages from
-source. So in addition, you will need:
+Note that you will need to be able to install R packages from source. So in addition, you will need:
 
 * **Windows**: [Rtools](http://cran.r-project.org/bin/windows/Rtools/)
 * **Mac**: [XCode command line tools](https://developer.apple.com/downloads)
 * **Linux**: gcc/gfortran, and R. On Ubuntu `apt-get install r-base-dev`.
 
-From then on, you can install the current build of the textgateway
-package via:
+From then on, you can install the current build of the textgateway package via:
 
 ```r
-devtools::install_github("XSEDEScienceGateways/textgateway")
+devtools::install_github("wrathematics/textgateway")
 ```
 
 
@@ -69,10 +61,7 @@ devtools::install_github("XSEDEScienceGateways/textgateway")
 
 ## Launching
 
-From a terminal, you can launch the app via the `runapp.sh` script.
-If your web browser does not automatically open the web app, use
-the url/port combo that it prints it's "listening on" in your
-web browser.
+From a terminal, you can launch the app via the `runapp.sh` script. If your web browser does not automatically open the web app, use the url/port combo that it prints it's "listening on" in your web browser.
 
 You can also easily run the app from any interactive R session:
 
