@@ -1,5 +1,5 @@
 /* 
-  Copyright (C) 2014 Drew Schmidt. All rights reserved.
+  Copyright (C) 2014-2017 Drew Schmidt. All rights reserved.
   
   Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions are met:
@@ -51,7 +51,7 @@ SEXP R_find_closest_word(SEXP input, SEXP words)
 {
   int i;
   int least_dist = -1;
-  int closest_word, current_dist;
+  int closest_word = 0, current_dist = 0;
   const int nwords = LENGTH(words);
   
   SEXP ret, ret_names, dist, word;
@@ -103,4 +103,3 @@ SEXP R_find_closest_word(SEXP input, SEXP words)
   UNPROTECT(4);
   return ret;
 }
-

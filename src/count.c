@@ -1,5 +1,5 @@
 /* 
-  Copyright (C) 2015 Drew Schmidt. All rights reserved.
+  Copyright (C) 2015-2017 Drew Schmidt. All rights reserved.
   
   Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions are met:
@@ -58,7 +58,7 @@ SEXP R_wc(SEXP string, SEXP wordlen_max_, SEXP senlen_max_, SEXP syllen_max_)
   const int wordlen_max = INT(wordlen_max_);
   const int senlen_max = INT(senlen_max_);
   const int syllen_max = INT(syllen_max_);
-  int i, j, tmp;
+  int i, j;
   char c, *str;
   bool multispace_correction;
   
@@ -231,5 +231,3 @@ SEXP R_wc(SEXP string, SEXP wordlen_max_, SEXP senlen_max_, SEXP syllen_max_)
   UNPROTECT(13);
   return ret;
 }
-
-
