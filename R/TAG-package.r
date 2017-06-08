@@ -1,6 +1,7 @@
 #' Text Analytics Gateway
 #' 
-#' TODO
+#' The Text Analytics Gateway (TAG) is an interactive webapp for performing
+#' simple analyses on unstructured text.
 #' 
 #' \tabular{ll}{ 
 #'    Package: \tab textgateway \cr 
@@ -35,4 +36,3 @@
 #' 
 #' @keywords Package
 NULL
-

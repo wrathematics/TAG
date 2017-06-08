@@ -1,7 +1,8 @@
 Package: TAG
 Title: Text Analytics Gateway
 Version: 0.0.11
-Description: TODO
+Description: The Text Analytics Gateway (TAG) is an interactive webapp for
+    performing simple analyses on unstructured text.
 License: AGPL-3
 Depends:
     R (>= 3.1.2)
