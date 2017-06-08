@@ -20,7 +20,8 @@ stopifnot(identical(test, truth))
 
 
 
-load("../inst/extradata/books/alice.rda")
+f = system.file("extradata/books/alice.rda", package="TAG")
+load(f)
 buk <- corpus[[1]]$content[1:10]
 test <- wc(buk)
 truth <-
